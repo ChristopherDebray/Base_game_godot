@@ -98,7 +98,7 @@ script = ExtResource("1_afppm")
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_cah3j")
 animation = &"idle"
-frame_progress = 0.0044083316
+frame_progress = 0.43085796
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=703838696]
 position = Vector2(0, 2)
