@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://gd583g4127u8"]
+
+[ext_resource type="Script" uid="uid://bx2k8j4wdjku" path="res://scenes/components/aim_component.gd" id="1_ufdgd"]
+[ext_resource type="Texture2D" uid="uid://chbcnp5fkb3k3" path="res://assets/ui/crosshair.png" id="2_ou5q3"]
+
+[node name="AimComponent" type="Node2D" unique_id=392743642]
+script = ExtResource("1_ufdgd")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=736552093]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_ou5q3")

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cbl8atr24cu21" path="res://scenes/entities/player/player.gd" id="1_afppm"]
 [ext_resource type="Texture2D" uid="uid://qd31ge3l1g3y" path="res://assets/entities/ranger_cute.png" id="1_tlaso"]
+[ext_resource type="PackedScene" uid="uid://gd583g4127u8" path="res://scenes/components/aim_component.tscn" id="3_58kc7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_afppm"]
 atlas = ExtResource("1_tlaso")
@@ -53,8 +54,8 @@ animations = [{
 "texture": SubResource("AtlasTexture_n1xdv")
 }],
 "loop": 1,
-"name": &"default",
-"speed": 4.0
+"name": &"idle",
+"speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -96,8 +97,8 @@ script = ExtResource("1_afppm")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=940797672]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_cah3j")
-animation = &"walk"
-frame_progress = 0.42817497
+animation = &"idle"
+frame_progress = 0.0044083316
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=703838696]
 position = Vector2(0, 2)
@@ -105,3 +106,8 @@ shape = SubResource("RectangleShape2D_cah3j")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1289425777]
 zoom = Vector2(1.5, 1.5)
+
+[node name="AimComponent" parent="." unique_id=392743642 instance=ExtResource("3_58kc7")]
+
+[node name="Muzzle" type="Node2D" parent="." unique_id=1700782415]
+position = Vector2(23, 0)
