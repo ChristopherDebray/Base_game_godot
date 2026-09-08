@@ -104,9 +104,6 @@ frame_progress = 0.6722283
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_cah3j")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1289425777]
-zoom = Vector2(1.5, 1.5)
-
 [node name="AimComponent" parent="." unique_id=392743642 instance=ExtResource("3_58kc7")]
 
 [node name="Muzzle" type="Node2D" parent="." unique_id=1700782415]

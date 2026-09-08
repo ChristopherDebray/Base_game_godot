@@ -1,10 +1,30 @@
-[gd_scene format=4 uid="uid://c3f42u55kjgq0"]
+[gd_scene format=3 uid="uid://c3f42u55kjgq0"]
 
+[ext_resource type="Script" uid="uid://bajlm1awu1mea" path="res://scenes/levels/base_level.gd" id="1_h4ce7"]
 [ext_resource type="Texture2D" uid="uid://bv4t8pif2e26u" path="res://assets/tilesets/cute_tileset_64.png" id="1_md458"]
+[ext_resource type="Shader" uid="uid://c5gmckmsybrte" path="res://shaders/masked_texture.gdshader" id="2_53c65"]
 [ext_resource type="Texture2D" uid="uid://c0vfihh1yhav4" path="res://assets/tilesets/cute_tileset_floor_top_64.png" id="2_uk53i"]
 [ext_resource type="PackedScene" uid="uid://1mmbps2pxg5d" path="res://scenes/entities/player/player.tscn" id="3_o1chu"]
 [ext_resource type="Texture2D" uid="uid://bfteaqjmqeyfv" path="res://assets/tilesets/cute_tileset_wall_64.png" id="3_ukglk"]
 [ext_resource type="Texture2D" uid="uid://sa2dym2aj80d" path="res://assets/tilesets/cute_tileset_wall_sm_64.png" id="4_wwrw0"]
+[ext_resource type="Texture2D" uid="uid://048bm14yq6gi" path="res://assets/light/lightcone.png" id="6_3rriw"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_53c65"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h4ce7"]
+resource_local_to_scene = true
+shader = ExtResource("2_53c65")
+shader_parameter/mask_texture = SubResource("ViewportTexture_53c65")
+shader_parameter/mask_with_alpha = false
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_u1hno"]
+viewport_path = NodePath("LitViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_cah3j"]
+viewport_path = NodePath("VisibilityViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_h4ce7"]
+viewport_path = NodePath("LitViewport")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uk53i"]
 texture = ExtResource("1_md458")
@@ -819,9 +839,10 @@ sources/0 = SubResource("TileSetAtlasSource_o1chu")
 
 [node name="BaseLevel" type="Node2D" unique_id=495596206]
 y_sort_enabled = true
+script = ExtResource("1_h4ce7")
 
-[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1445771390]
-color = Color(0.60933006, 0.6093301, 0.60933006, 1)
+[node name="Camera2D" type="Camera2D" parent="." unique_id=510499961]
+zoom = Vector2(1.5, 1.5)
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=1007571249]
 position = Vector2(-13.000008, -18)
@@ -831,27 +852,60 @@ energy = 0.5
 shadow_enabled = true
 shadow_filter = 2
 
-[node name="FloorLayer" type="Node2D" parent="." unique_id=694362356]
+[node name="LitView" type="Sprite2D" parent="." unique_id=1424341239]
+material = SubResource("ShaderMaterial_h4ce7")
+texture = SubResource("ViewportTexture_u1hno")
+centered = false
+
+[node name="VisibilityDebugView" type="Sprite2D" parent="." unique_id=1174649125]
+position = Vector2(-120, 59)
+scale = Vector2(0.13657406, 0.13657407)
+texture = SubResource("ViewportTexture_cah3j")
+
+[node name="LitDebugView" type="Sprite2D" parent="." unique_id=914462528]
+position = Vector2(-120, 169)
+scale = Vector2(0.13657406, 0.13657407)
+texture = SubResource("ViewportTexture_h4ce7")
+
+[node name="VisibilityViewport" type="SubViewport" parent="." unique_id=762621373]
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="LightHolder" type="Node2D" parent="VisibilityViewport" unique_id=1228069941]
+
+[node name="PointLight2D" type="PointLight2D" parent="VisibilityViewport/LightHolder" unique_id=583779339]
+rotation = -1.5707964
+scale = Vector2(2, 2)
+color = Color(1, 1, 1, 0.09803922)
+shadow_enabled = true
+texture = ExtResource("6_3rriw")
+offset = Vector2(0, 100)
+
+[node name="LitViewport" type="SubViewport" parent="." unique_id=1202024971]
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Entities" type="Node2D" parent="LitViewport" unique_id=523767429]
 y_sort_enabled = true
 
-[node name="Floor" type="TileMapLayer" parent="FloorLayer" unique_id=762751144]
-tile_map_data = PackedByteArray("AAAAAAAAAAAEAAAAAAAAAAgAAAAKAAAAAAARAAgAAAAMAAAAAAAPAAgAAAALAAAAAAAQAAgAAAALAAAAAAAOAAgAAAALAAAAAAANAAgAAAALAAAAAAAMAAgAAAALAAAAAAALAAgAAAALAAAAAAAKAAgAAAALAAAAAAAJAAgAAAALAAAAAAAIAAgAAAALAAAAAAAHAAgAAAALAAAAAAAGAAgAAAALAAAAAAAFAAgAAAALAAAAAAAEAAgAAAALAAAAAAADAAgAAAALAAAAAAACAAgAAAALAAAAAAABAAgAAAALAAAAAAAAAAcAAAAHAAAAAAAAAAYAAAAHAAAAAAAAAAUAAAAHAAAAAAAAAAQAAAAHAAAAAAAAAAMAAAAHAAAAAAAAAAIAAAAHAAAAAAAAAAEAAAAHAAAAAAARAAcAAAAJAAAAAAARAAYAAAAJAAAAAAARAAUAAAAJAAAAAAARAAQAAAAJAAAAAAARAAMAAAAJAAAAAAARAAIAAAAJAAAAAAARAAEAAAAJAAAAAAARAAAAAAAGAAAAAAAQAAAAAAAFAAAAAAAPAAAAAAAFAAAAAAAOAAAAAAAFAAAAAAANAAAAAAAFAAAAAAAMAAAAAAAFAAAAAAALAAAAAAAFAAAAAAAKAAAAAAAFAAAAAAAJAAAAAAAFAAAAAAAIAAAAAAAFAAAAAAAHAAAAAAAFAAAAAAAGAAAAAAAFAAAAAAAFAAAAAAAFAAAAAAAEAAAAAAAFAAAAAAADAAAAAAAFAAAAAAACAAAAAAAFAAAAAAABAAAAAAAFAAAAAAAGAAUAAAAIAAAAAAAGAAQAAAAIAAAAAAAGAAMAAAAIAAAAAAAGAAIAAAAIAAAAAAAGAAEAAAAIAAAAAAAFAAEAAAAIAAAAAAAEAAEAAAAIAAAAAAADAAEAAAAIAAAAAAACAAEAAAAIAAAAAAABAAEAAAAIAAAAAAABAAIAAAAIAAAAAAABAAMAAAAIAAAAAAABAAQAAAAIAAAAAAABAAUAAAAIAAAAAAABAAYAAAAIAAAAAAABAAcAAAAIAAAAAAACAAcAAAAIAAAAAAACAAYAAAAIAAAAAAACAAUAAAAIAAAAAAACAAQAAAAIAAAAAAACAAMAAAAIAAAAAAACAAIAAAAIAAAAAAADAAIAAQAVAAAAAAADAAMAAQAXAAAAAAADAAQAAQAQAAAAAAADAAUAAAAIAAAAAAADAAYAAAAIAAAAAAADAAcAAAAIAAAAAAAEAAcAAAAIAAAAAAAEAAYAAAAIAAAAAAAEAAUAAAAIAAAAAAAEAAQAAQARAAAAAAAEAAMAAQAPAAAAAAAEAAIAAQAWAAAAAAAFAAIAAQATAAAAAAAFAAMAAQAUAAAAAAAFAAQAAQASAAAAAAAFAAUAAAAIAAAAAAAFAAYAAAAIAAAAAAAFAAcAAAAIAAAAAAAGAAcAAAAIAAAAAAAGAAYAAAAIAAAAAAAHAAYAAAAIAAAAAAAHAAUAAAAIAAAAAAAHAAQAAAAIAAAAAAAHAAMAAAAIAAAAAAAHAAIAAAAIAAAAAAAHAAEAAAAIAAAAAAAIAAEAAAAIAAAAAAAIAAIAAAAIAAAAAAAIAAMAAAAIAAAAAAAIAAQAAAAIAAAAAAAIAAUAAAAIAAAAAAAIAAYAAAAIAAAAAAAIAAcAAAAIAAAAAAAHAAcAAAAIAAAAAAAJAAcAAAAIAAAAAAAJAAYAAAAIAAAAAAAJAAUAAAAIAAAAAAAJAAQAAAAIAAAAAAAJAAMAAAAIAAAAAAAJAAIAAAAIAAAAAAAJAAEAAAAIAAAAAAAKAAEAAAAIAAAAAAAKAAIAAAAIAAAAAAAKAAMAAAAIAAAAAAAKAAQAAAAIAAAAAAAKAAUAAAAIAAAAAAAKAAYAAAAIAAAAAAAKAAcAAAAIAAAAAAALAAcAAAAIAAAAAAALAAYAAAAIAAAAAAALAAUAAAAIAAAAAAALAAQAAAAIAAAAAAALAAMAAAAIAAAAAAALAAIAAAAIAAAAAAALAAEAAAAIAAAAAAAMAAEAAAAIAAAAAAAMAAIAAAAIAAAAAAAMAAMAAAAIAAAAAAAMAAQAAAAIAAAAAAAMAAUAAAAIAAAAAAAMAAYAAAAIAAAAAAAMAAcAAAAIAAAAAAANAAcAAAAIAAAAAAANAAYAAAAIAAAAAAANAAUAAAAIAAAAAAANAAQAAAAIAAAAAAANAAMAAAAIAAAAAAANAAIAAAAIAAAAAAANAAEAAAAIAAAAAAAOAAEAAAAIAAAAAAAOAAIAAAAIAAAAAAAOAAMAAAAIAAAAAAAOAAQAAAAIAAAAAAAOAAUAAAAIAAAAAAAOAAYAAAAIAAAAAAAOAAcAAAAIAAAAAAAPAAcAAAAIAAAAAAAPAAYAAAAIAAAAAAAPAAUAAAAIAAAAAAAPAAQAAAAIAAAAAAAPAAMAAAAIAAAAAAAPAAIAAAAIAAAAAAAPAAEAAAAIAAAAAAAQAAEAAAAIAAAAAAAQAAIAAAAIAAAAAAAQAAMAAAAIAAAAAAAQAAQAAAAIAAAAAAAQAAUAAAAIAAAAAAAQAAYAAAAIAAAAAAAQAAcAAAAIAAAAAAA=")
+[node name="Player" parent="LitViewport/Entities" unique_id=362983861 node_paths=PackedStringArray("light_holder") instance=ExtResource("3_o1chu")]
+position = Vector2(186, 173)
+light_holder = NodePath("../../../VisibilityViewport/LightHolder")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="LitViewport" unique_id=1445771390]
+color = Color(0.60933006, 0.6093301, 0.60933006, 1)
+
+[node name="DebugDisplay" type="Node2D" parent="." unique_id=1069228217]
+
+[node name="Floor" type="TileMapLayer" parent="DebugDisplay" unique_id=697312789]
 tile_set = SubResource("TileSet_cah3j")
 
-[node name="YsortLayer" type="Node2D" parent="." unique_id=1537973730]
+[node name="Wall" type="TileMapLayer" parent="DebugDisplay" unique_id=1933774055]
 y_sort_enabled = true
-
-[node name="Wall" type="TileMapLayer" parent="YsortLayer" unique_id=1535771316]
-y_sort_enabled = true
-tile_map_data = PackedByteArray("AAADAAEAAAARAAAAAAAGAAIAAAARAAAAAAABAAQAAAARAAAAAAA=")
 tile_set = SubResource("TileSet_f2c5w")
 
-[node name="WallSm" type="TileMapLayer" parent="YsortLayer" unique_id=565852405]
+[node name="WallSm" type="TileMapLayer" parent="DebugDisplay" unique_id=184270954]
 y_sort_enabled = true
 tile_set = SubResource("TileSet_0qes0")
 
-[node name="Entities" type="Node2D" parent="YsortLayer" unique_id=523767429]
-y_sort_enabled = true
-
-[node name="Player" parent="YsortLayer/Entities" unique_id=362983861 instance=ExtResource("3_o1chu")]
-position = Vector2(186, 173)
+[node name="Lights" type="Node2D" parent="DebugDisplay" unique_id=424014505]

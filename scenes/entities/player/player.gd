@@ -7,6 +7,8 @@ class_name Player
 @onready var aim_component: Node2D = $AimComponent
 @onready var muzzle: Node2D = $Muzzle
 
+@export var light_holder: Node2D
+
 const SPEED: float = 130.0
 const PROBE_SIZE = Vector2(50, 50)
 const MUZZLE_INVERTION_POS: float = -10
@@ -16,6 +18,8 @@ var muzzle_initial_position: float = 27
 var idle_anim_name := "idle" 
 var run_anim_name := "walk" 
 var idle_frame_index := 1
+
+const LIGHT_RADIANT_OFFSET := deg_to_rad(-90)
 
 func _ready() -> void:
 	return
