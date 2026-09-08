@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dyl8hma0rti03"]
+
+[ext_resource type="Texture2D" uid="uid://cpjqm4ihglfjf" path="res://assets/light/2d_light.webp" id="1_14x8j"]
+
+[node name="Lamp" type="Node2D" unique_id=532712221]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1159220998]
+
+[node name="PointLight2D" type="PointLight2D" parent="Sprite2D" unique_id=1568312186]
+scale = Vector2(0.40660727, 0.40660727)
+texture = ExtResource("1_14x8j")

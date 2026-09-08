@@ -1,6 +1,8 @@
 [gd_scene format=4 uid="uid://bwicli23plvxg"]
 
 [ext_resource type="PackedScene" uid="uid://c3f42u55kjgq0" path="res://scenes/levels/base_level.tscn" id="1_ks53v"]
+[ext_resource type="PackedScene" uid="uid://dyl8hma0rti03" path="res://scenes/objects/lamp/lamp.tscn" id="2_0e4wa"]
+[ext_resource type="PackedScene" uid="uid://crheon3n34s26" path="res://scenes/objects/box/box.tscn" id="3_j0f3p"]
 
 [node name="BaseLevel" unique_id=495596206 instance=ExtResource("1_ks53v")]
 
@@ -8,4 +10,24 @@
 position = Vector2(-310, 15)
 
 [node name="Wall" parent="YsortLayer" parent_id_path=PackedInt32Array(1537973730) index="0" unique_id=1535771316]
-tile_map_data = PackedByteArray("AAABAAQAAAARAAAAAAABAAAAAAACAAAAAAACAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAJAAAAAAAAAAIAAAAJAAAAAAAAAAMAAAAOAAAAAAABAAMAAAATAAAAAAADAAAAAAATAAAAAAAHAAEAAAARAAAAAAAFAAUAAAACAAAAAAAGAAUAAAACAAAAAAAEAAUAAAASAAAAAAAHAAUAAAATAAAAAAA=")
+tile_map_data = PackedByteArray("AAABAAQAAAAJAAAAAAABAAAAAAACAAAAAAACAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAJAAAAAAAAAAIAAAAJAAAAAAAAAAMAAAAOAAAAAAABAAMAAAADAAAAAAADAAAAAAACAAAAAAAHAAEAAAAJAAAAAAAFAAUAAAACAAAAAAAGAAUAAAACAAAAAAAEAAUAAAACAAAAAAAHAAUAAAAPAAAAAAABAAUAAAAOAAAAAAACAAUAAAACAAAAAAADAAUAAAACAAAAAAAHAAQAAAAJAAAAAAAHAAMAAAAJAAAAAAAHAAIAAAAJAAAAAAAHAAAAAAADAAAAAAAGAAAAAAACAAAAAAAFAAAAAAACAAAAAAAEAAAAAAACAAAAAAAEAAMAAAANAAAAAAAEAAIAAAAFAAAAAAACAAIAAAARAAAAAAA=")
+
+[node name="Player" parent="YsortLayer/Entities" parent_id_path=PackedInt32Array(523767429) index="0" unique_id=362983861]
+position = Vector2(220, 208)
+
+[node name="Lights" type="Node2D" parent="YsortLayer" parent_id_path=PackedInt32Array(1537973730) index="3" unique_id=566734737]
+
+[node name="Lamp" parent="YsortLayer/Lights" index="0" unique_id=532712221 instance=ExtResource("2_0e4wa")]
+position = Vector2(102, 116)
+
+[node name="Lamp2" parent="YsortLayer/Lights" index="1" unique_id=2048666672 instance=ExtResource("2_0e4wa")]
+position = Vector2(411, 266)
+
+[node name="Lamp3" parent="YsortLayer/Lights" index="2" unique_id=267453482 instance=ExtResource("2_0e4wa")]
+position = Vector2(381, 113)
+
+[node name="Box" parent="YsortLayer/Lights/Lamp3" index="1" unique_id=305955430 instance=ExtResource("3_j0f3p")]
+position = Vector2(-71, 46)
+
+[node name="Box2" parent="YsortLayer/Lights/Lamp3" index="2" unique_id=1311201572 instance=ExtResource("3_j0f3p")]
+position = Vector2(-249, 51)
