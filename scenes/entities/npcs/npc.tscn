@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cqaw1sa4on8xe"]
+
+[ext_resource type="Script" uid="uid://b3d053gp7qxn" path="res://scenes/entities/npcs/npc.gd" id="1_ujkxw"]
+
+[node name="Npc" type="CharacterBody2D" unique_id=1102328879]
+script = ExtResource("1_ujkxw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=714265977]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1112970280]
+
+[node name="PlayerDetect" type="Node2D" parent="." unique_id=1495446021]
+
+[node name="LightRaycast2D" type="RayCast2D" parent="PlayerDetect" unique_id=699324795]
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1538370023]
+avoidance_enabled = true
+debug_enabled = true

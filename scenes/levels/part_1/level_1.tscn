@@ -9,49 +9,158 @@
 [ext_resource type="Texture2D" uid="uid://bv4t8pif2e26u" path="res://assets/tilesets/cute_tileset_64.png" id="4_uw6js"]
 [ext_resource type="Texture2D" uid="uid://c0vfihh1yhav4" path="res://assets/tilesets/cute_tileset_floor_top_64.png" id="5_7tlrb"]
 [ext_resource type="Texture2D" uid="uid://sa2dym2aj80d" path="res://assets/tilesets/cute_tileset_wall_sm_64.png" id="7_4iill"]
+[ext_resource type="PackedScene" uid="uid://b5puydfcwcesa" path="res://scenes/entities/npcs/soldier/soldier.tscn" id="10_1scuh"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uk53i"]
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_6hji1"]
+vertices = PackedVector2Array(32, 0, -32, 0, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 0, -32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_4iill"]
+vertices = PackedVector2Array(32, 32, -32, 32, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_wjute"]
+vertices = PackedVector2Array(32, 0, -32, 0, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 0, -32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_x2qb8"]
+vertices = PackedVector2Array(32, 0, -32, 0, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 0, -32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_1scuh"]
+vertices = PackedVector2Array(32, 32, -32, 32, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_ae1t5"]
+vertices = PackedVector2Array(32, 0, -32, 0, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 0, -32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_h8qkv"]
+vertices = PackedVector2Array(32, 32, -32, 32, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_7ho41"]
+vertices = PackedVector2Array(32, 0, -32, 0, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 0, -32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_nhqxr"]
+vertices = PackedVector2Array(32, 32, -32, 32, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_qp6nd"]
+vertices = PackedVector2Array(32, 0, -32, 0, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 0, -32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_tqku2"]
+vertices = PackedVector2Array(32, 32, -32, 32, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_xfusq"]
+vertices = PackedVector2Array(32, 32, -32, 32, -32, -32, 32, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)])
+agent_radius = 0.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4iill"]
 texture = ExtResource("4_uw6js")
 texture_region_size = Vector2i(64, 64)
 4:0/0 = 0
+4:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_xfusq")
 5:0/0 = 0
+5:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_xfusq")
 6:0/0 = 0
+6:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_xfusq")
 7:0/0 = 0
+7:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_xfusq")
 8:0/0 = 0
+8:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_xfusq")
 9:0/0 = 0
+9:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_xfusq")
 10:0/0 = 0
+10:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_6hji1")
 11:0/0 = 0
+11:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_6hji1")
 12:0/0 = 0
+12:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_6hji1")
 13:0/0 = 0
 14:0/0 = 0
+14:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_4iill")
 15:0/0 = 0
 16:0/0 = 0
 17:0/0 = 0
+17:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_wjute")
 18:0/0 = 0
+18:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_wjute")
 19:0/0 = 0
+19:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_wjute")
 20:0/0 = 0
+20:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_1scuh")
 21:0/0 = 0
+21:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_1scuh")
 22:0/0 = 0
+22:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_1scuh")
 23:0/0 = 0
+23:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_1scuh")
 24:0/0 = 0
+24:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_1scuh")
 25:0/0 = 0
+25:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_1scuh")
 26:0/0 = 0
+26:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_ae1t5")
 27:0/0 = 0
+27:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_ae1t5")
 28:0/0 = 0
+28:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_ae1t5")
 29:0/0 = 0
+29:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_h8qkv")
 30:0/0 = 0
+30:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_7ho41")
 31:0/0 = 0
+31:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_7ho41")
 32:0/0 = 0
+32:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_7ho41")
 33:0/0 = 0
+33:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_nhqxr")
 34:0/0 = 0
+34:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_nhqxr")
 35:0/0 = 0
+35:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_nhqxr")
 36:0/0 = 0
+36:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_nhqxr")
 37:0/0 = 0
+37:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_nhqxr")
 38:0/0 = 0
+38:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_nhqxr")
 39:0/0 = 0
+39:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_qp6nd")
 40:0/0 = 0
+40:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_qp6nd")
 41:0/0 = 0
+41:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_qp6nd")
 42:0/0 = 0
+42:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_tqku2")
 43:0/0 = 0
 44:0/0 = 0
 45:0/0 = 0
@@ -651,10 +760,13 @@ texture_region_size = Vector2i(64, 64)
 170:3/0 = 0
 171:3/0 = 0
 3:0/0 = 0
+3:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_x2qb8")
 2:0/0 = 0
+2:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_x2qb8")
 1:0/0 = 0
+1:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_x2qb8")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ukglk"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1scuh"]
 texture = ExtResource("5_7tlrb")
 texture_region_size = Vector2i(64, 64)
 1:0/0 = 0
@@ -697,8 +809,9 @@ texture_region_size = Vector2i(64, 64)
 
 [sub_resource type="TileSet" id="TileSet_cah3j"]
 tile_size = Vector2i(64, 64)
-sources/0 = SubResource("TileSetAtlasSource_uk53i")
-sources/1 = SubResource("TileSetAtlasSource_ukglk")
+navigation_layer_0/layers = 1
+sources/0 = SubResource("TileSetAtlasSource_4iill")
+sources/1 = SubResource("TileSetAtlasSource_1scuh")
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o1chu"]
 polygon = PackedVector2Array(-32, -32, 32, -32, 32, 15.931534, -32, 16.250168)
@@ -821,33 +934,47 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_o1chu")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_4iill"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_1scuh"]
 viewport_path = NodePath("VisibilityViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1scuh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h8qkv"]
 resource_local_to_scene = true
 shader = ExtResource("2_4iill")
-shader_parameter/mask_texture = SubResource("ViewportTexture_4iill")
+shader_parameter/mask_texture = SubResource("ViewportTexture_1scuh")
 shader_parameter/mask_with_alpha = false
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_h8qkv"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_nhqxr"]
 viewport_path = NodePath("LitViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_nhqxr"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_tqku2"]
 viewport_path = NodePath("VisibilityViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_tqku2"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_xfusq"]
 viewport_path = NodePath("LitViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4iill"]
 shader = ExtResource("4_7tlrb")
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_wwrw0"]
+vertices = PackedVector2Array(439.15625, 266.35938, 436.15625, 71.25, 578.03125, 74.75781, 578.9531, 305.96094, 55.960938, 304.03125, 389.89844, 264.65625, 55.03125, 74.90625, 391.89063, 72.078125)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(0, 3, 4, 5), PackedInt32Array(5, 4, 6, 7)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(45, 65, 46, 314, 589, 316, 588, 65, 426, 61, 429, 256, 400, 255, 402, 62)])
+
 [node name="BaseLevel" unique_id=495596206 instance=ExtResource("1_ks53v")]
 
-[node name="DirectionalLight2D" parent="." index="1" unique_id=1007571249]
+[node name="DebugDisplay_Lights#Lamp" parent="." index="0" unique_id=1446876841 instance=ExtResource("2_0e4wa")]
+position = Vector2(102, 116)
+
+[node name="DebugDisplay_Lights#Lamp2" parent="." index="1" unique_id=2048666672 instance=ExtResource("2_0e4wa")]
+position = Vector2(501, 273)
+
+[node name="DebugDisplay_Lights#Lamp3" parent="." index="2" unique_id=267453482 instance=ExtResource("2_0e4wa")]
+position = Vector2(381, 113)
+
+[node name="DirectionalLight2D" parent="." index="4" unique_id=1007571249]
 position = Vector2(-310, 15)
 
-[node name="LitViewFogOfWar" type="Node2D" parent="." index="2" unique_id=1441937440]
+[node name="LitViewFogOfWar" type="Node2D" parent="." index="5" unique_id=1441937440]
 
 [node name="Floor" type="TileMapLayer" parent="LitViewFogOfWar" index="0" unique_id=1674903056]
 modulate = Color(0.1254902, 0.1254902, 0.1254902, 1)
@@ -865,22 +992,18 @@ modulate = Color(0.1254902, 0.1254902, 0.1254902, 1)
 y_sort_enabled = true
 tile_set = SubResource("TileSet_0qes0")
 
-[node name="LitView" parent="." index="3" unique_id=1424341239]
-material = SubResource("ShaderMaterial_1scuh")
-texture = SubResource("ViewportTexture_h8qkv")
-
-[node name="VisibilityDebugView" parent="." index="4" unique_id=1174649125]
+[node name="LitView" parent="." index="6" unique_id=1424341239]
+material = SubResource("ShaderMaterial_h8qkv")
 texture = SubResource("ViewportTexture_nhqxr")
 
-[node name="LitDebugView" parent="." index="5" unique_id=914462528]
+[node name="VisibilityDebugView" parent="." index="7" unique_id=1174649125]
 texture = SubResource("ViewportTexture_tqku2")
 
-[node name="VisibilityViewport" parent="." index="6" unique_id=762621373]
-transparent_bg = true
+[node name="LitDebugView" parent="." index="8" unique_id=914462528]
+texture = SubResource("ViewportTexture_xfusq")
 
-[node name="PointLight2D" parent="VisibilityViewport/LightHolder" parent_id_path=PackedInt32Array(1228069941) index="0" unique_id=583779339]
-color = Color(1, 1, 1, 1)
-blend_mode = 1
+[node name="VisibilityViewport" parent="." index="9" unique_id=762621373]
+transparent_bg = true
 
 [node name="Floor" type="TileMapLayer" parent="VisibilityViewport" index="1" unique_id=1709717556]
 material = SubResource("ShaderMaterial_4iill")
@@ -898,23 +1021,26 @@ y_sort_enabled = true
 material = SubResource("ShaderMaterial_4iill")
 tile_set = SubResource("TileSet_0qes0")
 
-[node name="LitViewport" parent="." index="7" unique_id=1202024971]
+[node name="LitViewport" parent="." index="10" unique_id=1202024971]
 transparent_bg = true
 
 [node name="Floor" type="TileMapLayer" parent="LitViewport" index="0" unique_id=112060656]
 tile_map_data = PackedByteArray("AAAAAAAAAAAIAAAAAAAAAAEAAAAIAAAAAAAAAAIAAAAIAAAAAAAAAAMAAAAIAAAAAAAAAAQAAAAIAAAAAAAAAAUAAAAIAAAAAAAAAAYAAAAIAAAAAAABAAAAAAAIAAAAAAABAAEAAAAIAAAAAAABAAIAAAAIAAAAAAABAAMAAAAIAAAAAAABAAQAAAAIAAAAAAABAAUAAAAIAAAAAAABAAYAAAAIAAAAAAACAAAAAAAIAAAAAAACAAEAAAAIAAAAAAACAAIAAAAIAAAAAAACAAMAAAAIAAAAAAACAAQAAAAIAAAAAAACAAUAAAAIAAAAAAACAAYAAAAIAAAAAAADAAAAAAAIAAAAAAADAAEAAAAIAAAAAAADAAIAAAAIAAAAAAADAAMAAAAIAAAAAAADAAQAAAAIAAAAAAADAAUAAAAIAAAAAAADAAYAAAAIAAAAAAAEAAAAAAAIAAAAAAAEAAEAAAAIAAAAAAAEAAIAAAAIAAAAAAAEAAMAAAAIAAAAAAAEAAQAAAAIAAAAAAAEAAUAAAAIAAAAAAAEAAYAAAAIAAAAAAAFAAAAAAAIAAAAAAAFAAEAAAAIAAAAAAAFAAIAAAAIAAAAAAAFAAMAAAAIAAAAAAAFAAQAAAAIAAAAAAAFAAUAAAAIAAAAAAAFAAYAAAAIAAAAAAAGAAAAAAAIAAAAAAAGAAEAAAAIAAAAAAAGAAIAAAAIAAAAAAAGAAMAAAAIAAAAAAAGAAQAAAAIAAAAAAAGAAUAAAAIAAAAAAAGAAYAAAAIAAAAAAAHAAAAAAAIAAAAAAAHAAEAAAAIAAAAAAAHAAIAAAAIAAAAAAAHAAMAAAAIAAAAAAAHAAQAAAAIAAAAAAAHAAUAAAAIAAAAAAAHAAYAAAAIAAAAAAAIAAAAAAAIAAAAAAAIAAEAAAAIAAAAAAAIAAIAAAAIAAAAAAAIAAMAAAAIAAAAAAAIAAQAAAAIAAAAAAAIAAUAAAAIAAAAAAAIAAYAAAAIAAAAAAAJAAAAAAAIAAAAAAAJAAEAAAAIAAAAAAAJAAIAAAAIAAAAAAAJAAMAAAAIAAAAAAAJAAQAAAAIAAAAAAAJAAUAAAAIAAAAAAAJAAYAAAAIAAAAAAAKAAAAAAAIAAAAAAAKAAEAAAAIAAAAAAAKAAIAAAAIAAAAAAAKAAMAAAAIAAAAAAAKAAQAAAAIAAAAAAAKAAUAAAAIAAAAAAAKAAYAAAAIAAAAAAA=")
 tile_set = SubResource("TileSet_cah3j")
 
-[node name="Wall" type="TileMapLayer" parent="LitViewport" index="1" unique_id=2054591855]
+[node name="NavigationRegion2D" parent="LitViewport" index="1" unique_id=1730612297]
+navigation_polygon = SubResource("NavigationPolygon_wwrw0")
+
+[node name="Wall" type="TileMapLayer" parent="LitViewport" index="2" unique_id=2054591855]
 y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAACAAAAAAACAAAAAAADAAAAAAACAAAAAAAEAAAAAAACAAAAAAAJAAAAAAADAAAAAAAGAAAAAAABAAAAAAAHAAAAAAACAAAAAAAIAAAAAAACAAAAAAAAAAUAAAAOAAAAAAAJAAUAAAAPAAAAAAAJAAEAAAALAAAAAAAJAAIAAAALAAAAAAAJAAMAAAALAAAAAAAJAAQAAAALAAAAAAAAAAEAAAALAAAAAAAAAAIAAAALAAAAAAAAAAMAAAALAAAAAAAAAAQAAAALAAAAAAABAAUAAAACAAAAAAACAAUAAAACAAAAAAADAAUAAAACAAAAAAAEAAUAAAACAAAAAAAFAAUAAAACAAAAAAAGAAUAAAACAAAAAAAHAAUAAAACAAAAAAAIAAUAAAACAAAAAAAGAAEAAAALAAAAAAAGAAIAAAALAAAAAAACAAIAAAARAAAAAAAEAAIAAAARAAAAAAAGAAMAAAANAAAAAAA=")
 tile_set = SubResource("TileSet_f2c5w")
 
-[node name="WallSm" type="TileMapLayer" parent="LitViewport" index="2" unique_id=1669577410]
+[node name="WallSm" type="TileMapLayer" parent="LitViewport" index="3" unique_id=1669577410]
 y_sort_enabled = true
 tile_set = SubResource("TileSet_0qes0")
 
-[node name="Lights" type="Node2D" parent="LitViewport" index="3" unique_id=555293572]
+[node name="Lights" type="Node2D" parent="LitViewport" index="4" unique_id=555293572]
 
 [node name="Lamp" parent="LitViewport/Lights" index="0" unique_id=532712221 instance=ExtResource("2_0e4wa")]
 position = Vector2(102, 116)
@@ -928,26 +1054,26 @@ position = Vector2(381, 113)
 [node name="Player" parent="LitViewport/Entities" parent_id_path=PackedInt32Array(523767429) index="0" unique_id=362983861]
 position = Vector2(220, 208)
 
-[node name="Box" parent="LitViewport/Entities" parent_id_path=PackedInt32Array(523767429) index="1" unique_id=305955430 instance=ExtResource("3_j0f3p")]
+[node name="Box" parent="LitViewport/Entities/Objects" parent_id_path=PackedInt32Array(755208327) index="0" unique_id=305955430 instance=ExtResource("3_j0f3p")]
 position = Vector2(516, 102)
 
-[node name="Box2" parent="LitViewport/Entities" parent_id_path=PackedInt32Array(523767429) index="2" unique_id=1311201572 instance=ExtResource("3_j0f3p")]
+[node name="Box2" parent="LitViewport/Entities/Objects" parent_id_path=PackedInt32Array(755208327) index="1" unique_id=1311201572 instance=ExtResource("3_j0f3p")]
 position = Vector2(132, 164)
 
-[node name="DebugDisplay" parent="." index="8" unique_id=1069228217]
-visible = false
+[node name="Soldier" parent="LitViewport/Entities/Npcs" parent_id_path=PackedInt32Array(199427629) index="0" unique_id=1102328879 instance=ExtResource("10_1scuh")]
+position = Vector2(300, 100)
+patrol_points = NodePath("../Paths")
 
-[node name="Floor" parent="DebugDisplay" index="0" unique_id=697312789]
-tile_map_data = PackedByteArray("AAAAAAAAAAAIAAAAAAAAAAEAAAAIAAAAAAAAAAIAAAAIAAAAAAAAAAMAAAAIAAAAAAAAAAQAAAAIAAAAAAAAAAUAAAAIAAAAAAAAAAYAAAAIAAAAAAABAAAAAAAIAAAAAAABAAEAAAAIAAAAAAABAAIAAAAIAAAAAAABAAMAAAAIAAAAAAABAAQAAAAIAAAAAAABAAUAAAAIAAAAAAABAAYAAAAIAAAAAAACAAAAAAAIAAAAAAACAAEAAAAIAAAAAAACAAIAAAAIAAAAAAACAAMAAAAIAAAAAAACAAQAAAAIAAAAAAACAAUAAAAIAAAAAAACAAYAAAAIAAAAAAADAAAAAAAIAAAAAAADAAEAAAAIAAAAAAADAAIAAAAIAAAAAAADAAMAAAAIAAAAAAADAAQAAAAIAAAAAAADAAUAAAAIAAAAAAADAAYAAAAIAAAAAAAEAAAAAAAIAAAAAAAEAAEAAAAIAAAAAAAEAAIAAAAIAAAAAAAEAAMAAAAIAAAAAAAEAAQAAAAIAAAAAAAEAAUAAAAIAAAAAAAEAAYAAAAIAAAAAAAFAAAAAAAIAAAAAAAFAAEAAAAIAAAAAAAFAAIAAAAIAAAAAAAFAAMAAAAIAAAAAAAFAAQAAAAIAAAAAAAFAAUAAAAIAAAAAAAFAAYAAAAIAAAAAAAGAAAAAAAIAAAAAAAGAAEAAAAIAAAAAAAGAAIAAAAIAAAAAAAGAAMAAAAIAAAAAAAGAAQAAAAIAAAAAAAGAAUAAAAIAAAAAAAGAAYAAAAIAAAAAAAHAAAAAAAIAAAAAAAHAAEAAAAIAAAAAAAHAAIAAAAIAAAAAAAHAAMAAAAIAAAAAAAHAAQAAAAIAAAAAAAHAAUAAAAIAAAAAAAHAAYAAAAIAAAAAAAIAAAAAAAIAAAAAAAIAAEAAAAIAAAAAAAIAAIAAAAIAAAAAAAIAAMAAAAIAAAAAAAIAAQAAAAIAAAAAAAIAAUAAAAIAAAAAAAIAAYAAAAIAAAAAAAJAAAAAAAIAAAAAAAJAAEAAAAIAAAAAAAJAAIAAAAIAAAAAAAJAAMAAAAIAAAAAAAJAAQAAAAIAAAAAAAJAAUAAAAIAAAAAAAJAAYAAAAIAAAAAAAKAAAAAAAIAAAAAAAKAAEAAAAIAAAAAAAKAAIAAAAIAAAAAAAKAAMAAAAIAAAAAAAKAAQAAAAIAAAAAAAKAAUAAAAIAAAAAAAKAAYAAAAIAAAAAAA=")
+[node name="Paths" type="Node2D" parent="LitViewport/Entities/Npcs" parent_id_path=PackedInt32Array(199427629) index="1" unique_id=1269318489]
 
-[node name="Wall" parent="DebugDisplay" index="1" unique_id=1933774055]
-tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAACAAAAAAACAAAAAAADAAAAAAACAAAAAAAEAAAAAAACAAAAAAAJAAAAAAADAAAAAAAGAAAAAAABAAAAAAAHAAAAAAACAAAAAAAIAAAAAAACAAAAAAAAAAUAAAAOAAAAAAAJAAUAAAAPAAAAAAAJAAEAAAALAAAAAAAJAAIAAAALAAAAAAAJAAMAAAALAAAAAAAJAAQAAAALAAAAAAAAAAEAAAALAAAAAAAAAAIAAAALAAAAAAAAAAMAAAALAAAAAAAAAAQAAAALAAAAAAABAAUAAAACAAAAAAACAAUAAAACAAAAAAADAAUAAAACAAAAAAAEAAUAAAACAAAAAAAFAAUAAAACAAAAAAAGAAUAAAACAAAAAAAHAAUAAAACAAAAAAAIAAUAAAACAAAAAAAGAAEAAAALAAAAAAAGAAIAAAALAAAAAAACAAIAAAARAAAAAAAEAAIAAAARAAAAAAAGAAMAAAANAAAAAAA=")
+[node name="Marker2D" type="Marker2D" parent="LitViewport/Entities/Npcs/Paths" index="0" unique_id=63195656]
+position = Vector2(355, 100)
 
-[node name="Lamp" parent="DebugDisplay/Lights" parent_id_path=PackedInt32Array(424014505) index="0" unique_id=1446876841 instance=ExtResource("2_0e4wa")]
-position = Vector2(102, 116)
+[node name="Marker2D2" type="Marker2D" parent="LitViewport/Entities/Npcs/Paths" index="1" unique_id=2089619078]
+position = Vector2(356, 254)
 
-[node name="Lamp2" parent="DebugDisplay/Lights" parent_id_path=PackedInt32Array(424014505) index="1" unique_id=2048666672 instance=ExtResource("2_0e4wa")]
-position = Vector2(501, 273)
+[node name="Marker2D3" type="Marker2D" parent="LitViewport/Entities/Npcs/Paths" index="2" unique_id=616717215]
+position = Vector2(92, 255)
 
-[node name="Lamp3" parent="DebugDisplay/Lights" parent_id_path=PackedInt32Array(424014505) index="2" unique_id=267453482 instance=ExtResource("2_0e4wa")]
-position = Vector2(381, 113)
+[node name="Marker2D4" type="Marker2D" parent="LitViewport/Entities/Npcs/Paths" index="3" unique_id=1871339750]
+position = Vector2(95, 100)

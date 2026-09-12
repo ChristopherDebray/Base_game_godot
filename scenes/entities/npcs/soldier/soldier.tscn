@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://b5puydfcwcesa"]
+
+[ext_resource type="PackedScene" uid="uid://cqaw1sa4on8xe" path="res://scenes/entities/npcs/npc.tscn" id="1_vofsr"]
+[ext_resource type="Texture2D" uid="uid://qd31ge3l1g3y" path="res://assets/entities/ranger_cute.png" id="2_5scpb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2skag"]
+atlas = ExtResource("2_5scpb")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yd37b"]
+atlas = ExtResource("2_5scpb")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhpys"]
+atlas = ExtResource("2_5scpb")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i2kol"]
+atlas = ExtResource("2_5scpb")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qky2u"]
+atlas = ExtResource("2_5scpb")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f83pe"]
+atlas = ExtResource("2_5scpb")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjvr5"]
+atlas = ExtResource("2_5scpb")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yytrg"]
+atlas = ExtResource("2_5scpb")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vofsr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2skag")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yd37b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jhpys")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i2kol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qky2u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f83pe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjvr5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yytrg")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nip3c"]
+
+[node name="Soldier" unique_id=1102328879 instance=ExtResource("1_vofsr")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=714265977]
+sprite_frames = SubResource("SpriteFrames_vofsr")
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1112970280]
+position = Vector2(1, 2)
+shape = SubResource("RectangleShape2D_nip3c")
+
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
