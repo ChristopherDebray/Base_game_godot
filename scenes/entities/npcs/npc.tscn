@@ -15,4 +15,3 @@ script = ExtResource("1_ujkxw")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1538370023]
 avoidance_enabled = true
-debug_enabled = true

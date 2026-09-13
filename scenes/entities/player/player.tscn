@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cbl8atr24cu21" path="res://scenes/entities/player/player.gd" id="1_afppm"]
 [ext_resource type="Texture2D" uid="uid://qd31ge3l1g3y" path="res://assets/entities/ranger_cute.png" id="1_tlaso"]
-[ext_resource type="PackedScene" uid="uid://gd583g4127u8" path="res://scenes/components/aim_component.tscn" id="3_58kc7"]
+[ext_resource type="PackedScene" uid="uid://du8sytr0jrmyu" path="res://scenes/weapons/guns/9_mm_pistol.tscn" id="4_nh4ur"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_afppm"]
 atlas = ExtResource("1_tlaso")
@@ -104,7 +104,8 @@ frame_progress = 0.6722283
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_cah3j")
 
-[node name="AimComponent" parent="." unique_id=392743642 instance=ExtResource("3_58kc7")]
+[node name="9mmPistol" parent="." unique_id=1844201469 instance=ExtResource("4_nh4ur")]
+position = Vector2(19, 0)
 
 [node name="Muzzle" type="Node2D" parent="." unique_id=1700782415]
-position = Vector2(23, 0)
+position = Vector2(14, 0)

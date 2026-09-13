@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://jl3r1ixc4q64"]
+
+[ext_resource type="Script" uid="uid://s70477hcrjen" path="res://scenes/weapons/base_weapon.gd" id="1_inxs3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cah3j"]
+animations = [{
+"frames": [],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 0,
+"name": &"primary_ability",
+"speed": 5.0
+}]
+
+[node name="BaseWeapon" type="Node2D" unique_id=1844201469]
+script = ExtResource("1_inxs3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=810678021]
+sprite_frames = SubResource("SpriteFrames_cah3j")
