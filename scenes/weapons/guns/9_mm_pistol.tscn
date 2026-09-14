@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://jl3r1ixc4q64" path="res://scenes/weapons/base_weapon.tscn" id="1_spb3q"]
 [ext_resource type="Resource" uid="uid://57vohdsjnlri" path="res://datas/abilities/9mm_bullet.tres" id="2_o4kwo"]
+[ext_resource type="Script" uid="uid://cjnpiussy775v" path="res://scenes/weapons/guns/9_mm_pistol.gd" id="2_txv3u"]
 [ext_resource type="Texture2D" uid="uid://b3tyeemo10q70" path="res://assets/weapons/gun.png" id="3_txv3u"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_txv3u"]
@@ -60,7 +61,11 @@ animations = [{
 }]
 
 [node name="9mmPistol" unique_id=1844201469 instance=ExtResource("1_spb3q")]
+script = ExtResource("2_txv3u")
 primary_ability = ExtResource("2_o4kwo")
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=810678021]
 sprite_frames = SubResource("SpriteFrames_8eds5")
+
+[node name="Muzzle" parent="." index="1" unique_id=1720962396]
+position = Vector2(4, 0)

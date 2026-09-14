@@ -13,7 +13,6 @@ class_name Player
 const SPEED: float = 130.0
 const PROBE_SIZE = Vector2(50, 50)
 const MUZZLE_INVERTION_POS: float = -10
-const BOX = preload("uid://crheon3n34s26")
 
 var facing_direction: Vector2 = Vector2.RIGHT
 var facing_position: Vector2
@@ -54,9 +53,7 @@ func get_movement_input() -> void:
 
 func get_actions_input():
 	if Input.is_action_just_released("primary_ability"):
-		var box = BOX.instantiate()
-		box.global_position = aim_dir
-		get_tree().current_scene.add_child(box)
+		_9_mm_pistol.launch_primary_ability(aim_dir)
 		
 
 func _update_facing() -> void:
