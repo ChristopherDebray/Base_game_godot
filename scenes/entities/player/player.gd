@@ -23,10 +23,13 @@ var run_anim_name := "walk"
 var idle_frame_index := 1
 # The aim_dir will be set via the aim_component on base_level scene
 var aim_dir := Vector2(10, 0)
+var base_weapon_pos := Vector2(0, 0)
+var weapon_pos := Vector2(0, 0)
 
 const LIGHT_RADIANT_OFFSET := deg_to_rad(-90)
 
 func _ready() -> void:
+	base_weapon_pos = _9_mm_pistol.position
 	return
 
 func _physics_process(delta: float) -> void:
@@ -54,17 +57,23 @@ func get_movement_input() -> void:
 func get_actions_input():
 	if Input.is_action_just_released("primary_ability"):
 		_9_mm_pistol.try_launch_primary_ability(aim_dir)
-		
 
 func _update_facing() -> void:
 	if facing_position.x < -0.05:
 		animated_sprite_2d.flip_h = false
 		muzzle.position.x = muzzle_initial_position
 		facing_direction = Vector2.RIGHT
+		weapon_pos = base_weapon_pos
+		_9_mm_pistol.animated_sprite_2d.flip_v = false
 	elif facing_position.x > 0.05:
 		animated_sprite_2d.flip_h = true
 		muzzle.position.x = MUZZLE_INVERTION_POS
 		facing_direction = Vector2.LEFT
+		weapon_pos = -base_weapon_pos
+		_9_mm_pistol.animated_sprite_2d.flip_v = true
+		
+	_9_mm_pistol.position = weapon_pos
+	
 
 func _update_anim() -> void:
 	# seuil pour éviter de “jouer/arrêter” quand la vitesse est quasi nulle
