@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b3d053gp7qxn" path="res://scenes/entities/npcs/npc.gd" id="1_ujkxw"]
 
 [node name="Npc" type="CharacterBody2D" unique_id=1102328879]
+process_mode = 1
 script = ExtResource("1_ujkxw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=714265977]

@@ -45,6 +45,9 @@ func _physics_process(delta: float) -> void:
 func set_aim_dir(dir: Vector2):
 	aim_dir = dir
 	_9_mm_pistol.look_at(aim_dir)
+	# @todo fix to move weapond in radius
+	var aim_dir_angle = aim_dir.angle() * 10
+	_9_mm_pistol.position.y = aim_dir_angle
 	facing_position = global_position - aim_dir
 
 func get_movement_input() -> void:

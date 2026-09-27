@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://1mmbps2pxg5d" path="res://scenes/entities/player/player.tscn" id="3_o1chu"]
 [ext_resource type="PackedScene" uid="uid://gd583g4127u8" path="res://scenes/components/aim_component.tscn" id="5_o1chu"]
 [ext_resource type="Texture2D" uid="uid://048bm14yq6gi" path="res://assets/light/lightcone.png" id="6_3rriw"]
+[ext_resource type="PackedScene" uid="uid://yeynd11ptcvr" path="res://scenes/ui/pause_ui.tscn" id="6_h4ce7"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_53c65"]
 
@@ -91,3 +92,7 @@ color = Color(0.8132577, 0.81325775, 0.8132574, 1)
 
 [node name="AimComponent" parent="." unique_id=392743642 node_paths=PackedStringArray("player") instance=ExtResource("5_o1chu")]
 player = NodePath("../LitViewport/Entities/Player")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1418907203]
+
+[node name="PauseUi" parent="CanvasLayer" unique_id=1060367445 instance=ExtResource("6_h4ce7")]

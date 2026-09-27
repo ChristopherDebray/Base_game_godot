@@ -1148,6 +1148,7 @@ position = Vector2(516, 102)
 position = Vector2(132, 164)
 
 [node name="Soldier" parent="LitViewport/Entities/Npcs" parent_id_path=PackedInt32Array(199427629) index="0" unique_id=1102328879 instance=ExtResource("10_1scuh")]
+process_mode = 0
 position = Vector2(300, 100)
 patrol_points = NodePath("../Paths")
 

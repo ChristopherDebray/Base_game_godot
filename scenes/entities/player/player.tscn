@@ -91,6 +91,7 @@ animations = [{
 size = Vector2(16, 16)
 
 [node name="Player" type="CharacterBody2D" unique_id=362983861]
+process_mode = 1
 y_sort_enabled = true
 script = ExtResource("1_afppm")
 
