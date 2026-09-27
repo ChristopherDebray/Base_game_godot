@@ -35,6 +35,7 @@ var _state: ENEMY_STATE = ENEMY_STATE.PATROLLING
 var _initial_facing_direction: Vector2
 var _initial_position: Vector2
 var _has_detected_player: bool = false
+var next_ms := 0
 
 func _ready() -> void:
 	setup()
@@ -150,6 +151,10 @@ func process_returning() -> void:
 		set_state(ENEMY_STATE.IDLE)
 
 func process_patrolling() -> void:
+	var now_ms := Time.get_ticks_msec()
+	if now_ms > next_ms:
+		SoundManager.play_footstep(global_position)
+		next_ms = Time.get_ticks_msec() + 1000
 	if nav_agent.is_navigation_finished() == true:
 		navigate_wp()
 

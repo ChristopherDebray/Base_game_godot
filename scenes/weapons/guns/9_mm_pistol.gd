@@ -1,23 +1,21 @@
 extends BaseWeapon
 
 func launch_primary_ability(target: Vector2):
-	print(target)
-	var dir = (target - global_position).normalized()
+	await super.launch_primary_ability(target)
+
+	var dir = (target - muzzle.global_position).normalized()
+	var space_state = get_world_2d().direct_space_state
 	
-	var raycast = RayCast2D.new()
-	raycast.global_position = muzzle.global_position
-	# RayCast2D.target_position est relatif à la position du RayCast lui-même,
-	# pas une position globale dans le monde.
-	# target est une position globale, donc le rayon part dans une direction complètement fausse
-	# Le multiplicateur = la distance max du rayon
-	raycast.target_position = dir * 100
-	print(raycast)
-	get_tree().current_scene.get_node("LitViewport").add_child(raycast)
+	var query = PhysicsRayQueryParameters2D.create(
+		muzzle.global_position,
+		muzzle.global_position + dir * primary_ability.range
+	)
+	query.exclude = [self]  # évite de se toucher soi-même
 	
-	# Quand on créer un raycast et qu'il est ajouté on ne calcule pas sa position encore,
-	# Il faut donc forcer la mise à jour
-	raycast.force_raycast_update()
-	print(raycast.get_collision_point())
-	print(raycast.is_colliding())
+	var result = space_state.intersect_ray(query)
 	
-	animated_sprite_2d.play("primary_ability")
+	if result:
+		hit_trigger(result.position, result.normal, result.collider)
+
+func hit_trigger(position: Vector2, normal: Vector2, collider: Variant):
+	SceneSpawnerManager.spawn_hit_particle(position, 0)

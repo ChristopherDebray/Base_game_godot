@@ -53,7 +53,7 @@ func get_movement_input() -> void:
 
 func get_actions_input():
 	if Input.is_action_just_released("primary_ability"):
-		_9_mm_pistol.launch_primary_ability(aim_dir)
+		_9_mm_pistol.try_launch_primary_ability(aim_dir)
 		
 
 func _update_facing() -> void:

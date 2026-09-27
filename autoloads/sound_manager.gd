@@ -3,6 +3,8 @@ extends Node
 
 class_name SfxManager
 
+const FOOTSTEPS_BOOTS = preload("uid://byhmwp2vibqd3")
+
 # --- Tag configuration container ---
 class TagConfig:
 	var max_simultaneous: int
@@ -12,7 +14,7 @@ class TagConfig:
 	var pitch_variation: float
 	var bus_name: String
 
-	func _init(max_simultaneous: int = 8, min_interval_ms: int = 0, audible_radius: float = 1600.0, priority: int = 0, pitch_variation: float = 1.4, bus_name: String = "SFX"):
+	func _init(max_simultaneous: int = 8, min_interval_ms: int = 0, audible_radius: float = 1600.0, priority: int = 0, pitch_variation: float = 1.2, bus_name: String = "SFX"):
 		self.max_simultaneous = max_simultaneous
 		self.min_interval_ms = min_interval_ms
 		self.audible_radius = audible_radius
@@ -110,6 +112,9 @@ func play_tag_at(tag_name: String, stream: AudioStream, world_position: Vector2,
 			return
 	_config_and_play(p, stream, world_position, volume_db, cfg, tag_name)
 	_tag_last_time[tag_name] = now_ms
+
+func play_footstep(pos: Vector2):
+	SoundManager.play_tag_at("footsteps", FOOTSTEPS_BOOTS, pos, 10.0)
 
 # -------- Internals --------
 

@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://p554j53dng6n"]
+
+[node name="CPUParticles2D" type="CPUParticles2D" unique_id=1337228448]
+modulate = Color(1, 1, 1, 0.7882353)
+scale = Vector2(1.8220148, 1.8220148)
+emitting = false
+amount = 4
+lifetime = 0.6
+one_shot = true
+speed_scale = 2.0
+explosiveness = 0.8
+randomness = 0.5
+emission_shape = 1
+emission_sphere_radius = 4.0
+gravity = Vector2(-10, 1)
+angular_velocity_min = -10.0
+angular_velocity_max = 10.0
+radial_accel_min = -10.0
+radial_accel_max = 10.0
+scale_amount_min = 3.0
+scale_amount_max = 3.0

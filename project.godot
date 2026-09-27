@@ -26,6 +26,7 @@ GameManager="*uid://cg3qtqu56s23i"
 InputSchemeManager="*uid://cpxe4pw2ri647"
 SignalManager="*uid://y4iw3t3yye5e"
 SoundManager="*uid://db3slm8athcic"
+SceneSpawnerManager="*uid://c40fm7rmgu6fr"
 
 [display]
 
@@ -97,7 +98,7 @@ secondary_ability={
 
 [layer_names]
 
-2d_physics/layer_1="wall"
+2d_physics/layer_1="wall_sm"
 2d_navigation/layer_1="base"
 
 [physics]

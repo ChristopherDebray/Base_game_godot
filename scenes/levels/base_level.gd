@@ -4,9 +4,11 @@ extends Node2D
 @onready var camera_2d: Camera2D = $Camera2D
 @onready var light_holder: Node2D = $VisibilityViewport/LightHolder
 @onready var aim_component: AimComponent = $AimComponent
+@onready var visibility_viewport: SubViewport = $VisibilityViewport
+@onready var lit_viewport: SubViewport = $LitViewport
 
 func _ready() -> void:
-	pass
+	SceneSpawnerManager.setup(lit_viewport)
 
 func _process(delta: float) -> void:
 	camera_2d.position = player.position

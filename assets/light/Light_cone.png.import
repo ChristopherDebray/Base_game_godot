@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tcc2utj3akss"
-path="res://.godot/imported/light_cone.webp-9bab50d44bacc211a87bc975456a4471.ctex"
+uid="uid://ouu7qiu5nxkk"
+path="res://.godot/imported/Light_cone.png-6709dcff884c732de5dadd88a3b08116.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/light/light_cone.webp"
-dest_files=["res://.godot/imported/light_cone.webp-9bab50d44bacc211a87bc975456a4471.ctex"]
+source_file="res://assets/light/Light_cone.png"
+dest_files=["res://.godot/imported/Light_cone.png-6709dcff884c732de5dadd88a3b08116.ctex"]
 
 [params]
 
