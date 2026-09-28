@@ -107,6 +107,7 @@ shape = SubResource("RectangleShape2D_cah3j")
 
 [node name="9mmPistol" parent="." unique_id=1844201469 instance=ExtResource("4_nh4ur")]
 position = Vector2(19, 0)
+fire_rate = null
 
 [node name="Muzzle" type="Node2D" parent="." unique_id=1700782415]
 position = Vector2(14, 0)

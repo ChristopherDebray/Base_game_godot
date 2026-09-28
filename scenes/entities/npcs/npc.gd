@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends Damageable
 
 class_name Npc
 
@@ -25,7 +25,7 @@ enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING }
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
-
+@onready var health_component: HealthComponent = $HealthComponent
 @onready var light_raycast_2d: RayCast2D = $PlayerDetect/LightRaycast2D
 
 var _waypoints: Array = []

@@ -9,6 +9,7 @@ extends Node2D
 
 func _ready() -> void:
 	SceneSpawnerManager.setup(lit_viewport)
+	SignalManager.on_death.connect(_on_death)
 
 func _process(delta: float) -> void:
 	camera_2d.position = player.position
@@ -20,3 +21,6 @@ func _process(delta: float) -> void:
 func get_aim_direction() -> Vector2:
 	var aim_world_pos := aim_component.get_aim_world_position()
 	return global_position.direction_to(aim_world_pos)
+
+func _on_death(pos: Vector2):
+	SceneSpawnerManager.spawn_death_particle(pos)

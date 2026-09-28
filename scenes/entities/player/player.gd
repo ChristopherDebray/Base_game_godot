@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends Damageable
 
 class_name Player
 
