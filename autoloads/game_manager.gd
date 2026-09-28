@@ -13,6 +13,7 @@ var used_controls := CONTROLS_TYPE.KEYBOARD
 func _ready() -> void:
 	camera_shake_noise = FastNoiseLite.new()
 	set_used_controls()
+	SignalManager.on_death.connect(_on_death)
 
 func modify_current_health(amount: float):
 	current_health = current_health + amount
@@ -39,3 +40,7 @@ func set_used_controls():
 		used_controls = CONTROLS_TYPE.KEYBOARD
 	elif !Input.get_connected_joypads().is_empty():
 		used_controls = CONTROLS_TYPE.XBOX
+
+func _on_death(pos: Vector2):
+	print("death")
+	return

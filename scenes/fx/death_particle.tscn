@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://dy17d1da57hic"]
+
+[node name="DeathParticle" type="CPUParticles2D" unique_id=731267936]
+emitting = false
+lifetime = 0.8
+one_shot = true
+speed_scale = 2.0
+explosiveness = 0.3
+emission_shape = 2
+emission_sphere_radius = 10.0
+gravity = Vector2(0, 0)
+radial_accel_min = 10.0
+radial_accel_max = 20.0
+scale_amount_min = 4.0
+scale_amount_max = 4.0

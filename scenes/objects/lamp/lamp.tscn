@@ -8,4 +8,6 @@
 
 [node name="PointLight2D" type="PointLight2D" parent="Sprite2D" unique_id=1568312186]
 scale = Vector2(0.40660727, 0.40660727)
+shadow_enabled = true
+shadow_filter = 2
 texture = ExtResource("1_14x8j")

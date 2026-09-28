@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dm6bc3e58pgny"]
+
+[ext_resource type="Script" uid="uid://ddviapp6xhf4l" path="res://scenes/ui/menu_bootstrap.gd" id="1_tssiw"]
+
+[node name="MenuBootstrap" type="Control" unique_id=149583393]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tssiw")
