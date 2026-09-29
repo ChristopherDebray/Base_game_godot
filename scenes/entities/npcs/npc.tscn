@@ -12,10 +12,6 @@ script = ExtResource("1_ujkxw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1112970280]
 
-[node name="PlayerDetect" type="Node2D" parent="." unique_id=1495446021]
-
-[node name="LightRaycast2D" type="RayCast2D" parent="PlayerDetect" unique_id=699324795]
-
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1538370023]
 avoidance_enabled = true
 

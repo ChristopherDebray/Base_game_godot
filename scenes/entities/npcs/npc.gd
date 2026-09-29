@@ -52,7 +52,7 @@ enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING }
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var health_component: HealthComponent = $HealthComponent
-@onready var light_raycast_2d: RayCast2D = $PlayerDetect/LightRaycast2D
+@onready var fov_detection_component: FovDetectionComponent = $FovDetectionComponent
 
 var _waypoints: Array = []
 var _current_wp: int = 0
@@ -60,9 +60,10 @@ var _player_ref: Player
 var _state: ENEMY_STATE = ENEMY_STATE.PATROLLING
 var _initial_facing_direction: Vector2
 var _initial_position: Vector2
-var _has_detected_player: bool = false
 var next_ms := 0
 var is_idle: bool = false
+
+var target: Node2D
 
 func _ready() -> void:
 	setup()
@@ -78,6 +79,7 @@ func setup():
 	_player_ref = get_tree().get_first_node_in_group("player")
 	_initial_facing_direction = animated_sprite_2d.global_transform.x.normalized()
 	_initial_position = global_position
+	fov_detection_component.detect.connect(_on_detect)
 
 func late_setup():
 	await get_tree().physics_frame
@@ -187,7 +189,7 @@ func process_patrolling() -> void:
 		navigate_wp()
 
 func process_chasing() -> void:
-	set_nav_to_player()
+	set_nav_to_position(target.global_position)
 
 func process_searching() -> void:
 	if nav_agent.is_navigation_finished() == true:
@@ -199,3 +201,7 @@ func process_searching() -> void:
 func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 	velocity = safe_velocity
 	move_and_slide()
+
+func _on_detect(body: Node2D):
+	set_nav_to_position(body.global_position)
+	set_state(ENEMY_STATE.CHASING)

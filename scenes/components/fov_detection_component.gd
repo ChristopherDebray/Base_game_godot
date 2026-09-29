@@ -25,7 +25,6 @@ func _on_body_entered(body: Node2D) -> void:
 	)
 	
 	if !is_instance_of(result.collider, Player):
-		print("not detected")
 		return
 	
-	print("detected")
+	detect.emit(body)
