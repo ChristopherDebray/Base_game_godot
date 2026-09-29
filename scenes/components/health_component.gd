@@ -3,7 +3,7 @@ extends Node2D
 class_name HealthComponent
 
 @export var health: float = 100
-
+signal test
 var current_health: float
 var entity: Damageable
 

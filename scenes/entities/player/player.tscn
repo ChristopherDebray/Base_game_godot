@@ -93,6 +93,7 @@ size = Vector2(16, 16)
 [node name="Player" type="CharacterBody2D" unique_id=362983861]
 process_mode = 1
 y_sort_enabled = true
+collision_layer = 32769
 script = ExtResource("1_afppm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=940797672]

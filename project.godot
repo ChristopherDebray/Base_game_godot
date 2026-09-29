@@ -28,6 +28,7 @@ SignalManager="*uid://y4iw3t3yye5e"
 SoundManager="*uid://db3slm8athcic"
 SceneSpawnerManager="*uid://c40fm7rmgu6fr"
 MenuManager="*uid://5akcm43dx4ig"
+CollisionManager="*uid://ceo18lh7ijwr7"
 
 [display]
 
@@ -104,8 +105,9 @@ pause={
 
 [layer_names]
 
-2d_physics/layer_1="wall_sm"
+2d_physics/layer_1="walls"
 2d_navigation/layer_1="base"
+2d_physics/layer_16="caracters"
 
 [physics]
 

@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dvyj0qmn8wilj"]
+
+[ext_resource type="Script" uid="uid://cyb3huqng5gql" path="res://scenes/components/fov_detection_component.gd" id="1_ja01t"]
+
+[node name="FovDetectionComponent" type="Area2D" unique_id=1197279757]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_ja01t")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1742538822]
+polygon = PackedVector2Array(60, -30, 60, 30, 0, 0)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -17,10 +17,36 @@ var SPEED = {
 	ENEMY_STATE.SEARCHING: 90.0
 }
 
+# Système de detection
+## 1. mettre un cone area2d, détecter les body.
+## 		Si tu rentres, ça check si c'est le player, si non
+##			return
+##		
+##		Trace un PhysicsRayQueryParameters2D vers le body de la taille x du champ de vision (taille max)
+##		SI collider != player
+##			return
+## 		Pr le process_chasing tu de déplace vers la cible et tu regardes vers elle
+## 		Si tu perds la cible de vue, tu te déplace vers sont dernier point connu
+## 
+## Problèmes
+## 		Du coup à chaque body qui rentre il va calculer.
+##		Si on créer mask dédié au player qui détecte que le player ça évite pas mal de souci
+## 		
+## 		Donc à chaque fois que tu est "détecté" ça va créer un rayon pour savoir si t'est derrière
+## 		Un mur ou pas. En vrai PhysicsRayQueryParameters2D est bcp plus opti que
+##		Raycast ou les méthode que j'ai utilisé sur l'autre jeu
+##
+## Questions
+##		En soit la je détecte que le player, sur l'autre jeu j'ai mis player_ref et je gardais la ref
+##		du joueur, mais du coup pour chaque enemy tu stock le player pas fou non ?
+##		Au final c'est mieux de juste choper le collider à la volée, de tt façon
+##		Faut check dans tout les cas si c'est bien un player
+## 			En plus c'est cool si plus tard je veux un système de "faction"
+## 			Avec des enemy qui se tape pas juste le player
+
 enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING }
 
 @export var patrol_points: NodePath
-@export var is_idle: bool = false
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -36,6 +62,7 @@ var _initial_facing_direction: Vector2
 var _initial_position: Vector2
 var _has_detected_player: bool = false
 var next_ms := 0
+var is_idle: bool = false
 
 func _ready() -> void:
 	setup()
@@ -43,6 +70,7 @@ func _ready() -> void:
 
 func setup():
 	set_physics_process(false)
+	is_idle = patrol_points.is_empty()
 	if is_idle:
 		_state = ENEMY_STATE.IDLE
 	
