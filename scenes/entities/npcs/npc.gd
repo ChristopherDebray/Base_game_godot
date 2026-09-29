@@ -63,8 +63,6 @@ var _initial_position: Vector2
 var next_ms := 0
 var is_idle: bool = false
 
-var target: Node2D
-
 func _ready() -> void:
 	setup()
 	call_deferred("late_setup")
@@ -115,8 +113,7 @@ func set_nav_to_position(nav_position: Vector2) -> void:
 
 func update_state() -> void:
 	var new_state = _state
-	var can_see = false
-	#var can_see = can_see_player()
+	var can_see = fov_detection_component.can_see_detected_body()
 	
 	if can_see == true:
 		new_state = ENEMY_STATE.CHASING
@@ -151,9 +148,9 @@ func search_player() -> void:
 	set_state(ENEMY_STATE.SEARCHING)
 	set_nav_to_player()
 
-func search_position(search_position: Vector2) -> void:
+func search_position(pos: Vector2) -> void:
 	set_state(ENEMY_STATE.SEARCHING)
-	set_nav_to_position(search_position)
+	set_nav_to_position(pos)
 
 # WAYPOINTS
 
@@ -189,14 +186,16 @@ func process_patrolling() -> void:
 		navigate_wp()
 
 func process_chasing() -> void:
-	set_nav_to_position(target.global_position)
+	set_nav_to_position(fov_detection_component.detected_body.global_position)
 
 func process_searching() -> void:
-	if nav_agent.is_navigation_finished() == true:
-		var _new_state = ENEMY_STATE.PATROLLING
-		if is_idle:
-			_new_state = ENEMY_STATE.RETURNING
-		set_state(_new_state)
+	if nav_agent.is_navigation_finished() == false:
+		return
+	
+	var _new_state = ENEMY_STATE.PATROLLING
+	if is_idle:
+		_new_state = ENEMY_STATE.RETURNING
+	set_state(_new_state)
 
 func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 	velocity = safe_velocity
@@ -205,3 +204,7 @@ func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 func _on_detect(body: Node2D):
 	set_nav_to_position(body.global_position)
 	set_state(ENEMY_STATE.CHASING)
+
+func _on_lost(body: Node2D):
+	set_nav_to_position(body.global_position)
+	set_state(ENEMY_STATE.SEARCHING)
