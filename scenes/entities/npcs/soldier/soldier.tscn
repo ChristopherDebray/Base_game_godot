@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://cqaw1sa4on8xe" path="res://scenes/entities/npcs/npc.tscn" id="1_vofsr"]
 [ext_resource type="Texture2D" uid="uid://qd31ge3l1g3y" path="res://assets/entities/ranger_cute.png" id="2_5scpb"]
+[ext_resource type="Script" uid="uid://dd6oxv8me7rld" path="res://scenes/entities/npcs/soldier/soldier.gd" id="2_yd37b"]
+[ext_resource type="PackedScene" uid="uid://du8sytr0jrmyu" path="res://scenes/weapons/guns/9_mm_pistol.tscn" id="3_2skag"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2skag"]
 atlas = ExtResource("2_5scpb")
@@ -70,6 +72,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nip3c"]
 
 [node name="Soldier" unique_id=1102328879 instance=ExtResource("1_vofsr")]
+script = ExtResource("2_yd37b")
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=714265977]
 sprite_frames = SubResource("SpriteFrames_vofsr")
@@ -77,5 +80,8 @@ sprite_frames = SubResource("SpriteFrames_vofsr")
 [node name="CollisionShape2D" parent="." index="1" unique_id=1112970280]
 position = Vector2(1, 2)
 shape = SubResource("RectangleShape2D_nip3c")
+
+[node name="9mmPistol" parent="." index="5" unique_id=1844201469 instance=ExtResource("3_2skag")]
+position = Vector2(18, 0)
 
 [connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
