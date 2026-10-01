@@ -19,3 +19,6 @@ avoidance_enabled = true
 health = 8.0
 
 [node name="FovDetectionComponent" parent="." unique_id=1197279757 instance=ExtResource("3_ii721")]
+
+[node name="Muzzle" type="Node2D" parent="." unique_id=307159199]
+position = Vector2(23, 0)

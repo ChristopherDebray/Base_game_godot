@@ -12,6 +12,24 @@ class_name BaseWeapon
 var can_launch_primary_ability: bool = true
 var can_launch_secondary_ability: bool = true
 
+var init_sprite_position_x: float
+var init_muzzle_position_x: float
+
+func setup(muzzle_position: Vector2):
+	init_sprite_position_x = muzzle_position.x
+	init_muzzle_position_x = muzzle.position.x + muzzle_position.x
+	
+	animated_sprite_2d.position.x = muzzle_position.x
+	muzzle.position.x = muzzle.position.x + muzzle_position.x
+
+func aim_at(aim_dir: Vector2):
+	look_at(aim_dir)
+	var aim_dir_angle = aim_dir.angle() * 10
+	position.y = aim_dir_angle
+
+func flip_weapon(must_reverse_flip: bool):
+	animated_sprite_2d.flip_v = must_reverse_flip
+
 func try_launch_primary_ability(target: Vector2):
 	if not can_launch_primary_ability:
 		return
@@ -42,3 +60,9 @@ func launch_secondary_ability(target: Vector2):
 	
 	animated_sprite_2d.play("secondary_ability")
 	SoundManager.play_tag_at("shoot", secondary_ability.sound, global_position, 10)
+
+func set_aim_dir(dir: Vector2):
+	look_at(dir)
+	# @todo fix to move weapond in radius
+	var aim_dir_angle = dir.angle() * 10
+	position.y = aim_dir_angle

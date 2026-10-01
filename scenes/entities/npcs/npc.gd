@@ -11,21 +11,23 @@ var FOV = {
 }
 var SPEED = {
 	ENEMY_STATE.IDLE: 60.0,
-	ENEMY_STATE.RETURNING: 90.0,
-	ENEMY_STATE.PATROLLING: 80.0,
-	ENEMY_STATE.CHASING: 90.0,
-	ENEMY_STATE.SEARCHING: 90.0
+	ENEMY_STATE.RETURNING: 80.0,
+	ENEMY_STATE.PATROLLING: 70.0,
+	ENEMY_STATE.CHASING: 80.0,
+	ENEMY_STATE.SEARCHING: 80.0
 }
 
 enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING }
 
 @export var patrol_points: NodePath
+@export var current_weapon: BaseWeapon
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var fov_detection_component: FovDetectionComponent = $FovDetectionComponent
+@onready var muzzle: Node2D = $Muzzle
 
 var _waypoints: Array = []
 var _current_wp: int = 0
@@ -35,6 +37,9 @@ var _initial_facing_direction: Vector2
 var _initial_position: Vector2
 var next_ms := 0
 var is_idle: bool = false
+var facing_direction: Vector2 = Vector2.RIGHT
+var facing_position: Vector2
+var aim_target: Vector2
 
 func _ready() -> void:
 	setup()
@@ -56,11 +61,14 @@ func late_setup():
 	await get_tree().physics_frame
 	await get_tree().create_timer(0.3).timeout
 	call_deferred("set_physics_process", true)
+	current_weapon.setup(muzzle.position)
 
 func _physics_process(delta):
 	update_state()
 	update_movement()
 	update_navigation()
+	_update_facing()
+	set_aim_dir(aim_target)
 
 func set_state(new_state: ENEMY_STATE) -> void:
 	if new_state == _state:
@@ -108,12 +116,31 @@ func update_movement() -> void:
 		ENEMY_STATE.CHASING:
 			process_chasing()
 
+func _update_facing() -> void:
+	if facing_position.x < -0.05:
+		flip_facing(false)
+		current_weapon.flip_weapon(false)
+	elif facing_position.x > 0.05:
+		flip_facing(true)
+		current_weapon.flip_weapon(true)
+	
+func set_aim_dir(dir: Vector2):
+	current_weapon.aim_at(dir)
+	facing_position = global_position - dir
+
+func flip_facing(must_reverse_flip: bool):
+	animated_sprite_2d.flip_h = must_reverse_flip
+	if must_reverse_flip:
+		facing_direction = Vector2.LEFT
+		return
+	facing_direction = Vector2.RIGHT
+
 func update_navigation() -> void:
 	if nav_agent.is_navigation_finished() == true:
 		return
 	
 	var next_path_position: Vector2 = nav_agent.get_next_path_position()
-	animated_sprite_2d.look_at(next_path_position)
+	aim_target = next_path_position
 	fov_detection_component.look_at(next_path_position)
 	var ini_v = global_position.direction_to(next_path_position) * SPEED[_state]
 	nav_agent.set_velocity(ini_v)

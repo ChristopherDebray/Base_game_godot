@@ -12,25 +12,29 @@ class_name Player
 
 const SPEED: float = 130.0
 const PROBE_SIZE = Vector2(50, 50)
-const MUZZLE_INVERTION_POS: float = -10
 
 var facing_direction: Vector2 = Vector2.RIGHT
 var facing_position: Vector2
 
-var muzzle_initial_position: float = 27
 var idle_anim_name := "idle" 
 var run_anim_name := "walk" 
 var idle_frame_index := 1
 # The aim_dir will be set via the aim_component on base_level scene
 var aim_dir := Vector2(10, 0)
-var base_weapon_pos := Vector2(0, 0)
-var weapon_pos := Vector2(0, 0)
 
 const LIGHT_RADIANT_OFFSET := deg_to_rad(-90)
 
+# Rotate weapon
+## Je veux que l'arme se déplace en direction de la cible directement plutot que juste tourner
+## Créer un block et mettre l'arme dedans, rotate le block, pas l'arme
+## Problèmes
+### On ser retrouves avec un node en plus et aussi il faut gérer l'offset à la main pr chaque.
+## Solutions
+### Faire en sorte uqe lors de l'init de l'arme, tu initialise l'offset à la position du muzzle
+### Pour le sprite de l'arme
+
 func _ready() -> void:
-	base_weapon_pos = _9_mm_pistol.position
-	return
+	_9_mm_pistol.setup(muzzle.position)
 
 func _physics_process(delta: float) -> void:
 	var transform = Transform2D()
@@ -44,10 +48,7 @@ func _physics_process(delta: float) -> void:
 
 func set_aim_dir(dir: Vector2):
 	aim_dir = dir
-	_9_mm_pistol.look_at(aim_dir)
-	# @todo fix to move weapond in radius
-	var aim_dir_angle = aim_dir.angle() * 10
-	_9_mm_pistol.position.y = aim_dir_angle
+	_9_mm_pistol.aim_at(aim_dir)
 	facing_position = global_position - aim_dir
 
 func get_movement_input() -> void:
@@ -63,20 +64,18 @@ func get_actions_input():
 
 func _update_facing() -> void:
 	if facing_position.x < -0.05:
-		animated_sprite_2d.flip_h = false
-		muzzle.position.x = muzzle_initial_position
-		facing_direction = Vector2.RIGHT
-		weapon_pos = base_weapon_pos
-		_9_mm_pistol.animated_sprite_2d.flip_v = false
+		flip_facing(false)
+		_9_mm_pistol.flip_weapon(false)
 	elif facing_position.x > 0.05:
-		animated_sprite_2d.flip_h = true
-		muzzle.position.x = MUZZLE_INVERTION_POS
-		facing_direction = Vector2.LEFT
-		weapon_pos = -base_weapon_pos
-		_9_mm_pistol.animated_sprite_2d.flip_v = true
-		
-	_9_mm_pistol.position = weapon_pos
+		flip_facing(true)
+		_9_mm_pistol.flip_weapon(true)
 	
+func flip_facing(must_reverse_flip: bool):
+	animated_sprite_2d.flip_h = must_reverse_flip
+	if must_reverse_flip:
+		facing_direction = Vector2.LEFT
+		return
+	facing_direction = Vector2.RIGHT
 
 func _update_anim() -> void:
 	# seuil pour éviter de “jouer/arrêter” quand la vitesse est quasi nulle

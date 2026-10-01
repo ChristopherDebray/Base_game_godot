@@ -1152,6 +1152,7 @@ position = Vector2(132, 164)
 
 [node name="Soldier2" parent="LitViewport/Entities/Npcs" parent_id_path=PackedInt32Array(199427629) index="0" unique_id=1102328879 instance=ExtResource("10_1scuh")]
 position = Vector2(438, 239)
+patrol_points = null
 
 [node name="Soldier" parent="LitViewport/Entities/Npcs" parent_id_path=PackedInt32Array(199427629) index="1" unique_id=791437307 instance=ExtResource("10_1scuh")]
 process_mode = 0
