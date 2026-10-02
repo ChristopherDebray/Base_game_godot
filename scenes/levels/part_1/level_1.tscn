@@ -1080,8 +1080,8 @@ shader = ExtResource("4_7tlrb")
 
 [node name="BaseLevel" unique_id=495596206 instance=ExtResource("1_ks53v")]
 
-[node name="DirectionalLight2D" parent="." index="1" unique_id=1007571249]
-position = Vector2(-310, 15)
+[node name="CanvasLayer" parent="." index="1" unique_id=1418907203]
+process_mode = 3
 
 [node name="LitViewFogOfWar" type="Node2D" parent="." index="2" unique_id=1441937440]
 
@@ -1101,17 +1101,20 @@ modulate = Color(0.1254902, 0.1254902, 0.1254902, 1)
 y_sort_enabled = true
 tile_set = SubResource("TileSet_0qes0")
 
-[node name="LitView" parent="." index="3" unique_id=1424341239]
+[node name="DirectionalLight2D" parent="." index="3" unique_id=1007571249]
+position = Vector2(-310, 15)
+
+[node name="LitView" parent="." index="4" unique_id=1424341239]
 material = SubResource("ShaderMaterial_1scuh")
 texture = SubResource("ViewportTexture_h8qkv")
 
-[node name="VisibilityDebugView" parent="." index="4" unique_id=1174649125]
+[node name="VisibilityDebugView" parent="." index="5" unique_id=1174649125]
 texture = SubResource("ViewportTexture_nhqxr")
 
-[node name="LitDebugView" parent="." index="5" unique_id=914462528]
+[node name="LitDebugView" parent="." index="6" unique_id=914462528]
 texture = SubResource("ViewportTexture_tqku2")
 
-[node name="VisibilityViewport" parent="." index="6" unique_id=762621373]
+[node name="VisibilityViewport" parent="." index="7" unique_id=762621373]
 transparent_bg = true
 
 [node name="LightHolder" parent="VisibilityViewport" index="0" unique_id=1228069941]
@@ -1134,7 +1137,7 @@ y_sort_enabled = true
 material = SubResource("ShaderMaterial_4iill")
 tile_set = SubResource("TileSet_0qes0")
 
-[node name="LitViewport" parent="." index="7" unique_id=1202024971]
+[node name="LitViewport" parent="." index="8" unique_id=1202024971]
 transparent_bg = true
 
 [node name="Floor" type="TileMapLayer" parent="LitViewport" index="0" unique_id=112060656]

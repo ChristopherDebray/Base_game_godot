@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://cusqyoco2wx3c"]
+
+[ext_resource type="PackedScene" uid="uid://b72wk3n5ym4yx" path="res://scenes/ui/audio_input_master.tscn" id="1_eiwsy"]
+
+[node name="SoundForm" type="VBoxContainer" unique_id=1288500784]
+process_mode = 3
+custom_minimum_size = Vector2(390, 0)
+custom_maximum_size = Vector2(390, -1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=675011168]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1415409640]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Master"
+
+[node name="AudioInputMaster" parent="VBoxContainer" unique_id=1088872432 instance=ExtResource("1_eiwsy")]
+layout_mode = 2
+audio_bus_name = "Master"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=401674812]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2" unique_id=1337808554]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Music"
+
+[node name="AudioInputMaster" parent="VBoxContainer2" unique_id=615778589 instance=ExtResource("1_eiwsy")]
+layout_mode = 2
+audio_bus_name = "Music"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=41602751]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer3" unique_id=408703363]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "FX"
+
+[node name="AudioInputMaster" parent="VBoxContainer3" unique_id=1953846855 instance=ExtResource("1_eiwsy")]
+layout_mode = 2
+audio_bus_name = "Sfx"

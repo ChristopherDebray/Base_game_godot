@@ -29,6 +29,7 @@ SoundManager="*uid://db3slm8athcic"
 SceneSpawnerManager="*uid://c40fm7rmgu6fr"
 MenuManager="*uid://5akcm43dx4ig"
 CollisionManager="*uid://ceo18lh7ijwr7"
+SettingsManager="*uid://cmy82n7e1a3bx"
 
 [display]
 

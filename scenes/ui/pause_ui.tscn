@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bjdnwmnr7m5pi" path="res://scenes/ui/pause_ui.gd" id="1_ghgjp"]
 [ext_resource type="PackedScene" uid="uid://dm6bc3e58pgny" path="res://scenes/ui/menu_bootstrap.tscn" id="1_xt3ok"]
+[ext_resource type="PackedScene" uid="uid://cusqyoco2wx3c" path="res://scenes/ui/sound_form.tscn" id="2_yrwkb"]
 
 [node name="PauseUi" type="Control" unique_id=1060367445]
 process_mode = 3
@@ -15,14 +16,71 @@ grow_vertical = 2
 script = ExtResource("1_ghgjp")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=411467542]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.33333334, 0.33333334, 0.33333334, 0.27058825)
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1439059162]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=360850377]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/TextureRect" unique_id=1049088982]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 140
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 140
+theme_override_constants/margin_bottom = 140
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/TextureRect/MarginContainer" unique_id=1382665200]
+layout_mode = 2
+tab_alignment = 1
+current_tab = 0
+
+[node name="Options" type="TabBar" parent="MarginContainer/TextureRect/MarginContainer/TabContainer" unique_id=649709358]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/TextureRect/MarginContainer/TabContainer/Options" unique_id=876265941]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 100
+
+[node name="Control" type="Control" parent="MarginContainer/TextureRect/MarginContainer/TabContainer/Options/MarginContainer" unique_id=1387452080]
+layout_mode = 2
+
+[node name="SoundForm" parent="MarginContainer/TextureRect/MarginContainer/TabContainer/Options/MarginContainer/Control" unique_id=1288500784 instance=ExtResource("2_yrwkb")]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 390.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Controls" type="TabBar" parent="MarginContainer/TextureRect/MarginContainer/TabContainer" unique_id=508188480]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="MenuBootstrap" parent="." unique_id=149583393 instance=ExtResource("1_xt3ok")]
 layout_mode = 1

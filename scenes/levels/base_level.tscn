@@ -31,6 +31,10 @@ script = ExtResource("1_h4ce7")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=510499961]
 zoom = Vector2(1.5, 1.5)
 
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1418907203]
+
+[node name="PauseUi" parent="CanvasLayer" unique_id=1060367445 instance=ExtResource("6_h4ce7")]
+
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=1007571249]
 position = Vector2(-13.000008, -18)
 rotation = -0.74700093
@@ -92,7 +96,3 @@ color = Color(0.8132577, 0.81325775, 0.8132574, 1)
 
 [node name="AimComponent" parent="." unique_id=392743642 node_paths=PackedStringArray("player") instance=ExtResource("5_o1chu")]
 player = NodePath("../LitViewport/Entities/Player")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1418907203]
-
-[node name="PauseUi" parent="CanvasLayer" unique_id=1060367445 instance=ExtResource("6_h4ce7")]

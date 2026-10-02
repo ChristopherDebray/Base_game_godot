@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b72wk3n5ym4yx"]
+
+[ext_resource type="Script" uid="uid://ingaupv7ss4f" path="res://scenes/ui/audio_input.gd" id="1_xgqmm"]
+
+[node name="AudioInputMaster" type="HSlider" unique_id=1088872432]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("1_xgqmm")
