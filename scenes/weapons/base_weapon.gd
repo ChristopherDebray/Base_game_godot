@@ -44,7 +44,7 @@ func try_launch_primary_ability(target: Vector2):
 		return
 
 	if current_ammunition == 0:
-		reload(max_ammunitions)
+		reload()
 		return
 	
 	can_launch_primary_ability = false
@@ -80,8 +80,8 @@ func set_aim_dir(dir: Vector2):
 	var aim_dir_angle = dir.angle() * 10
 	position.y = aim_dir_angle
 
-func reload(ammunitions: int):
-	current_ammunition = ammunitions
+func reload():
+	current_ammunition = max_ammunitions
 	is_reloading = true
 	animated_sprite_2d.play("reload")
 	SoundManager.play_tag_at("reload", primary_ability.reload_sound, global_position, 10)
