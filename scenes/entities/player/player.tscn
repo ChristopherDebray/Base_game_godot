@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cbl8atr24cu21" path="res://scenes/entities/player/player.gd" id="1_afppm"]
 [ext_resource type="Texture2D" uid="uid://qd31ge3l1g3y" path="res://assets/entities/ranger_cute.png" id="1_tlaso"]
-[ext_resource type="PackedScene" uid="uid://du8sytr0jrmyu" path="res://scenes/weapons/guns/9_mm_pistol.tscn" id="4_nh4ur"]
+[ext_resource type="PackedScene" uid="uid://cbrkppffb548k" path="res://scenes/components/weapon_holder_component.tscn" id="4_bjvvg"]
+[ext_resource type="PackedScene" uid="uid://corngir70i7ee" path="res://scenes/components/objects_holder_component.tscn" id="4_nh4ur"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_afppm"]
 atlas = ExtResource("1_tlaso")
@@ -106,9 +107,13 @@ frame_progress = 0.6722283
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_cah3j")
 
-[node name="9mmPistol" parent="." unique_id=1844201469 instance=ExtResource("4_nh4ur")]
-
 [node name="Muzzle" type="Node2D" parent="." unique_id=1700782415]
 position = Vector2(23, 0)
 
 [node name="AudioListener2D" type="AudioListener2D" parent="." unique_id=1431995565]
+
+[node name="WeaponHolderComponent" parent="." unique_id=1441292615 instance=ExtResource("4_bjvvg")]
+
+[node name="ObjectsHolderComponent" parent="." unique_id=1505046309 node_paths=PackedStringArray("weapon_holder", "muzzle") instance=ExtResource("4_nh4ur")]
+weapon_holder = NodePath("../WeaponHolderComponent")
+muzzle = NodePath("../Muzzle")

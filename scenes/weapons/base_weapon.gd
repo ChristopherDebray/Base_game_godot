@@ -86,6 +86,12 @@ func reload():
 	animated_sprite_2d.play("reload")
 	SoundManager.play_tag_at("reload", primary_ability.reload_sound, global_position, 10)
 
+func hit_trigger(damage: float, position: Vector2, normal: Vector2, collider: Variant):
+	SceneSpawnerManager.spawn_hit_particle(position, 0)
+	if is_instance_of(collider, Npc):
+		var npc: Npc = collider
+		npc.health_component.apply_damage(damage)
+
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_sprite_2d.animation != "reload":
 		return

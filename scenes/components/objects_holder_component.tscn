@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://corngir70i7ee"]
+
+[ext_resource type="Script" uid="uid://dvbs50p6miiqq" path="res://scenes/components/objects_holder_component.gd" id="1_orl5u"]
+
+[node name="ObjectsHolderComponent" type="Node2D" unique_id=1505046309]
+script = ExtResource("1_orl5u")

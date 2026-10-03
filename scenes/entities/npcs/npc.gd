@@ -20,7 +20,7 @@ var SPEED = {
 enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING }
 
 @export var patrol_points: NodePath
-@export var current_weapon: BaseWeapon
+@export var initial_weapon: PackedScene
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -28,6 +28,7 @@ enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING }
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var fov_detection_component: FovDetectionComponent = $FovDetectionComponent
 @onready var muzzle: Node2D = $Muzzle
+@onready var weapon_holder_component: WeaponHolderComponent = $WeaponHolderComponent
 
 var _waypoints: Array = []
 var _current_wp: int = 0
@@ -61,7 +62,10 @@ func late_setup():
 	await get_tree().physics_frame
 	await get_tree().create_timer(0.3).timeout
 	call_deferred("set_physics_process", true)
-	current_weapon.setup(muzzle.position)
+	weapon_holder_component.switch_weapon(
+		initial_weapon.instantiate(),
+		muzzle.position
+	)
 
 func _physics_process(delta):
 	update_state()
@@ -119,13 +123,13 @@ func update_movement() -> void:
 func _update_facing() -> void:
 	if facing_position.x < -0.05:
 		flip_facing(false)
-		current_weapon.flip_weapon(false)
+		weapon_holder_component.current_weapon.flip_weapon(false)
 	elif facing_position.x > 0.05:
 		flip_facing(true)
-		current_weapon.flip_weapon(true)
+		weapon_holder_component.current_weapon.flip_weapon(true)
 	
 func set_aim_dir(dir: Vector2):
-	current_weapon.aim_at(dir)
+	weapon_holder_component.current_weapon.aim_at(dir)
 	facing_position = global_position - dir
 
 func flip_facing(must_reverse_flip: bool):

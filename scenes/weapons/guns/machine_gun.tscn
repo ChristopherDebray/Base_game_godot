@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://0q4gltcb58aj"]
+
+[ext_resource type="PackedScene" uid="uid://jl3r1ixc4q64" path="res://scenes/weapons/base_weapon.tscn" id="1_7am7k"]
+[ext_resource type="Texture2D" uid="uid://b3tyeemo10q70" path="res://assets/weapons/gun.png" id="2_gdeeo"]
+[ext_resource type="Script" uid="uid://cjnpiussy775v" path="res://scenes/weapons/projectile_weapon.gd" id="2_ncyc7"]
+[ext_resource type="Resource" uid="uid://5n6hs2jxxtu6" path="res://datas/abilities/machine_gun_bullet.tres" id="3_i6dus"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ncyc7"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i6dus"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m28u3"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ys5od"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_16oun"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8eqy8"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cuff3"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymprn"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjiff"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ryoht"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jawhy"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hcdq1"]
+atlas = ExtResource("2_gdeeo")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lkqgg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ncyc7")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i6dus")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m28u3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ys5od")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_16oun")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8eqy8")
+}],
+"loop": 0,
+"name": &"primary_ability",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cuff3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymprn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vjiff")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ryoht")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jawhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hcdq1")
+}],
+"loop": 0,
+"name": &"reload",
+"speed": 10.0
+}]
+
+[node name="MachineGun" unique_id=1844201469 instance=ExtResource("1_7am7k")]
+script = ExtResource("2_ncyc7")
+primary_ability = ExtResource("3_i6dus")
+max_ammunitions = 20
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=810678021]
+modulate = Color(1, 0.38431373, 0.14509805, 1)
+sprite_frames = SubResource("SpriteFrames_lkqgg")
+animation = &"reload"
+frame = 5
+frame_progress = 1.0

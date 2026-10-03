@@ -1,7 +1,5 @@
 extends Npc
 
-@onready var _9_mm_pistol: BaseWeapon = $"9mmPistol"
-
 var aim_dir := Vector2(10, 0)
 
 func _physics_process(delta):
@@ -10,4 +8,4 @@ func _physics_process(delta):
 		return
 	
 	var target_pos = fov_detection_component.detected_body.global_position
-	current_weapon.try_launch_primary_ability(target_pos)
+	weapon_holder_component.current_weapon.try_launch_primary_ability(target_pos)

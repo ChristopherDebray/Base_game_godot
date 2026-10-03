@@ -71,9 +71,9 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nip3c"]
 
-[node name="Soldier" unique_id=1102328879 node_paths=PackedStringArray("current_weapon") instance=ExtResource("1_vofsr")]
+[node name="Soldier" unique_id=1102328879 instance=ExtResource("1_vofsr")]
 script = ExtResource("2_yd37b")
-current_weapon = NodePath("9mmPistol")
+initial_weapon = ExtResource("3_2skag")
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=714265977]
 sprite_frames = SubResource("SpriteFrames_vofsr")
@@ -81,7 +81,5 @@ sprite_frames = SubResource("SpriteFrames_vofsr")
 [node name="CollisionShape2D" parent="." index="1" unique_id=1112970280]
 position = Vector2(1, 2)
 shape = SubResource("RectangleShape2D_nip3c")
-
-[node name="9mmPistol" parent="." index="5" unique_id=1844201469 instance=ExtResource("3_2skag")]
 
 [connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]

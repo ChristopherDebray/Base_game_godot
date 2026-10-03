@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b3d053gp7qxn" path="res://scenes/entities/npcs/npc.gd" id="1_ujkxw"]
 [ext_resource type="PackedScene" uid="uid://ccttkl2axdjlv" path="res://scenes/components/health_component.tscn" id="2_0o1kd"]
 [ext_resource type="PackedScene" uid="uid://dvyj0qmn8wilj" path="res://scenes/components/fov_detection_component.tscn" id="3_ii721"]
+[ext_resource type="Script" uid="uid://v6tej5oq37sp" path="res://scenes/components/weapon_holder_component.gd" id="4_kcbfn"]
 
 [node name="Npc" type="CharacterBody2D" unique_id=1102328879]
 process_mode = 1
@@ -22,3 +23,7 @@ health = 8.0
 
 [node name="Muzzle" type="Node2D" parent="." unique_id=307159199]
 position = Vector2(23, 0)
+
+[node name="WeaponHolderComponent" type="Node2D" parent="." unique_id=613582999]
+script = ExtResource("4_kcbfn")
+metadata/_custom_type_script = "uid://v6tej5oq37sp"
