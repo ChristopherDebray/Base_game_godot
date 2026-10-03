@@ -40,11 +40,11 @@ func try_launch_primary_ability(target: Vector2):
 	if is_reloading:
 		return
 
-	if current_ammunition == 0:
-		reload(max_ammunitions)
+	if not can_launch_primary_ability:
 		return
 
-	if not can_launch_primary_ability:
+	if current_ammunition == 0:
+		reload(max_ammunitions)
 		return
 	
 	can_launch_primary_ability = false
@@ -77,7 +77,6 @@ func launch_secondary_ability(target: Vector2):
 
 func set_aim_dir(dir: Vector2):
 	look_at(dir)
-	# @todo fix to move weapond in radius
 	var aim_dir_angle = dir.angle() * 10
 	position.y = aim_dir_angle
 
@@ -85,6 +84,7 @@ func reload(ammunitions: int):
 	current_ammunition = ammunitions
 	is_reloading = true
 	animated_sprite_2d.play("reload")
+	SoundManager.play_tag_at("reload", primary_ability.reload_sound, global_position, 10)
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_sprite_2d.animation != "reload":

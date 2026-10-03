@@ -8,3 +8,4 @@ class_name BaseAbility
 #cooldown in sec
 @export var cooldown: float;
 @export var sound: AudioStream;
+@export var reload_sound: AudioStream;
