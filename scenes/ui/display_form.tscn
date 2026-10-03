@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://b8lo5enihshwo"]
+
+[ext_resource type="Script" uid="uid://g28a1me2bwc" path="res://scenes/ui/display_form.gd" id="1_7jdao"]
+
+[node name="DisplayForm" type="VBoxContainer" unique_id=352056030]
+custom_minimum_size = Vector2(390, 0)
+custom_maximum_size = Vector2(390, -1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7jdao")
+
+[node name="Display" type="VBoxContainer" parent="." unique_id=1361141938]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Display" unique_id=1095719423]
+layout_mode = 2
+text = "Display"
+
+[node name="ScreenSizeOptionButton" type="OptionButton" parent="Display" unique_id=295136762]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "Fullscreen"
+popup/item_1/id = 1
+popup/item_2/text = "Excl Fullscreen"
+popup/item_2/id = 2
+
+[node name="InterfaceScale" type="VBoxContainer" parent="." unique_id=1498828900]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InterfaceScale" unique_id=905406095]
+layout_mode = 2
+text = "Interface scale"
+
+[node name="InterfaceScaleOptionButton" type="OptionButton" parent="InterfaceScale" unique_id=129431636]
+layout_mode = 2
+selected = 2
+item_count = 5
+popup/item_0/text = "Smaller (66%)"
+popup/item_0/id = 0
+popup/item_1/text = "Small (88%)"
+popup/item_1/id = 1
+popup/item_2/text = "Medium (100%)"
+popup/item_2/id = 2
+popup/item_3/text = "Large (133%)"
+popup/item_3/id = 3
+popup/item_4/text = "Larger (166%)"
+popup/item_4/id = 4
+
+[node name="Vsync" type="VBoxContainer" parent="." unique_id=645090796]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Vsync" unique_id=1977451378]
+layout_mode = 2
+text = "VSync"
+
+[node name="VsyncOptionButton" type="OptionButton" parent="Vsync" unique_id=1202828802]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "Adaptative"
+popup/item_1/id = 1
+popup/item_2/text = "Enabled"
+popup/item_2/id = 2
+
+[connection signal="item_selected" from="Display/ScreenSizeOptionButton" to="." method="_on_screen_size_option_button_item_selected"]
+[connection signal="item_selected" from="InterfaceScale/InterfaceScaleOptionButton" to="." method="_on_interface_scale_option_button_item_selected"]
+[connection signal="item_selected" from="Vsync/VsyncOptionButton" to="." method="_on_vsync_option_button_item_selected"]

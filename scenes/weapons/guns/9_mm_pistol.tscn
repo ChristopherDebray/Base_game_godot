@@ -29,6 +29,30 @@ region = Rect2(48, 0, 16, 16)
 atlas = ExtResource("3_txv3u")
 region = Rect2(64, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jwlx"]
+atlas = ExtResource("3_txv3u")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y6kev"]
+atlas = ExtResource("3_txv3u")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aj7pw"]
+atlas = ExtResource("3_txv3u")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xk5br"]
+atlas = ExtResource("3_txv3u")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xmlw3"]
+atlas = ExtResource("3_txv3u")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w5o4l"]
+atlas = ExtResource("3_txv3u")
+region = Rect2(160, 0, 16, 16)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_8eds5"]
 animations = [{
 "frames": [{
@@ -58,11 +82,35 @@ animations = [{
 "loop": 0,
 "name": &"primary_ability",
 "speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6jwlx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y6kev")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aj7pw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xk5br")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xmlw3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w5o4l")
+}],
+"loop": 0,
+"name": &"reload",
+"speed": 8.0
 }]
 
 [node name="9mmPistol" unique_id=1844201469 instance=ExtResource("1_spb3q")]
 script = ExtResource("2_txv3u")
 primary_ability = ExtResource("2_o4kwo")
+max_ammunitions = 7
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=810678021]
 sprite_frames = SubResource("SpriteFrames_8eds5")

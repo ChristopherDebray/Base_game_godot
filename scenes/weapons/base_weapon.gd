@@ -7,6 +7,7 @@ class_name BaseWeapon
 
 @export var primary_ability: BaseAbility
 @export var secondary_ability: BaseAbility = null
+@export var max_ammunitions: int
 @export var fire_rate: float = 0.15  # secondes entre 2 tirs
 
 var can_launch_primary_ability: bool = true
@@ -15,12 +16,17 @@ var can_launch_secondary_ability: bool = true
 var init_sprite_position_x: float
 var init_muzzle_position_x: float
 
+var current_ammunition: int
+var is_reloading: bool = false
+
 func setup(muzzle_position: Vector2):
 	init_sprite_position_x = muzzle_position.x
 	init_muzzle_position_x = muzzle.position.x + muzzle_position.x
 	
 	animated_sprite_2d.position.x = muzzle_position.x
 	muzzle.position.x = muzzle.position.x + muzzle_position.x
+	
+	current_ammunition = max_ammunitions
 
 func aim_at(aim_dir: Vector2):
 	look_at(aim_dir)
@@ -31,6 +37,13 @@ func flip_weapon(must_reverse_flip: bool):
 	animated_sprite_2d.flip_v = must_reverse_flip
 
 func try_launch_primary_ability(target: Vector2):
+	if is_reloading:
+		return
+
+	if current_ammunition == 0:
+		reload(max_ammunitions)
+		return
+
 	if not can_launch_primary_ability:
 		return
 	
@@ -42,6 +55,7 @@ func try_launch_primary_ability(target: Vector2):
 func launch_primary_ability(target: Vector2):
 	animated_sprite_2d.play("primary_ability")
 	SoundManager.play_tag_at("shoot", primary_ability.sound, global_position, 10)
+	current_ammunition -= 1
 
 func try_launch_secondary_ability(target: Vector2):
 	if not can_launch_secondary_ability:
@@ -66,3 +80,14 @@ func set_aim_dir(dir: Vector2):
 	# @todo fix to move weapond in radius
 	var aim_dir_angle = dir.angle() * 10
 	position.y = aim_dir_angle
+
+func reload(ammunitions: int):
+	current_ammunition = ammunitions
+	is_reloading = true
+	animated_sprite_2d.play("reload")
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	if animated_sprite_2d.animation != "reload":
+		return
+	
+	is_reloading = false
