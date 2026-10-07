@@ -3,7 +3,19 @@
 [ext_resource type="PackedScene" uid="uid://jl3r1ixc4q64" path="res://scenes/weapons/base_weapon.tscn" id="1_7am7k"]
 [ext_resource type="Texture2D" uid="uid://b3tyeemo10q70" path="res://assets/weapons/gun.png" id="2_gdeeo"]
 [ext_resource type="Script" uid="uid://cjnpiussy775v" path="res://scenes/weapons/projectile_weapon.gd" id="2_ncyc7"]
-[ext_resource type="Resource" uid="uid://5n6hs2jxxtu6" path="res://datas/abilities/machine_gun_bullet.tres" id="3_i6dus"]
+[ext_resource type="AudioStream" uid="uid://b1cy8n8au71lk" path="res://assets/sounds/gun-reload.mp3" id="3_ys5od"]
+[ext_resource type="Script" uid="uid://suviedghqsyt" path="res://datas/abilities/base_ability_data.gd" id="4_16oun"]
+[ext_resource type="AudioStream" uid="uid://dygkdapuxdmbr" path="res://assets/sounds/gun-shot.mp3" id="5_8eqy8"]
+
+[sub_resource type="Resource" id="Resource_cuff3"]
+script = ExtResource("4_16oun")
+damage = 2.0
+speed = 100.0
+range = 200.0
+cooldown = 0.15
+sound = ExtResource("5_8eqy8")
+reload_sound = ExtResource("3_ys5od")
+metadata/_custom_type_script = "uid://suviedghqsyt"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ncyc7"]
 atlas = ExtResource("2_gdeeo")
@@ -109,7 +121,7 @@ animations = [{
 
 [node name="MachineGun" unique_id=1844201469 instance=ExtResource("1_7am7k")]
 script = ExtResource("2_ncyc7")
-primary_ability = ExtResource("3_i6dus")
+primary_ability = SubResource("Resource_cuff3")
 max_ammunitions = 20
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=810678021]

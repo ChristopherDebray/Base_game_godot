@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://b37dqi5t2q2ra"]
+
+[ext_resource type="Script" uid="uid://qnivdntgc50y" path="res://scenes/ui/inventory/inventory_slot.gd" id="1_wle7a"]
+
+[node name="InventorySlot" type="ColorRect" unique_id=324666516]
+custom_minimum_size = Vector2(40, 40)
+custom_maximum_size = Vector2(40, 40)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 556.0
+offset_top = 304.0
+offset_right = -556.0
+offset_bottom = -304.0
+grow_horizontal = 2
+grow_vertical = 2
+tooltip_text = "test"
+color = Color(0.2509804, 0.2509804, 0.2509804, 0.75686276)
+script = ExtResource("1_wle7a")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=119832289]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=658216414]
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 5

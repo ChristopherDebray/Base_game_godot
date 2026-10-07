@@ -1,6 +1,6 @@
 extends Node2D
 
-class_name  WeaponHolderComponent
+class_name  ObjectHolderComponent
 
 var current_weapon: BaseWeapon
 

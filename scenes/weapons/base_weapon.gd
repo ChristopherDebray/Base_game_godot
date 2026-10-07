@@ -5,10 +5,12 @@ class_name BaseWeapon
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var muzzle: Node2D = $Muzzle
 
-@export var primary_ability: BaseAbility
-@export var secondary_ability: BaseAbility = null
+@export var primary_ability: BaseAbilityData
+@export var secondary_ability: BaseAbilityData = null
 @export var max_ammunitions: int
 @export var fire_rate: float = 0.15  # secondes entre 2 tirs
+
+@export var data: BaseWeaponData
 
 var can_launch_primary_ability: bool = true
 var can_launch_secondary_ability: bool = true

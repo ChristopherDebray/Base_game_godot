@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BaseWeaponData" format=3 uid="uid://ddwe31sqyyulb"]
+
+[ext_resource type="Resource" uid="uid://60swwnduhsul" path="res://datas/abilities/9_mm_bullet.tres" id="1_6ifyt"]
+[ext_resource type="Script" uid="uid://dktoas357kykt" path="res://datas/weapons/base_weapon_data.gd" id="1_qywju"]
+[ext_resource type="Texture2D" uid="uid://cou6kx4ek11j8" path="res://assets/ui/Blank_Black_Mouse.png" id="1_wfiej"]
+
+[resource]
+script = ExtResource("1_qywju")
+primary_ability = ExtResource("1_6ifyt")
+max_ammunitions = 7
+fire_rate = 0.8
+type = 5
+item_name = "9 mm pistol"
+item_texture = ExtResource("1_wfiej")
+metadata/_custom_type_script = "uid://dktoas357kykt"

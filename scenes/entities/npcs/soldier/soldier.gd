@@ -8,4 +8,4 @@ func _physics_process(delta):
 		return
 	
 	var target_pos = fov_detection_component.detected_body.global_position
-	weapon_holder_component.current_weapon.try_launch_primary_ability(target_pos)
+	object_holder_component.current_weapon.try_launch_primary_ability(target_pos)

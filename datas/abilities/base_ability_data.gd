@@ -1,6 +1,6 @@
 extends Resource
 
-class_name BaseAbility
+class_name BaseAbilityData
 
 @export var damage: float;
 @export var speed: float;

@@ -1,13 +1,13 @@
-[gd_resource type="Resource" script_class="BaseAbility" format=3 uid="uid://5n6hs2jxxtu6"]
+[gd_resource type="Resource" script_class="BaseAbilityData" format=3 uid="uid://5n6hs2jxxtu6"]
 
 [ext_resource type="AudioStream" uid="uid://b1cy8n8au71lk" path="res://assets/sounds/gun-reload.mp3" id="1_lhutl"]
-[ext_resource type="Script" uid="uid://suviedghqsyt" path="res://datas/abilities/base_ability.gd" id="1_qd0dc"]
+[ext_resource type="Script" uid="uid://suviedghqsyt" path="res://datas/abilities/base_ability_data.gd" id="1_qd0dc"]
 [ext_resource type="AudioStream" uid="uid://dygkdapuxdmbr" path="res://assets/sounds/gun-shot.mp3" id="3_o6nj6"]
 
 [resource]
 script = ExtResource("1_qd0dc")
 damage = 2.0
-speed = 100.0
+speed = 50.0
 range = 200.0
 cooldown = 0.15
 sound = ExtResource("3_o6nj6")

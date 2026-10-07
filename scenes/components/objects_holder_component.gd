@@ -2,7 +2,7 @@ extends Node2D
 
 class_name ObjectsHolderComponent
 
-@export var weapon_holder: WeaponHolderComponent
+@export var object_holder: ObjectHolderComponent
 @export var muzzle: Node2D
 
 # TODO add typing to only allow specific type in specific location
@@ -49,5 +49,5 @@ func set_holded_object_to_previous():
 	_set_holded_object(object, previous_index)
 
 func _set_holded_object(object: BaseWeapon, index: int):
-	weapon_holder.switch_weapon(object, muzzle.position)
+	object_holder.switch_weapon(object, muzzle.position)
 	current_targeted_index = index

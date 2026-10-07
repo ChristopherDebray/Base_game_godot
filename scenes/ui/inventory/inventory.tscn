@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://jcuu3umv0xad"]
+
+[ext_resource type="Script" uid="uid://s5d7xecowadf" path="res://scenes/ui/inventory/inventory.gd" id="1_3bwaq"]
+
+[node name="Inventory" type="Control" unique_id=430170735]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3bwaq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=225051175]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=926418115]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=2098479074]
+layout_mode = 2
+theme_override_constants/margin_left = 386
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 386
+theme_override_constants/margin_bottom = 24
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/MarginContainer" unique_id=897321950]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 8

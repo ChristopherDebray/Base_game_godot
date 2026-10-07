@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BaseWeaponData" format=3 uid="uid://dqw2hvpvfgwgr"]
+
+[ext_resource type="Script" uid="uid://dktoas357kykt" path="res://datas/weapons/base_weapon_data.gd" id="1_5wnit"]
+[ext_resource type="Texture2D" uid="uid://d2e5foly1qgtf" path="res://assets/ui/Blank_Black_Normal.png" id="1_ianfd"]
+[ext_resource type="Resource" uid="uid://5n6hs2jxxtu6" path="res://datas/abilities/machine_gun_bullet.tres" id="1_koh72"]
+
+[resource]
+script = ExtResource("1_5wnit")
+primary_ability = ExtResource("1_koh72")
+max_ammunitions = 20
+type = 4
+item_name = "Machine gun"
+description = "A machine gun"
+item_texture = ExtResource("1_ianfd")
+metadata/_custom_type_script = "uid://dktoas357kykt"

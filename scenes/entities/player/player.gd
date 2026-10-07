@@ -8,7 +8,7 @@ class_name Player
 
 @export var light_holder: Node2D
 
-@onready var weapon_holder_component: WeaponHolderComponent = $WeaponHolderComponent
+@onready var object_holder_component: ObjectHolderComponent = $ObjectHolderComponent
 @onready var objects_holder_component: ObjectsHolderComponent = $ObjectsHolderComponent
 
 const _9_MM_PISTOL = preload("uid://du8sytr0jrmyu")
@@ -29,7 +29,7 @@ var aim_dir := Vector2(10, 0)
 const LIGHT_RADIANT_OFFSET := deg_to_rad(-90)
 
 func _ready() -> void:
-	#weapon_holder_component.switch_weapon(_9_MM_PISTOL.instantiate(), muzzle.position)
+	#object_holder_component.switch_weapon(_9_MM_PISTOL.instantiate(), muzzle.position)
 	objects_holder_component.set_object_at(0, _9_MM_PISTOL.instantiate())
 	objects_holder_component.set_object_at(1, MACHINE_GUN.instantiate())
 
@@ -46,7 +46,7 @@ func _physics_process(delta: float) -> void:
 
 func set_aim_dir(dir: Vector2):
 	aim_dir = dir
-	weapon_holder_component.current_weapon.aim_at(aim_dir)
+	object_holder_component.current_weapon.aim_at(aim_dir)
 	facing_position = global_position - aim_dir
 
 func get_movement_inputs() -> void:
@@ -58,10 +58,10 @@ func get_movement_inputs() -> void:
 
 func get_action_inputs():
 	if Input.is_action_just_released("primary_ability"):
-		weapon_holder_component.current_weapon.try_launch_primary_ability(aim_dir)
+		object_holder_component.current_weapon.try_launch_primary_ability(aim_dir)
 	
 	if Input.is_action_just_released("reload"):
-		weapon_holder_component.current_weapon.reload()
+		object_holder_component.current_weapon.reload()
 
 
 func get_object_selection_inputs():
@@ -84,10 +84,10 @@ func get_object_selection_inputs():
 func _update_facing() -> void:
 	if facing_position.x < -0.05:
 		flip_facing(false)
-		weapon_holder_component.current_weapon.flip_weapon(false)
+		object_holder_component.current_weapon.flip_weapon(false)
 	elif facing_position.x > 0.05:
 		flip_facing(true)
-		weapon_holder_component.current_weapon.flip_weapon(true)
+		object_holder_component.current_weapon.flip_weapon(true)
 	
 func flip_facing(must_reverse_flip: bool):
 	animated_sprite_2d.flip_h = must_reverse_flip
