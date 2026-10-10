@@ -9,10 +9,10 @@ func launch_primary_ability(target: Vector2):
 	var result = CollisionManager.draw_ray_query_to_target(
 		target,
 		muzzle.global_position,
-		primary_ability.range,
+		data.primary_ability.range,
 		space_state,
 		self
 	)
 	
 	if result:
-		hit_trigger(primary_ability.damage, result.position, result.normal, result.collider)
+		hit_trigger(data.primary_ability.damage, result.position, result.normal, result.collider)

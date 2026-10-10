@@ -2,7 +2,7 @@ extends Resource
 
 class_name BaseItemData
 
-enum ITEM_TYPE {HEAD, CHEST, LEGS, FEET, PRIMARY, SECONDARY, GADGET}
+enum ITEM_TYPE {HEAD, CHEST, LEGS, FEET, PRIMARY, SECONDARY, GADGET, OTHER}
 
 @export var type: ITEM_TYPE
 @export var item_name: String
