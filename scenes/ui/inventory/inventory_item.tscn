@@ -1,20 +1,6 @@
 [gd_scene format=3 uid="uid://cwehi45q4to7m"]
 
-[sub_resource type="GDScript" id="GDScript_plvqj"]
-script/source = "extends TextureRect
-class_name InventoryItem
-
-@export var data: BaseItemData
-
-func _ready() -> void:
-	expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	texture = data.item_texture
-	tooltip_text = \"%s\\n%s\" % [data.item_name, data.description]
-
-func init(data: BaseItemData):
-	data = data
-"
+[ext_resource type="Script" uid="uid://bmx8j1j5jwpul" path="res://scenes/ui/inventory/inventory_item.gd" id="1_1f4sr"]
 
 [node name="InventoryItem" type="TextureRect" unique_id=1285377874]
 anchors_preset = 15
@@ -22,4 +8,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_plvqj")
+expand_mode = 2
+script = ExtResource("1_1f4sr")

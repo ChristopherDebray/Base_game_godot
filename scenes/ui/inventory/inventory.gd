@@ -5,31 +5,45 @@ class_name Inventory
 
 @export var inventory_size: int = 8
 
-var inventory := []
-
 const INVENTORY_SLOT = preload("uid://b37dqi5t2q2ra")
 const MACHINE_GUN = preload("uid://dqw2hvpvfgwgr")
+const _9_MM_GUN = preload("uid://ddwe31sqyyulb")
 
 func _ready() -> void:
 	for i in inventory_size:
 		var slot := INVENTORY_SLOT.instantiate()
 		inventory_container.add_child(slot)
-		inventory.push_back(slot)
 	
-	add_item_to_index(1, MACHINE_GUN)
+	var item = InventoryItem.new()
+	item.init(MACHINE_GUN)
+	add_item_to_index(0, item)
+	
+	var item2 = InventoryItem.new()
+	item2.init(_9_MM_GUN)
+	add_item_to_index(1, item2)
 
-func add_item_to_index(index: int, data: BaseWeaponData):
-	var inventory_slot: InventorySlot = inventory.get(index)
+func add_item_to_index(index: int, item: InventoryItem):
+	var inventory_slot: InventorySlot = inventory_container.get_child(index)
 	if !inventory_slot:
 		return
-		
-	inventory_slot.texture_rect.texture = data.item_texture
+	
+	inventory_slot.add_child(item)
 
 func pop_item_at_index(index: int):
-	return inventory.pop_at(index)
+	var inventory_slot: InventorySlot = inventory_container.get_child(index)
+	if !inventory_slot:
+		return
+	
+	var child = inventory_slot.get_child(0)
+	if !child:
+		return
+	
+	inventory_slot.remove_child(child)
 
+	return child
+#
 func swap_item_at_index(prev_index: int, new_index: int, base_inventory: Inventory):
-	var targeted_slot_item = inventory.pop_at(prev_index)
+	var targeted_slot_item = pop_item_at_index(prev_index)
 	if !targeted_slot_item:
 		return
 	
