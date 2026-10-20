@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cbl8atr24cu21" path="res://scenes/entities/player/player.gd" id="1_afppm"]
 [ext_resource type="Texture2D" uid="uid://qd31ge3l1g3y" path="res://assets/entities/ranger_cute.png" id="1_tlaso"]
-[ext_resource type="PackedScene" uid="uid://cbrkppffb548k" path="res://scenes/components/weapon_holder_component.tscn" id="4_bjvvg"]
+[ext_resource type="PackedScene" uid="uid://cbrkppffb548k" path="res://scenes/components/object_holder_component.tscn" id="4_bjvvg"]
 [ext_resource type="PackedScene" uid="uid://corngir70i7ee" path="res://scenes/components/objects_holder_component.tscn" id="4_nh4ur"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_afppm"]

@@ -5,14 +5,6 @@ class_name ObjectsHolderComponent
 @export var object_holder: ObjectHolderComponent
 @export var muzzle: Node2D
 
-# TODO add typing to only allow specific type in specific location
-const OBJECT_MAPPING = {
-	"1": "weapon",
-	"2": "weapon",
-	"3": "weapon",
-	"4": "weapon",
-	"5": "weapon",
-}
 
 var objects: Array[BaseWeapon] = [null, null, null, null, null]
 var current_targeted_index: int = 0

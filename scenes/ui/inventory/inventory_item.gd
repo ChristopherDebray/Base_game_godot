@@ -35,3 +35,6 @@ func make_drag_preview(at_position: Vector2) -> Control:
 	c.add_child(t)
 	
 	return c
+
+func get_slot() -> InventorySlot:
+	return get_parent() as InventorySlot

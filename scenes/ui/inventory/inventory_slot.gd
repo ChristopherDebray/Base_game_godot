@@ -1,33 +1,44 @@
 extends ColorRect
 class_name InventorySlot
 
-@export var type: BaseItemData.ITEM_TYPE
+@export var accepted_types: Array[BaseItemData.ITEM_TYPE] = []
 
 var data: BaseWeaponData
 
-func init(t: BaseItemData.ITEM_TYPE, cms: Vector2) -> void:
-	type = t
+func init(types: Array[BaseItemData.ITEM_TYPE], cms: Vector2) -> void:
+	accepted_types = types
 	custom_minimum_size = cms
 
+func accepts(item: InventoryItem) -> bool:
+	return accepted_types.is_empty() or item.data.type in accepted_types
+
+func get_item() -> InventoryItem:
+	# If we use get_child(0) we get an out of bound error
+	for c in get_children():
+		if c is InventoryItem:
+			return c
+	return null
+
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
-	if data is InventoryItem:
-		if type == BaseItemData.ITEM_TYPE.PRIMARY:
-			if get_child_count() == 0:
-				return true
-			else:
-				if type == data.get_parent().type:
-					return true
-				return get_child(0).data.type == data.type
-		else:
-			# TODO set a condition to check matching types
-			return true
+	if data is not InventoryItem:
+		return false
+	var item: InventoryItem = data
+	if not accepts(item):
+		return false
 	
-	return false
+	var occupant := get_item()
+	if occupant and occupant != item:
+		var origin := item.get_slot()
+		return origin == null or origin.accepts(occupant)
+	return true
 
 func _drop_data(at_position: Vector2, data: Variant) -> void:
-	if get_child_count() > 0:
-		var item := get_child(0)
-		if item == data:
-			return
-		item.reparent(data.get_parent(), false)
-	data.reparent(self, false)
+	var item: InventoryItem = data
+	var occupant := get_item()
+	if occupant == item:
+		return
+	if occupant:
+		var origin := item.get_slot()
+		if origin:
+			occupant.reparent(origin, false)
+	item.reparent(self, false)
