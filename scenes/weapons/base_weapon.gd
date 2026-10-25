@@ -5,7 +5,8 @@ class_name BaseWeapon
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var muzzle: Node2D = $Muzzle
 
-@export var data: BaseWeaponData
+# La data est injectée lors de l'instanciation / setup dans item_instance sur get_scene
+var data: BaseWeaponData
 
 var can_launch_primary_ability: bool = true
 var can_launch_secondary_ability: bool = true

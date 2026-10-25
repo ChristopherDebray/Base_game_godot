@@ -12,4 +12,5 @@ fire_rate = 0.8
 type = 5
 item_name = "9 mm pistol"
 item_texture = ExtResource("1_wfiej")
+equipped_scene_path = "uid://du8sytr0jrmyu"
 metadata/_custom_type_script = "uid://dktoas357kykt"

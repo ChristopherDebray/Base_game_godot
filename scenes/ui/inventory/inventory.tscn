@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://jcuu3umv0xad"]
 
 [ext_resource type="Script" uid="uid://s5d7xecowadf" path="res://scenes/ui/inventory/inventory.gd" id="1_3bwaq"]
-[ext_resource type="PackedScene" uid="uid://b37dqi5t2q2ra" path="res://scenes/ui/inventory/inventory_slot.tscn" id="2_xce7s"]
+[ext_resource type="Script" uid="uid://diwuha5bmsau8" path="res://scenes/ui/inventory/inventory_view.gd" id="2_xce7s"]
 
-[node name="Inventory" type="Control" unique_id=430170735]
+[node name="Inventory" type="Control" unique_id=430170735 node_paths=PackedStringArray("armor_view", "weapons_view", "bag_view")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,6 +11,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3bwaq")
+armor_view = NodePath("MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Equipements")
+weapons_view = NodePath("MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Weapons")
+bag_view = NodePath("MarginContainer/VBoxContainer/GridContainer")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1001016313]
 layout_mode = 1
@@ -40,41 +43,11 @@ theme_override_constants/separation = 40
 
 [node name="Equipements" type="GridContainer" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1606921111]
 layout_mode = 2
-
-[node name="HeadSlot" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Equipements" unique_id=324666516 instance=ExtResource("2_xce7s")]
-layout_mode = 2
-accepted_types = Array[int]([0])
-
-[node name="ChestSlot" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Equipements" unique_id=617042074 instance=ExtResource("2_xce7s")]
-layout_mode = 2
-accepted_types = Array[int]([1])
-
-[node name="FootSlot" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Equipements" unique_id=229692653 instance=ExtResource("2_xce7s")]
-layout_mode = 2
-accepted_types = Array[int]([3])
-
-[node name="BackSlot" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Equipements" unique_id=1914967998 instance=ExtResource("2_xce7s")]
-layout_mode = 2
-accepted_types = Array[int]([7])
+script = ExtResource("2_xce7s")
 
 [node name="Weapons" type="GridContainer" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1005650478]
 layout_mode = 2
-
-[node name="PrimarySlot" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Weapons" unique_id=305740006 instance=ExtResource("2_xce7s")]
-layout_mode = 2
-accepted_types = Array[int]([4])
-
-[node name="SecondarySlot" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Weapons" unique_id=165637023 instance=ExtResource("2_xce7s")]
-layout_mode = 2
-accepted_types = Array[int]([5])
-
-[node name="GadgetSlot1" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Weapons" unique_id=1226223915 instance=ExtResource("2_xce7s")]
-layout_mode = 2
-accepted_types = Array[int]([6])
-
-[node name="GadgetSlot2" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/Weapons" unique_id=1909237041 instance=ExtResource("2_xce7s")]
-layout_mode = 2
-accepted_types = Array[int]([6])
+script = ExtResource("2_xce7s")
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer" unique_id=897321950]
 layout_mode = 2
@@ -83,3 +56,4 @@ size_flags_vertical = 4
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 8
+script = ExtResource("2_xce7s")
