@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://qd31ge3l1g3y" path="res://assets/entities/ranger_cute.png" id="1_tlaso"]
 [ext_resource type="PackedScene" uid="uid://cbrkppffb548k" path="res://scenes/components/object_holder_component.tscn" id="4_bjvvg"]
 [ext_resource type="PackedScene" uid="uid://corngir70i7ee" path="res://scenes/components/objects_holder_component.tscn" id="4_nh4ur"]
+[ext_resource type="PackedScene" uid="uid://ccttkl2axdjlv" path="res://scenes/components/health_component.tscn" id="5_health"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_afppm"]
 atlas = ExtResource("1_tlaso")
@@ -94,7 +95,8 @@ size = Vector2(16, 16)
 [node name="Player" type="CharacterBody2D" unique_id=362983861]
 process_mode = 1
 y_sort_enabled = true
-collision_layer = 32769
+collision_layer = 32772
+collision_mask = 9
 script = ExtResource("1_afppm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=940797672]
@@ -113,7 +115,11 @@ position = Vector2(23, 0)
 [node name="AudioListener2D" type="AudioListener2D" parent="." unique_id=1431995565]
 
 [node name="ObjectHolderComponent" parent="." unique_id=1441292615 instance=ExtResource("4_bjvvg")]
+hit_mask = 9
 
 [node name="ObjectsHolderComponent" parent="." unique_id=1505046309 node_paths=PackedStringArray("object_holder", "muzzle") instance=ExtResource("4_nh4ur")]
 object_holder = NodePath("../ObjectHolderComponent")
 muzzle = NodePath("../Muzzle")
+
+[node name="HealthComponent" parent="." unique_id=1627911993 instance=ExtResource("5_health")]
+health = 10.0

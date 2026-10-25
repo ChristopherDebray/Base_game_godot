@@ -2,6 +2,9 @@ extends Node2D
 
 class_name  ObjectHolderComponent
 
+## Layers que touchent les armes tenues (murs + camp adverse). À régler dans l'inspecteur.
+@export_flags_2d_physics var hit_mask: int = CollisionManager.MASK_WALLS
+
 var current_weapon: BaseWeapon
 
 func switch_weapon(weapon: BaseWeapon, muzzle_pos: Vector2) -> BaseWeapon:
@@ -13,6 +16,7 @@ func switch_weapon(weapon: BaseWeapon, muzzle_pos: Vector2) -> BaseWeapon:
 		remove_child(previous_weapon)
 	
 	add_child(weapon)
+	weapon.hit_mask = hit_mask
 	current_weapon = weapon
 	weapon.setup(muzzle_pos)
 	

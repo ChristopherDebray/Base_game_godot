@@ -25,7 +25,6 @@ enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING }
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
-@onready var health_component: HealthComponent = $HealthComponent
 @onready var fov_detection_component: FovDetectionComponent = $FovDetectionComponent
 @onready var muzzle: Node2D = $Muzzle
 @onready var object_holder_component: ObjectHolderComponent = $ObjectHolderComponent
