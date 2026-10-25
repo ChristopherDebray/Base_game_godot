@@ -11,7 +11,8 @@ func launch_primary_ability(target: Vector2):
 		muzzle.global_position,
 		data.primary_ability.range,
 		space_state,
-		self
+		self,
+		hit_mask
 	)
 	
 	if result:

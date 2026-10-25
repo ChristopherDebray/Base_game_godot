@@ -11,6 +11,9 @@ var particle_container: Node = null
 
 func setup(container: Node) -> void:
 	particle_container = container
+	# Le niveau peut être rechargé : les anciennes particules ont été libérées avec lui.
+	hit_particles_pool.clear()
+	death_particles_pool.clear()
 	_setup_hit_particles(container)
 	_setup_death_particles(container)
 	
@@ -36,7 +39,9 @@ func spawn_hit_particle(pos: Vector2, rot: float):
 			p.visible = true
 			p.restart()
 			await get_tree().create_timer(p.lifetime).timeout
-			p.visible = false
+			# Le niveau a pu être rechargé pendant l'attente.
+			if is_instance_valid(p):
+				p.visible = false
 			return
 
 func spawn_death_particle(pos: Vector2):
@@ -46,5 +51,7 @@ func spawn_death_particle(pos: Vector2):
 			p.visible = true
 			p.restart()
 			await get_tree().create_timer(p.lifetime).timeout
-			p.visible = false
+			# Le niveau a pu être rechargé pendant l'attente.
+			if is_instance_valid(p):
+				p.visible = false
 			return

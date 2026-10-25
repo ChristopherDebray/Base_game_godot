@@ -19,6 +19,7 @@ const T = BaseItemData.ITEM_TYPE
 const SPEED: float = 130.0
 const PROBE_SIZE = Vector2(50, 50)
 
+var is_dead := false
 var facing_direction: Vector2 = Vector2.RIGHT
 var facing_position: Vector2
 
@@ -37,6 +38,18 @@ func _ready() -> void:
 	# s'équipe tout seul via le signal
 	weapons.set_item(0, ItemInstance.new(PISTOL_DATA))
 	weapons.set_item(1, ItemInstance.new(MACHINE_GUN_DATA))
+
+## Le joueur n'est pas libéré à sa mort (la caméra et la visée en dépendent) :
+## on le désactive et on prévient le reste du jeu.
+func die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	hide()
+	collision_shape_2d.set_deferred("disabled", true)
+	SignalManager.on_player_died.emit()
 
 func _physics_process(delta: float) -> void:
 	var transform = Transform2D()

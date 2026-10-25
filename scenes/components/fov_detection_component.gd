@@ -6,6 +6,8 @@ signal detect(detected_entity: Node2D)
 signal lost(detected_entity: Node2D)
 
 const DETECTION_RANGE := 900.00
+# Le regard est bloqué par les murs et par le joueur, mais pas par les autres ennemis.
+const SIGHT_MASK := CollisionManager.MASK_WALLS | CollisionManager.MASK_PLAYER
 
 var detected_body: Node2D = null
 
@@ -24,10 +26,11 @@ func can_see_detected_body():
 		global_position,
 		DETECTION_RANGE,
 		space_state,
-		self
+		self,
+		SIGHT_MASK
 	)
 	
-	if !is_instance_of(result.collider, Player):
+	if result.is_empty() or !is_instance_of(result.collider, Player):
 		return false
 	
 	return true
@@ -42,10 +45,11 @@ func _on_body_entered(body: Node2D) -> void:
 		global_position,
 		DETECTION_RANGE,
 		space_state,
-		self
+		self,
+		SIGHT_MASK
 	)
 	
-	if !is_instance_of(result.collider, Player):
+	if result.is_empty() or !is_instance_of(result.collider, Player):
 		return
 	
 	detected_body = body

@@ -8,6 +8,10 @@ class_name BaseWeapon
 # La data est injectée lors de l'instanciation / setup dans item_instance sur get_scene
 var data: BaseWeaponData
 
+## Layers que les tirs de cette arme peuvent toucher. Réglé par le porteur (ObjectHolderComponent)
+## à l'équipement, pour qu'un ennemi ne touche que le joueur et inversement.
+var hit_mask: int = CollisionManager.MASK_WALLS
+
 var can_launch_primary_ability: bool = true
 var can_launch_secondary_ability: bool = true
 
@@ -86,9 +90,8 @@ func reload():
 
 func hit_trigger(damage: float, position: Vector2, normal: Vector2, collider: Variant):
 	SceneSpawnerManager.spawn_hit_particle(position, 0)
-	if is_instance_of(collider, Npc):
-		var npc: Npc = collider
-		npc.health_component.apply_damage(damage)
+	if collider is Damageable:
+		collider.take_damage(damage)
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_sprite_2d.animation != "reload":
