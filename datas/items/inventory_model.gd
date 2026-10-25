@@ -30,6 +30,15 @@ func can_place(i: int, item: ItemInstance) -> bool:
 	var types: Array = rules[i]
 	return types.is_empty() or item.data.type in types
 
+## Renvoie l'index du premier slot vide qui accepte `item`, ou -1 s'il n'y en a pas.
+func find_slot_for(item: ItemInstance) -> int:
+	if item == null:
+		return -1
+	for slot_index in slots.size():
+		if slots[slot_index] == null and can_place(slot_index, item):
+			return slot_index
+	return -1
+
 func can_move(from: InventoryModel, from_index: int, to_index: int) -> bool:
 	if from == self and from_index == to_index:
 		return false

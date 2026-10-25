@@ -8,6 +8,8 @@
 [ext_resource type="Shader" uid="uid://hiiwgwthyorq" path="res://shaders/all_white.gdshader" id="4_7tlrb"]
 [ext_resource type="Texture2D" uid="uid://eomkol4qti77" path="res://assets/tilesets/Autotile_Grass_and_Dirt_Path_Tileset.png" id="4_h8qkv"]
 [ext_resource type="Texture2D" uid="uid://sa2dym2aj80d" path="res://assets/tilesets/cute_tileset_wall_sm_64.png" id="7_4iill"]
+[ext_resource type="PackedScene" uid="uid://cmeiv6en4dxl3" path="res://scenes/items/world_item.tscn" id="11_worlditem"]
+[ext_resource type="Resource" uid="uid://dqw2hvpvfgwgr" path="res://datas/weapons/machine_gun.tres" id="12_machinegun"]
 [ext_resource type="PackedScene" uid="uid://b5puydfcwcesa" path="res://scenes/entities/npcs/soldier/soldier.tscn" id="10_1scuh"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_1scuh"]
@@ -1152,6 +1154,10 @@ position = Vector2(516, 102)
 
 [node name="Box2" parent="LitViewport/Entities/Objects" parent_id_path=PackedInt32Array(755208327) index="1" unique_id=1311201572 instance=ExtResource("3_j0f3p")]
 position = Vector2(132, 164)
+
+[node name="MachineGunPickup" parent="LitViewport/Entities/Objects" instance=ExtResource("11_worlditem")]
+position = Vector2(240, 150)
+data = ExtResource("12_machinegun")
 
 [node name="Soldier2" parent="LitViewport/Entities/Npcs" parent_id_path=PackedInt32Array(199427629) index="0" unique_id=1102328879 instance=ExtResource("10_1scuh")]
 position = Vector2(438, 239)

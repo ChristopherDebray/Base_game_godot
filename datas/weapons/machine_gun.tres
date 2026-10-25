@@ -8,7 +8,7 @@
 script = ExtResource("1_5wnit")
 primary_ability = ExtResource("1_koh72")
 max_ammunitions = 20
-type = 4
+type = 6
 item_name = "Machine gun"
 description = "A machine gun"
 item_texture = ExtResource("1_ianfd")

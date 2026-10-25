@@ -13,7 +13,6 @@ class_name Player
 @onready var objects_holder_component: ObjectsHolderComponent = $ObjectsHolderComponent
 
 const PISTOL_DATA = preload("uid://ddwe31sqyyulb")
-const MACHINE_GUN_DATA = preload("uid://dqw2hvpvfgwgr")
 const T = BaseItemData.ITEM_TYPE
 
 const SPEED: float = 130.0
@@ -37,7 +36,21 @@ func _ready() -> void:
 	objects_holder_component.bind(weapons)
 	# s'équipe tout seul via le signal
 	weapons.set_item(0, ItemInstance.new(PISTOL_DATA))
-	weapons.set_item(1, ItemInstance.new(MACHINE_GUN_DATA))
+
+## Range un objet ramassé dans le premier slot libre compatible (armes, puis équipement, puis sac).
+## Renvoie false si rien n'a pu être rangé, pour que l'objet reste au sol.
+func pickup(item_data: BaseItemData) -> bool:
+	if item_data == null:
+		return false
+
+	var item := ItemInstance.new(item_data)
+	for inventory in [weapons, armor, bag]:
+		var slot_index: int = inventory.find_slot_for(item)
+		if slot_index == -1:
+			continue
+		inventory.set_item(slot_index, item)
+		return true
+	return false
 
 ## Le joueur n'est pas libéré à sa mort (la caméra et la visée en dépendent) :
 ## on le désactive et on prévient le reste du jeu.
