@@ -43,10 +43,16 @@ theme_override_constants/separation = 40
 
 [node name="Equipements" type="GridContainer" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1606921111]
 layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
 script = ExtResource("2_xce7s")
 
 [node name="Weapons" type="GridContainer" parent="MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1005650478]
 layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
 script = ExtResource("2_xce7s")
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer" unique_id=897321950]

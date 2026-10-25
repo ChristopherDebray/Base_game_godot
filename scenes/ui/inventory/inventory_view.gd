@@ -16,4 +16,4 @@ func build(model: InventoryModel) -> void:
 func bind_existing(model: InventoryModel) -> void:
 	for child in get_children():
 		if child is InventorySlot:
-			child.setup(model, child.index)
+			child.setup(model, child.slot_index)
