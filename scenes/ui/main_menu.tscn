@@ -1,0 +1,131 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/main_menu.gd" id="3_script"]
+[ext_resource type="PackedScene" uid="uid://cusqyoco2wx3c" path="res://scenes/ui/sound_form.tscn" id="1_sound"]
+[ext_resource type="PackedScene" uid="uid://b8lo5enihshwo" path="res://scenes/ui/display_form.tscn" id="2_display"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09, 0.1, 0.13, 1)
+
+[node name="MainPanel" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "New Game Project"
+horizontal_alignment = 1
+
+[node name="PlayButton" type="Button" parent="MainPanel/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Play"
+
+[node name="OptionsButton" type="Button" parent="MainPanel/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Options"
+
+[node name="QuitButton" type="Button" parent="MainPanel/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Quit"
+
+[node name="OptionsPanel" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OptionsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="OptionsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Options"
+horizontal_alignment = 1
+
+[node name="TabContainer" type="TabContainer" parent="OptionsPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+tab_alignment = 1
+current_tab = 0
+
+[node name="Sound" type="MarginContainer" parent="OptionsPanel/VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 0
+
+[node name="SoundForm" parent="OptionsPanel/VBoxContainer/TabContainer/Sound" instance=ExtResource("1_sound")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Display" type="MarginContainer" parent="OptionsPanel/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 1
+
+[node name="DisplayForm" parent="OptionsPanel/VBoxContainer/TabContainer/Display" instance=ExtResource("2_display")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="BackButton" type="Button" parent="OptionsPanel/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"
