@@ -12,4 +12,5 @@ type = 4
 item_name = "Machine gun"
 description = "A machine gun"
 item_texture = ExtResource("1_ianfd")
+equipped_scene_path = "uid://0q4gltcb58aj"
 metadata/_custom_type_script = "uid://dktoas357kykt"

@@ -84,9 +84,10 @@ render_target_update_mode = 4
 [node name="Entities" type="Node2D" parent="LitViewport" unique_id=523767429]
 y_sort_enabled = true
 
-[node name="Player" parent="LitViewport/Entities" unique_id=362983861 node_paths=PackedStringArray("light_holder") instance=ExtResource("3_o1chu")]
+[node name="Player" parent="LitViewport/Entities" unique_id=362983861 node_paths=PackedStringArray("light_holder", "inventory_ui") instance=ExtResource("3_o1chu")]
 position = Vector2(186, 173)
 light_holder = NodePath("../../../VisibilityViewport/LightHolder")
+inventory_ui = NodePath("../../../CanvasLayer/Inventory")
 
 [node name="Objects" type="Node2D" parent="LitViewport/Entities" unique_id=755208327]
 y_sort_enabled = true

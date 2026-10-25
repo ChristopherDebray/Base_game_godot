@@ -5,41 +5,34 @@ class_name ObjectsHolderComponent
 @export var object_holder: ObjectHolderComponent
 @export var muzzle: Node2D
 
-
-var objects: Array[BaseWeapon] = [null, null, null, null, null]
+var weapons: InventoryModel
 var current_targeted_index: int = 0
 
-func get_object_at(index: int) -> BaseWeapon:
-	return objects.get(index)
+func bind(model: InventoryModel) -> void:
+	weapons = model
+	weapons.slot_changed.connect(_on_slot_changed)
 
-func set_object_at(index: int, object: BaseWeapon):
-	objects.set(index, object)
-	if current_targeted_index == index:
-		set_holded_object_to(index)
-
-func set_holded_object_to(index: int):
-	var object = get_object_at(index)
-	if !object:
+func _on_slot_changed(i: int) -> void:
+	if i != current_targeted_index:
 		return
 	
-	_set_holded_object(object, index)
+	_equip(i)
 
-func set_holded_object_to_next():
-	var next_index = 1 + current_targeted_index
-	var object = objects.get(next_index)
-	if !object:
-		return
+func set_holded_object_to(i: int) -> void:
+	if _equip(i):
+		current_targeted_index = i
 
-	_set_holded_object(object, next_index)
+func set_holded_object_to_next() -> void:
+	set_holded_object_to(current_targeted_index + 1)
 
-func set_holded_object_to_previous():
-	var previous_index = -1 + current_targeted_index
-	var object = objects.get(previous_index)
-	if !object:
-		return
+func set_holded_object_to_previous() -> void:
+	set_holded_object_to(current_targeted_index - 1)
 
-	_set_holded_object(object, previous_index)
-
-func _set_holded_object(object: BaseWeapon, index: int):
-	object_holder.switch_weapon(object, muzzle.position)
-	current_targeted_index = index
+func _equip(i: int) -> bool:
+	if i < 0 or i >= weapons.slots.size():
+		return false
+	var item := weapons.get_item(i)
+	if item == null:
+		return false
+	object_holder.switch_weapon(item.get_scene() as BaseWeapon, muzzle.position)
+	return true

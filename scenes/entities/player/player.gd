@@ -7,12 +7,14 @@ class_name Player
 @onready var muzzle: Node2D = $Muzzle
 
 @export var light_holder: Node2D
+@export var inventory_ui: Inventory
 
 @onready var object_holder_component: ObjectHolderComponent = $ObjectHolderComponent
 @onready var objects_holder_component: ObjectsHolderComponent = $ObjectsHolderComponent
 
-const _9_MM_PISTOL = preload("uid://du8sytr0jrmyu")
-const MACHINE_GUN = preload("uid://0q4gltcb58aj")
+const PISTOL_DATA = preload("uid://ddwe31sqyyulb")
+const MACHINE_GUN_DATA = preload("uid://dqw2hvpvfgwgr")
+const T = BaseItemData.ITEM_TYPE
 
 const SPEED: float = 130.0
 const PROBE_SIZE = Vector2(50, 50)
@@ -26,12 +28,15 @@ var idle_frame_index := 1
 # The aim_dir will be set via the aim_component on base_level scene
 var aim_dir := Vector2(10, 0)
 
-const LIGHT_RADIANT_OFFSET := deg_to_rad(-90)
+var bag := InventoryModel.with_size(20)
+var armor := InventoryModel.new([[T.HEAD], [T.CHEST], [T.FEET], [T.BACK]])
+var weapons := InventoryModel.new([[T.PRIMARY], [T.SECONDARY], [T.GADGET], [T.GADGET]])
 
 func _ready() -> void:
-	#object_holder_component.switch_weapon(_9_MM_PISTOL.instantiate(), muzzle.position)
-	objects_holder_component.set_object_at(0, _9_MM_PISTOL.instantiate())
-	objects_holder_component.set_object_at(1, MACHINE_GUN.instantiate())
+	objects_holder_component.bind(weapons)
+	# s'équipe tout seul via le signal
+	weapons.set_item(0, ItemInstance.new(PISTOL_DATA))
+	weapons.set_item(1, ItemInstance.new(MACHINE_GUN_DATA))
 
 func _physics_process(delta: float) -> void:
 	var transform = Transform2D()
@@ -62,6 +67,9 @@ func get_action_inputs():
 	
 	if Input.is_action_just_released("reload"):
 		object_holder_component.current_weapon.reload()
+	
+	if Input.is_action_just_released("open_bag"):
+		inventory_ui.open(bag, armor, weapons)
 
 
 func get_object_selection_inputs():

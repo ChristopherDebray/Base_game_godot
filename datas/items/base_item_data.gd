@@ -8,4 +8,4 @@ enum ITEM_TYPE {HEAD, CHEST, LEGS, FEET, BACK, PRIMARY, SECONDARY, GADGET, OTHER
 @export var item_name: String
 @export_multiline var description: String
 @export var item_texture: Texture2D
-@export var equipped_scene: PackedScene  # la scène utilisée quand c'est équipé (arme, gadget...)
+@export_file("*.tscn") var equipped_scene_path: String

@@ -5,11 +5,15 @@ class_name  ObjectHolderComponent
 var current_weapon: BaseWeapon
 
 func switch_weapon(weapon: BaseWeapon, muzzle_pos: Vector2) -> BaseWeapon:
-	var previous_weapon = current_weapon
-	remove_child(current_weapon)
-
+	if weapon == current_weapon:
+		return current_weapon
+	
+	var previous_weapon := current_weapon
+	if previous_weapon and previous_weapon.get_parent() == self:
+		remove_child(previous_weapon)
+	
 	add_child(weapon)
 	current_weapon = weapon
-	current_weapon.setup(muzzle_pos)
+	weapon.setup(muzzle_pos)
 	
 	return previous_weapon
