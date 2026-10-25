@@ -7,7 +7,9 @@ class_name Inventory
 @export var weapons_view: InventoryView
 @export var bag_view: InventoryView
 
+## Affiche les trois inventaires : un slot est généré par case de chaque modèle,
+## donc le nombre de slots affichés suit toujours le modèle du joueur.
 func open(bag: InventoryModel, armor: InventoryModel, weapons: InventoryModel) -> void:
-	armor_view.bind_existing(armor)
-	weapons_view.bind_existing(weapons)
+	armor_view.build(armor)
+	weapons_view.build(weapons)
 	bag_view.build(bag)
