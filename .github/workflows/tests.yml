@@ -19,9 +19,39 @@ env:
   # À mettre à jour en même temps que GODOT_VERSION.
   GODOT_ARCHIVE_SHA512: 9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65
 
+# Pas de filtre `paths:` au niveau du workflow : sur une PR qui ne touche que de la doc,
+# les checks obligatoires resteraient « en attente » et bloqueraient le merge. Ici le
+# workflow se lance toujours, mais les jobs de test sont ignorés (« skipped », ce qui
+# compte comme réussi pour une règle de protection de branche) quand rien ne les concerne.
+# Si la détection elle-même échoue, les tests se lancent quand même : une panne ne doit jamais
+# laisser passer une PR sans test.
 jobs:
+  changes:
+    name: Détection des changements
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      game: ${{ steps.scopes.outputs.game }}
+      tooling: ${{ steps.scopes.outputs.tooling }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Déterminer les jobs utiles
+        id: scopes
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD > changed_files.txt
+          else
+            : > changed_files.txt
+          fi
+          cat changed_files.txt
+          python3 .github/scripts/changed_scopes.py < changed_files.txt | tee -a "$GITHUB_OUTPUT"
+
   gdunit:
     name: Tests gdUnit4
+    needs: changes
+    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.game == 'true') }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -59,9 +89,12 @@ jobs:
 
   tooling:
     name: Tests des outils (hook git, check-gdscript)
+    needs: changes
+    if: ${{ !cancelled() && (needs.changes.result != 'success' || needs.changes.outputs.tooling == 'true') }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - run: python3 .claude/hooks/git_guard_test.py
       - run: python3 .claude/skills/check-gdscript/scripts/check_gdscript_test.py
+      - run: python3 .github/scripts/changed_scopes_test.py
