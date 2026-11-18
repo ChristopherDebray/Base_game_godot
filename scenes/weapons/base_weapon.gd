@@ -1,5 +1,8 @@
 extends Node2D
 
+## Base d'une arme tenue : gère la visée (rotation/retournement du sprite), les munitions, le
+## rechargement et les cooldowns des capacités. Les sous-classes implémentent le tir réel
+## (voir `ProjectileWeapon`). `data` est injecté par `ItemInstance.get_scene`.
 class_name BaseWeapon
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -21,7 +24,9 @@ var init_muzzle_position_x: float
 var current_ammunition: int
 var is_reloading: bool = false
 
-func setup(muzzle_position: Vector2):
+## Décale le sprite et la bouche (`Muzzle`) horizontalement de `muzzle_position.x` (offset du
+## porteur) et recharge complètement l'arme. À appeler une fois l'arme ajoutée à son porteur.
+func setup(muzzle_position: Vector2) -> void:
 	init_sprite_position_x = muzzle_position.x
 	init_muzzle_position_x = muzzle.position.x + muzzle_position.x
 	
@@ -30,15 +35,22 @@ func setup(muzzle_position: Vector2):
 	
 	current_ammunition = data.max_ammunitions
 
-func aim_at(aim_dir: Vector2):
+## Oriente l'arme vers le point monde `aim_dir` et règle son `position.y` à dix fois
+## l'angle de visée (décalage visuel empirique ; le rôle exact de ce facteur n'est pas documenté).
+func aim_at(aim_dir: Vector2) -> void:
 	look_at(aim_dir)
-	var aim_dir_angle = aim_dir.angle() * 10
+	var aim_dir_angle := aim_dir.angle() * 10
 	position.y = aim_dir_angle
 
-func flip_weapon(must_reverse_flip: bool):
+## Retourne verticalement le sprite quand le porteur regarde vers la gauche, pour qu'il
+## ne soit pas à l'envers une fois l'arme tournée.
+func flip_weapon(must_reverse_flip: bool) -> void:
 	animated_sprite_2d.flip_v = must_reverse_flip
 
-func try_launch_primary_ability(target: Vector2):
+## Tire la capacité primaire vers `target` si l'arme n'est pas en rechargement ni en cooldown.
+## Sans munition, déclenche un rechargement à la place. Le cooldown est attendu (`await`) avant
+## de réautoriser le tir.
+func try_launch_primary_ability(target: Vector2) -> void:
 	if is_reloading:
 		return
 
@@ -54,12 +66,16 @@ func try_launch_primary_ability(target: Vector2):
 	await get_tree().create_timer(data.primary_ability.cooldown).timeout
 	can_launch_primary_ability = true
 
-func launch_primary_ability(target: Vector2):
+## Effet du tir primaire : animation, son, consomme une munition. Les sous-classes surchargent
+## cette méthode pour appliquer l'effet réel vers `target` (non utilisé ici).
+func launch_primary_ability(target: Vector2) -> void:
 	animated_sprite_2d.play("primary_ability")
 	SoundManager.play_tag_at("shoot", data.primary_ability.sound, global_position, 10)
 	current_ammunition -= 1
 
-func try_launch_secondary_ability(target: Vector2):
+## Tire la capacité secondaire vers `target` si elle n'est pas en cooldown, puis attend son
+## cooldown avant de la réautoriser.
+func try_launch_secondary_ability(target: Vector2) -> void:
 	if not can_launch_secondary_ability:
 		return
 
@@ -67,28 +83,33 @@ func try_launch_secondary_ability(target: Vector2):
 	launch_secondary_ability(target)
 	await get_tree().create_timer(data.secondary_ability.cooldown).timeout
 	can_launch_secondary_ability = true
-	
-	return can_launch_secondary_ability
 
-func launch_secondary_ability(target: Vector2):
+## Effet du tir secondaire : animation et son. Sans effet si l'arme n'a pas de capacité
+## secondaire. `target` n'est pas utilisé ici (prévu pour les sous-classes).
+func launch_secondary_ability(target: Vector2) -> void:
 	if !data.secondary_ability:
 		return
 	
 	animated_sprite_2d.play("secondary_ability")
 	SoundManager.play_tag_at("shoot", data.secondary_ability.sound, global_position, 10)
 
-func set_aim_dir(dir: Vector2):
+## Même orientation que `aim_at` pour le point monde `dir`.
+func set_aim_dir(dir: Vector2) -> void:
 	look_at(dir)
-	var aim_dir_angle = dir.angle() * 10
+	var aim_dir_angle := dir.angle() * 10
 	position.y = aim_dir_angle
 
-func reload():
+## Remplit immédiatement le chargeur, bloque le tir (`is_reloading`) et joue l'animation et le son
+## de rechargement. `is_reloading` repasse à `false` à la fin de l'animation "reload".
+func reload() -> void:
 	current_ammunition = data.max_ammunitions
 	is_reloading = true
 	animated_sprite_2d.play("reload")
 	SoundManager.play_tag_at("reload", data.primary_ability.reload_sound, global_position, 10)
 
-func hit_trigger(damage: float, position: Vector2, normal: Vector2, collider: Variant):
+## Réagit à un impact en `position` : joue la particule d'impact et inflige `damage` si
+## `collider` est un `Damageable`. `normal` n'est pas utilisé pour l'instant.
+func hit_trigger(damage: float, position: Vector2, normal: Vector2, collider: Variant) -> void:
 	SceneSpawnerManager.spawn_hit_particle(position, 0)
 	if collider is Damageable:
 		collider.take_damage(damage)
