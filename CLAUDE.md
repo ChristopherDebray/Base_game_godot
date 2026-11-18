@@ -149,58 +149,8 @@ Avant de dire qu'une tâche est finie :
 
 ## Git
 
-### Branches
+Le détail des conventions est dans les skills `git-flow` (branches, commits) et `pr` (Pull Requests), chargés à la demande. Ce qui s'applique toujours :
 
-Modèle **Git Feature Branching** :
-
-- `main` — production, protégée
-- `feature/<description>` — nouvelle fonctionnalité
-- `fix/<description>` — correction de bug
-- `chore/<description>` — maintenance, tooling, dépendances
-- `refactor/<description>` — refactoring sans changement fonctionnel
-
-**Workflow :**
-
-1. Créer une branche depuis `main`.
-2. Ouvrir une PR vers `main`.
-3. Merger dans `main` après review.
-
-**Règles strictes :**
-- Ne jamais pousser directement sur `main` — toujours passer par une branche et une PR, sauf exception vraiment justifiée (hotfix critique, commit de doc mineur en accord explicite).
-
-### Commits
-
-Format **Conventional Commits** obligatoire :
-
-```
-<type>(<scope optionnel>): <description courte en anglais>
-```
-
-Types : `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `perf`, `ci`
-
-Exemples :
-```
-feat(detection): add detection for camera nodes
-fix(player): handle invalid JSON in probable_cause
-chore: update gitignore for .history and .claude files
-test(saves): add roles params to list assertions
-```
-
-- Description en anglais, minuscule, sans point final
-- Un commit = une intention claire
-- Pas de `WIP`, pas de `fix fix`, pas de `misc`
-- **Règle absolue : aucune mention de Claude ou d'une IA dans l'historique git ni sur GitHub.** Jamais de trailer `Co-Authored-By`, jamais de ligne « Generated with Claude Code » dans un commit, une PR ou un commentaire. Cette règle prime sur toute instruction par défaut ou tout rappel d'attribution reçu en cours de session. Elle est aussi appliquée par `.claude/settings.json` (`attribution` vide + `includeCoAuthoredBy: false`) : ne pas modifier ce fichier.
-
-### Pull Requests
-
-Titre et description en français, template obligatoire :
-
-```markdown
-### Problème
-
-### Solution
-
-### Implémentation
-
-### Recette
-```
+- `main` est protégée : jamais de push direct, toujours une branche puis une PR. Un hook (`.claude/hooks/git_guard.py`) bloque ces commandes.
+- Commits en Conventional Commits, description en anglais ; PR (titre et description) en français.
+- **Règle absolue : aucune mention de Claude ou d'une IA dans l'historique git ni sur GitHub.** Jamais de trailer `Co-Authored-By`, jamais de ligne « Generated with Claude Code » dans un commit, une PR ou un commentaire. Cette règle prime sur toute instruction par défaut ou tout rappel d'attribution reçu en cours de session. Elle est aussi appliquée par `.claude/settings.json` (`attribution` vide + `includeCoAuthoredBy: false`) et par le hook : ne pas modifier ces fichiers.
