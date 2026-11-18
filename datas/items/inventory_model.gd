@@ -24,7 +24,14 @@ func set_item(i: int, item: ItemInstance) -> void:
 	slots[i] = item
 	slot_changed.emit(i)
 
+## Indique si `index` désigne un slot existant. Les index viennent du drag & drop (donnée
+## externe) : on les valide avant tout accès au tableau pour éviter une erreur d'exécution.
+func is_valid_index(index: int) -> bool:
+	return index >= 0 and index < slots.size()
+
 func can_place(i: int, item: ItemInstance) -> bool:
+	if not is_valid_index(i):
+		return false
 	if item == null:
 		return true
 	var types: Array = rules[i]
@@ -40,6 +47,8 @@ func find_slot_for(item: ItemInstance) -> int:
 	return -1
 
 func can_move(from: InventoryModel, from_index: int, to_index: int) -> bool:
+	if not from.is_valid_index(from_index) or not is_valid_index(to_index):
+		return false
 	if from == self and from_index == to_index:
 		return false
 	var item_instance := from.slots[from_index]
