@@ -37,6 +37,10 @@ RebindManager="*uid://birc8l4r6jacj"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
 [input]
 
 up={
