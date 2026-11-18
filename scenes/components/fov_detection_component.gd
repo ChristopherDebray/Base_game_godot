@@ -39,6 +39,15 @@ func can_see_detected_body() -> bool:
 	
 	return true
 
+## Renvoie les points du cône de vision (repère local), tels que définis par le
+## `CollisionPolygon2D` enfant, pour pouvoir le dessiner sans dupliquer sa forme.
+## Renvoie un tableau vide s'il n'y a pas de polygone.
+func get_cone_polygon() -> PackedVector2Array:
+	for child in get_children():
+		if child is CollisionPolygon2D:
+			return child.polygon
+	return PackedVector2Array()
+
 func _on_body_entered(body: Node2D) -> void:
 	if !is_instance_of(body, Player):
 		return
