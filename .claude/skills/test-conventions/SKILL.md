@@ -21,6 +21,25 @@ Priorité : 1) logique pure et composants (Health, InventoryModel, états ennemi
 - Cas à couvrir : cas normal, bornes (vie à 0, index hors bornes, premier et dernier index), refus (type d'item refusé), entrées invalides, signaux émis **et** signaux non émis.
 - Un bug corrigé reçoit d'abord un test qui l'échoue, puis le fix, puis le test passe.
 
+## Quand un test est requis, et quand il ne l'est pas
+
+**Requis** : un script qui contient une décision, un calcul, un état ou une validation.
+- Règles et états : `InventoryModel`, états des ennemis (`npc.gd`), pile de menus, détection clavier/manette.
+- Calculs : visée (zone morte, rayon max), cadence de tir, munitions et rechargement.
+- Persistance et entrées externes : tout ce qui lit ou écrit `user://`, parse du JSON, migre un schéma, valide un index ou des drag data (`DataManager`, bindings, réglages).
+- Composants à dépendances injectables (`@export` ou paramètre) : ils s'instancient seuls.
+- Tout bug corrigé (voir plus haut).
+
+**Pas requis** (ne pas écrire de test pour faire du volume) :
+- `Resource` de données sans logique (`base_*_data.gd` : des champs `@export`).
+- Scripts de câblage ou de délégation de quelques lignes (handler qui appelle une méthode, `_ready` qui connecte des signaux, `signal_manager.gd`).
+- UI visuelle : mise en page, thèmes, animations, menus, indicateurs de touches. S'il y a une vraie logique dedans, l'extraire dans une classe sans dépendance au SceneTree, puis tester **celle-là**.
+- Rendu, shaders, SubViewports, particules, audio (lecture des sons) : hors périmètre.
+- Le moteur lui-même (que `move_and_slide` ou `queue_free` fonctionnent).
+- Getters, setters et propriétés triviaux ; fonctions privées (les tester via l'API publique).
+
+**Code difficile à tester** (dépendance à un autoload en dur, `get_node` fragile, logique collée à l'UI) : ne pas le refactorer dans la même PR que les tests. Le signaler à l'utilisateur et proposer le refactoring à part, avec les tests qu'il rendrait possibles.
+
 ## Règle absolue
 
 Ne pas modifier un test pour le faire passer sans l'expliquer à l'utilisateur : un test qui échoue est peut-être un vrai bug. Si un test révèle un bug du code, le signaler et proposer le fix séparément.
