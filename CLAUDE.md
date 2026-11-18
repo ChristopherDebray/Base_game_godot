@@ -40,6 +40,7 @@ Ce projet suit les principes du **Software Craftsmanship** : code propre, testé
 - **TDD** : écrire le test avant le code de production. Les tests documentent l'intention, pas l'implémentation.
 - **Baby Steps** : avancer par petits incréments vérifiables. Chaque étape doit compiler, passer les tests, et laisser le code dans un état cohérent.
 - **Clean Code** : noms explicites, fonctions courtes à responsabilité unique, pas de commentaires inutiles, pas de code mort.
+- **Return early** : toujours priviligier les cas provoquant un return en priorité afin d'éviter des déclanchement inutile de code et améliorer la lisibilité
 - **YAGNI / KISS** : ne pas anticiper. Implémenter ce qui est demandé, rien de plus.
 
 ### Commentaires
