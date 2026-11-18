@@ -1,5 +1,7 @@
 extends Damageable
 
+## Joueur : déplacement, visée, entrées d'action (tir, rechargement, inventaire, choix d'arme) et
+## inventaires (`bag`, `armor`, `weapons`). Délègue l'arme tenue aux composants *holder.
 class_name Player
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -13,7 +15,7 @@ class_name Player
 @onready var objects_holder_component: ObjectsHolderComponent = $ObjectsHolderComponent
 
 const PISTOL_DATA = preload("uid://ddwe31sqyyulb")
-const T = BaseItemData.ITEM_TYPE
+const ItemType = BaseItemData.ITEM_TYPE
 
 const SPEED: float = 130.0
 const PROBE_SIZE = Vector2(50, 50)
@@ -29,8 +31,8 @@ var idle_frame_index := 1
 var aim_dir := Vector2(10, 0)
 
 var bag := InventoryModel.with_size(20)
-var armor := InventoryModel.new([[T.HEAD], [T.CHEST], [T.FEET], [T.BACK]])
-var weapons := InventoryModel.new([[T.PRIMARY], [T.SECONDARY], [T.GADGET], [T.GADGET]])
+var armor := InventoryModel.new([[ItemType.HEAD], [ItemType.CHEST], [ItemType.FEET], [ItemType.BACK]])
+var weapons := InventoryModel.new([[ItemType.PRIMARY], [ItemType.SECONDARY], [ItemType.GADGET], [ItemType.GADGET]])
 
 func _ready() -> void:
 	objects_holder_component.bind(weapons)
@@ -65,9 +67,6 @@ func die() -> void:
 	SignalManager.on_player_died.emit()
 
 func _physics_process(delta: float) -> void:
-	var transform = Transform2D()
-	transform = transform.translated(-global_position + PROBE_SIZE/2)
-	
 	get_movement_inputs()
 	get_action_inputs()
 	get_object_selection_inputs()
@@ -75,11 +74,15 @@ func _physics_process(delta: float) -> void:
 	_update_facing()
 	_update_anim()
 
-func set_aim_dir(dir: Vector2):
+## Mémorise la direction de visée `dir` (point monde fourni par `AimComponent`), oriente l'arme
+## tenue et met à jour `facing_position`, utilisée pour retourner le sprite. Nécessite une arme
+## équipée (`current_weapon`).
+func set_aim_dir(dir: Vector2) -> void:
 	aim_dir = dir
 	object_holder_component.current_weapon.aim_at(aim_dir)
 	facing_position = global_position - aim_dir
 
+## Lit les actions de déplacement et met à jour `velocity` (diagonales normalisées).
 func get_movement_inputs() -> void:
 	var nv: Vector2 = Vector2.ZERO
 	# Returns a value from 0 to 1, depending on the "strength" used mostly for controllers
@@ -87,7 +90,8 @@ func get_movement_inputs() -> void:
 	nv.y = Input.get_action_strength("down") - Input.get_action_strength("up")
 	velocity = nv.normalized() * SPEED
 
-func get_action_inputs():
+## Gère tir, rechargement (sur relâchement de la touche) et ouverture de l'inventaire.
+func get_action_inputs() -> void:
 	if Input.is_action_just_released("primary_ability"):
 		object_holder_component.current_weapon.try_launch_primary_ability(aim_dir)
 	
@@ -98,7 +102,8 @@ func get_action_inputs():
 		inventory_ui.open(bag, armor, weapons)
 
 
-func get_object_selection_inputs():
+## Gère le choix de l'arme tenue : slots 1 à 3, objet suivant / précédent.
+func get_object_selection_inputs() -> void:
 	# TODO use better naming with primary / secondary weapon ?
 	if Input.is_action_just_released("get_object_1"):
 		objects_holder_component.set_holded_object_to(0)
@@ -123,7 +128,9 @@ func _update_facing() -> void:
 		flip_facing(true)
 		object_holder_component.current_weapon.flip_weapon(true)
 	
-func flip_facing(must_reverse_flip: bool):
+## Retourne le sprite horizontalement et met `facing_direction` à gauche (si
+## `must_reverse_flip`) ou à droite.
+func flip_facing(must_reverse_flip: bool) -> void:
 	animated_sprite_2d.flip_h = must_reverse_flip
 	if must_reverse_flip:
 		facing_direction = Vector2.LEFT
