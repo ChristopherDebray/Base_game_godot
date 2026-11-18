@@ -9,6 +9,8 @@ var hit_particles_pool: Array[Node2D] = []
 var death_particles_pool: Array[Node2D] = []
 var particle_container: Node = null
 
+## Initialise les pools de particules (cachées) dans `container`, typiquement le viewport du
+## niveau. À rappeler à chaque chargement de niveau : les pools sont réinitialisés.
 func setup(container: Node) -> void:
 	particle_container = container
 	# Le niveau peut être rechargé : les anciennes particules ont été libérées avec lui.
@@ -19,39 +21,43 @@ func setup(container: Node) -> void:
 	
 func _setup_hit_particles(container: Node) -> void:
 	for i in HIT_PARTICLES_POOL_SIZE:
-		var p = HIT_PARTICLE.instantiate()
-		p.visible = false
-		particle_container.add_child(p)
-		hit_particles_pool.append(p)
+		var particle := HIT_PARTICLE.instantiate() as CPUParticles2D
+		particle.visible = false
+		particle_container.add_child(particle)
+		hit_particles_pool.append(particle)
 
 func _setup_death_particles(container: Node) -> void:
 	for i in DEATH_PARTICLES_POOL_SIZE:
-		var p = DEATH_PARTICLE.instantiate()
-		p.visible = false
-		particle_container.add_child(p)
-		death_particles_pool.append(p)
+		var particle := DEATH_PARTICLE.instantiate() as CPUParticles2D
+		particle.visible = false
+		particle_container.add_child(particle)
+		death_particles_pool.append(particle)
 
-func spawn_hit_particle(pos: Vector2, rot: float):
-	for p in hit_particles_pool:
-		if not p.visible:
-			p.global_position = pos
-			p.rotation = rot
-			p.visible = true
-			p.restart()
-			await get_tree().create_timer(p.lifetime).timeout
+## Joue une particule d'impact libre du pool en `pos` avec la rotation `rot`, puis la recache à la
+## fin de sa durée de vie. Sans effet si toutes les particules du pool sont déjà utilisées.
+func spawn_hit_particle(pos: Vector2, rot: float) -> void:
+	for particle in hit_particles_pool:
+		if not particle.visible:
+			particle.global_position = pos
+			particle.rotation = rot
+			particle.visible = true
+			particle.restart()
+			await get_tree().create_timer(particle.lifetime).timeout
 			# Le niveau a pu être rechargé pendant l'attente.
-			if is_instance_valid(p):
-				p.visible = false
+			if is_instance_valid(particle):
+				particle.visible = false
 			return
 
-func spawn_death_particle(pos: Vector2):
-	for p in death_particles_pool:
-		if not p.visible:
-			p.global_position = pos
-			p.visible = true
-			p.restart()
-			await get_tree().create_timer(p.lifetime).timeout
+## Joue une particule de mort libre du pool en `pos`, puis la recache à la fin de sa durée de vie.
+## Sans effet si toutes les particules du pool sont déjà utilisées.
+func spawn_death_particle(pos: Vector2) -> void:
+	for particle in death_particles_pool:
+		if not particle.visible:
+			particle.global_position = pos
+			particle.visible = true
+			particle.restart()
+			await get_tree().create_timer(particle.lifetime).timeout
 			# Le niveau a pu être rechargé pendant l'attente.
-			if is_instance_valid(p):
-				p.visible = false
+			if is_instance_valid(particle):
+				particle.visible = false
 			return
