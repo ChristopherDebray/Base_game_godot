@@ -18,9 +18,11 @@ func _process(delta: float) -> void:
 	light_holder.look_at(mouse_position)
 	light_holder.position = player.position
 
+## Renvoie la direction (normalisée) du niveau vers la position de visée donnée par
+## `AimComponent` (souris ou manette selon le schéma d'entrée actif).
 func get_aim_direction() -> Vector2:
 	var aim_world_pos := aim_component.get_aim_world_position()
 	return global_position.direction_to(aim_world_pos)
 
-func _on_death(pos: Vector2):
+func _on_death(pos: Vector2) -> void:
 	SceneSpawnerManager.spawn_death_particle(pos)

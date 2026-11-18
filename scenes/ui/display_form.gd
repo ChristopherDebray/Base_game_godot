@@ -51,6 +51,3 @@ func _on_vsync_option_button_item_selected(index: int) -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ADAPTIVE)
 	elif index == 2: # Enabled
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
-
-func _on_display_button_selected(button: BaseButton):
-	print('test')
