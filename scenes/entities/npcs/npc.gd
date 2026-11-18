@@ -175,6 +175,14 @@ func search_player() -> void:
 	set_state(ENEMY_STATE.SEARCHING)
 	set_nav_to_player()
 
+## Alerte externe (ex. caméra de surveillance) : le PNJ part chercher en `target_position`.
+## Sans effet pendant une poursuite, pour ne pas dégrader une détection directe plus précise.
+func alert_to(target_position: Vector2) -> void:
+	if _state == ENEMY_STATE.CHASING:
+		return
+
+	search_position(target_position)
+
 ## Passe en recherche et navigue vers `pos`.
 func search_position(pos: Vector2) -> void:
 	set_state(ENEMY_STATE.SEARCHING)
