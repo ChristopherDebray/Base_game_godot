@@ -119,7 +119,7 @@ Le code existant n'est pas toujours conforme à ces règles (projet d'apprentiss
 - Framework : gdUnit4 (addons/gdUnit4). Tests dans `tests/`, en miroir de l'arborescence du projet.
 - Nommage : `<nom_du_script>_test.gd`, fonctions `test_<comportement>_<condition_ou_résultat>` 
   (ex: `test_take_damage_at_zero_emits_death`).
-- Commande de lancement (headless) : <à compléter une fois trouvée>
+- Commande de lancement (headless) : `GODOT_BIN=/chemin/vers/godot addons/gdUnit4/runtest.sh -a res://tests` (voir README.md)
 - Tout node créé dans un test est libéré (`auto_free`). Attendre les frames/physique avant d'asserter 
   sur un comportement dépendant du temps.
 - Priorité de test : 1) logique pure et composants (Health, InventoryModel, états ennemis), 
