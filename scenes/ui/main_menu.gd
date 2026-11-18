@@ -1,5 +1,7 @@
 extends Control
 
+## Menu principal : bascule entre le panneau principal (jouer, options, quitter) et le panneau
+## d'options, en gérant le focus pour la navigation à la manette.
 class_name MainMenu
 
 @onready var main_panel: Control = %MainPanel
