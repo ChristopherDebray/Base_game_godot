@@ -40,8 +40,14 @@ jobs:
       - name: Importer le projet
         run: '"$GODOT_BIN" --headless --import'
 
+      # Même commande que addons/gdUnit4/runtest.sh, mais avec --headless : le runner n'a pas
+      # d'écran et le script ne permet pas de passer cette option au moteur. gdUnit refuse le
+      # mode headless par défaut (tests d'UI non fiables) ; --ignoreHeadlessMode est acceptable
+      # ici car le projet ne teste pas le rendu ni les entrées (voir CLAUDE.md).
       - name: Lancer les tests
-        run: addons/gdUnit4/runtest.sh -a res://tests
+        run: >-
+          "$GODOT_BIN" --headless --path . -s -d --remote-debug tcp://127.0.0.1:0
+          res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://tests
 
       - name: Publier les rapports
         if: always()
