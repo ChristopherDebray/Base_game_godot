@@ -2,8 +2,9 @@
 """Tests de git_guard.py. Lancer : `python3 .claude/hooks/git_guard_test.py` (exit 1 si échec).
 
 Chaque cas envoie un payload de hook réel sur stdin et vérifie le code de sortie
-(0 = autorisé, 2 = bloqué). Le cas « git push depuis main » utilise un dépôt temporaire
-sur `main`, pour ne pas dépendre de la branche courante du projet.
+(0 = autorisé, 2 = bloqué). Les cas qui dépendent de la branche courante (`git push` sans
+destination) utilisent des dépôts temporaires sur `main` et sur une branche de feature, pour
+ne pas dépendre de la branche sur laquelle le projet se trouve quand on lance le test.
 """
 
 import json
@@ -16,6 +17,7 @@ GUARD_PATH = Path(__file__).with_name("git_guard.py")
 ALLOWED_EXIT_CODE = 0
 BLOCKED_EXIT_CODE = 2
 MAIN_REPO_MARKER = "REPO_MAIN"
+FEATURE_REPO_MARKER = "REPO_FEATURE"
 
 HEREDOC_BAD = 'git commit -m "$(cat <<\'EOF\'\nfeat: x\n\nCo-Authored-By: Claude Sonnet <noreply@anthropic.com>\nEOF\n)"'
 HEREDOC_OK = 'git commit -m "$(cat <<\'EOF\'\nchore: track claude.md\n\nEOF\n)"'
@@ -24,7 +26,7 @@ CASES = [
  ("allow", "git status", "."),
  ("allow", "git push -u origin chore/x", "."),
  ("allow", "git push --force-with-lease=chore/x:abc origin chore/x", "."),
- ("allow", "git push", "."),  # branche courante != main
+ ("allow", "git push", FEATURE_REPO_MARKER),  # branche courante != main
  ("allow", HEREDOC_OK, "."),
  ("allow", 'gh pr create --title "t" --body "### Problème"', "."),
  ("allow", "gh pr merge 20 --rebase --delete-branch", "."),
@@ -59,10 +61,12 @@ def run_guard(command: str, working_directory: str, raw_input: str | None = None
 
 def main() -> None:
     failures = 0
-    with tempfile.TemporaryDirectory() as main_repo:
+    with tempfile.TemporaryDirectory() as main_repo, tempfile.TemporaryDirectory() as feature_repo:
         subprocess.run(["git", "init", "-q", "-b", "main", main_repo], check=True)
+        subprocess.run(["git", "init", "-q", "-b", "chore/example", feature_repo], check=True)
+        working_directories = {MAIN_REPO_MARKER: main_repo, FEATURE_REPO_MARKER: feature_repo}
         for expected, command, location in CASES:
-            working_directory = main_repo if location == MAIN_REPO_MARKER else "."
+            working_directory = working_directories.get(location, location)
             exit_code = run_guard(command, working_directory).returncode
             expected_code = BLOCKED_EXIT_CODE if expected == "deny" else ALLOWED_EXIT_CODE
             if exit_code != expected_code:
