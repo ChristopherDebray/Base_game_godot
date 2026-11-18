@@ -14,11 +14,16 @@ const SCHEME_CHANGED_SIGNAL := "scheme_changed"
 const UNUSED_DEVICE_ID := 0
 
 var _manager: Node
+# `is_not_emitted` de gdUnit n'écoute qu'À PARTIR du `await` : une émission déjà passée n'est pas vue.
+# Pour prouver qu'un signal n'est PAS émis, on le collecte dès l'arrivée du manager.
+var _emitted_schemes: Array[int] = []
 
 
 func before_test() -> void:
 	_manager = auto_free(load(INPUT_SCHEME_MANAGER_SCRIPT).new())
 	add_child(_manager)
+	_emitted_schemes.clear()
+	_manager.scheme_changed.connect(func(scheme: int) -> void: _emitted_schemes.append(scheme))
 
 
 func test_default_scheme_is_keyboard() -> void:
@@ -26,11 +31,9 @@ func test_default_scheme_is_keyboard() -> void:
 
 
 func test_key_event_on_keyboard_scheme_emits_nothing() -> void:
-	monitor_signals(_manager, false)
-
 	_manager._unhandled_input(InputEventKey.new())
 
-	await assert_signal(_manager).is_not_emitted(SCHEME_CHANGED_SIGNAL)
+	assert_array(_emitted_schemes).is_empty()
 
 
 func test_key_event_switches_back_to_keyboard() -> void:
@@ -76,12 +79,18 @@ func test_gamepad_event_without_connected_gamepad_falls_back_to_keyboard() -> vo
 
 func test_unrelated_event_keeps_current_scheme() -> void:
 	_manager.current_scheme = _manager.SCHEME.XBOX
-	monitor_signals(_manager, false)
 
 	_manager._unhandled_input(InputEventAction.new())
 
 	assert_int(_manager.current_scheme).is_equal(_manager.SCHEME.XBOX)
-	await assert_signal(_manager).is_not_emitted(SCHEME_CHANGED_SIGNAL)
+
+
+func test_unrelated_event_emits_nothing() -> void:
+	_manager.current_scheme = _manager.SCHEME.XBOX
+
+	_manager._unhandled_input(InputEventAction.new())
+
+	assert_array(_emitted_schemes).is_empty()
 
 
 func test_gamepad_motion_without_connected_gamepad_falls_back_to_keyboard() -> void:
@@ -103,8 +112,6 @@ func test_last_gamepad_disconnected_switches_back_to_keyboard() -> void:
 
 
 func test_gamepad_disconnected_on_keyboard_scheme_emits_nothing() -> void:
-	monitor_signals(_manager, false)
-
 	Input.joy_connection_changed.emit(UNUSED_DEVICE_ID, false)
 
-	await assert_signal(_manager).is_not_emitted(SCHEME_CHANGED_SIGNAL)
+	assert_array(_emitted_schemes).is_empty()
