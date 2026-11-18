@@ -1,5 +1,7 @@
 extends Node2D
 
+## Composant de visée : déplace le réticule selon la souris ou le stick de la manette, selon le
+## schéma d'entrée actif (`InputSchemeManager`), et transmet la direction au `Player`.
 class_name AimComponent
 
 @export var sensitivity: float = 800.0   # pixels/sec à stick=1
@@ -23,7 +25,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	current_aim_callback.call(delta)
 
-func _setup_controller():
+func _setup_controller() -> void:
 	if InputSchemeManager.SCHEME.KEYBOARD == InputSchemeManager.current_scheme:
 		current_aim_callback = func(delta: float): self._process_mouse_aim(delta)
 		return
@@ -57,18 +59,20 @@ func _process_gamepad_aim(delta: float) -> void:
 	var radius := max_radius
 	if use_stick_magnitude:
 		# Map magnitude [deadzone..1] to [0..1]
-		var t = clamp((input_vec.length() - deadzone) / (1.0 - deadzone), 0.0, 1.0)
-		radius = t * max_radius
+		var stick_ratio: float = clamp((input_vec.length() - deadzone) / (1.0 - deadzone), 0.0, 1.0)
+		radius = stick_ratio * max_radius
 	
 	# Snap instantly (no lag)
 	global_position = player.global_position + dir * radius
 	rotation = dir.angle()
 
+## Renvoie la position monde visée : curseur de la souris au clavier, position du réticule
+## à la manette.
 func get_aim_world_position() -> Vector2:
 	if InputSchemeManager.SCHEME.KEYBOARD == InputSchemeManager.current_scheme:
 		return get_global_mouse_position()
 	
 	return global_position
 
-func _on_scheme_changed(scheme: InputSchemeManager.SCHEME):
+func _on_scheme_changed(scheme: InputSchemeManager.SCHEME) -> void:
 	_setup_controller()

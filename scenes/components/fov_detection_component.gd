@@ -1,5 +1,7 @@
 extends Area2D
 
+## Détection par champ de vision (Area2D) : repère le `Player` entré dans la zone, à condition
+## qu'aucun mur ne le cache (raycast). Émet `detect` à la détection et `lost` à la sortie.
 class_name FovDetectionComponent
 
 signal detect(detected_entity: Node2D)
@@ -16,12 +18,14 @@ func _ready() -> void:
 	# For now only detect caracter layer, later might have dynamic detection
 	set_collision_mask_value(CollisionManager.LAYER_CARACTER, true)
 
-func can_see_detected_body():
+## Indique si le corps détecté est toujours en ligne de vue (aucun mur entre les deux).
+## Renvoie `false` s'il n'y a pas de corps détecté.
+func can_see_detected_body() -> bool:
 	if !detected_body:
 		return false
 	
-	var space_state = get_world_2d().direct_space_state
-	var result = CollisionManager.draw_ray_query_to_target(
+	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	var result: Dictionary = CollisionManager.draw_ray_query_to_target(
 		detected_body.global_position,
 		global_position,
 		DETECTION_RANGE,
@@ -39,8 +43,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if !is_instance_of(body, Player):
 		return
 	
-	var space_state = get_world_2d().direct_space_state
-	var result = CollisionManager.draw_ray_query_to_target(
+	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	var result: Dictionary = CollisionManager.draw_ray_query_to_target(
 		body.global_position,
 		global_position,
 		DETECTION_RANGE,
