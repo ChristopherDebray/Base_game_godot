@@ -1,15 +1,18 @@
 extends Damageable
 
+## Ennemi contrôlé par une machine à états (IDLE, RETURNING, PATROLLING, CHASING, SEARCHING) :
+## patrouille entre waypoints, détecte le joueur via `FovDetectionComponent` et le poursuit par
+## navigation. Les sous-classes (ex. `Soldier`) ajoutent leur comportement offensif.
 class_name Npc
 
-var FOV = {
+var FOV: Dictionary = {
 	ENEMY_STATE.IDLE: 60.0,
 	ENEMY_STATE.RETURNING: 60.0,
 	ENEMY_STATE.PATROLLING: 60.0,
 	ENEMY_STATE.CHASING: 120.0,
 	ENEMY_STATE.SEARCHING: 100.0
 }
-var SPEED = {
+var SPEED: Dictionary = {
 	ENEMY_STATE.IDLE: 60.0,
 	ENEMY_STATE.RETURNING: 80.0,
 	ENEMY_STATE.PATROLLING: 70.0,
@@ -45,7 +48,10 @@ func _ready() -> void:
 	setup()
 	call_deferred("late_setup")
 
-func setup():
+## Prépare le PNJ : coupe le traitement physique (réactivé par `late_setup`), passe en IDLE s'il
+## n'a pas de points de patrouille, construit les waypoints, retrouve le joueur (groupe
+## "player") et branche le signal `detect` du champ de vision.
+func setup() -> void:
 	set_physics_process(false)
 	is_idle = patrol_points.is_empty()
 	if is_idle:
@@ -57,7 +63,9 @@ func setup():
 	_initial_position = global_position
 	fov_detection_component.detect.connect(_on_detect)
 
-func late_setup():
+## Appelée en différé après `setup` : attend une frame physique et 0,3 s (le temps que la
+## navigation soit prête), réactive le traitement physique puis équipe l'arme initiale.
+func late_setup() -> void:
 	await get_tree().physics_frame
 	await get_tree().create_timer(0.3).timeout
 	call_deferred("set_physics_process", true)
@@ -66,13 +74,15 @@ func late_setup():
 		muzzle.position
 	)
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	update_state()
 	update_movement()
 	update_navigation()
 	_update_facing()
 	set_aim_dir(aim_target)
 
+## Passe dans l'état `new_state` (sans effet s'il est déjà courant). Entrer en IDLE ré-oriente
+## le sprite vers sa direction initiale.
 func set_state(new_state: ENEMY_STATE) -> void:
 	if new_state == _state:
 		return
@@ -89,15 +99,19 @@ func set_state(new_state: ENEMY_STATE) -> void:
 	
 	_state = new_state
 
+## Définit la destination de navigation sur la position actuelle du joueur.
 func set_nav_to_player() -> void:
 	nav_agent.target_position = _player_ref.global_position
 
+## Définit la destination de navigation sur `nav_position`.
 func set_nav_to_position(nav_position: Vector2) -> void:
 	nav_agent.target_position = nav_position
 
+## Choisit l'état selon la vue : poursuite si le joueur détecté est visible, recherche s'il
+## vient de disparaître pendant une poursuite.
 func update_state() -> void:
-	var new_state = _state
-	var can_see = fov_detection_component.can_see_detected_body()
+	var new_state: ENEMY_STATE = _state
+	var can_see: bool = fov_detection_component.can_see_detected_body()
 	
 	if can_see == true:
 		new_state = ENEMY_STATE.CHASING
@@ -106,6 +120,7 @@ func update_state() -> void:
 	
 	set_state(new_state)
 
+## Exécute le comportement de déplacement de l'état courant.
 func update_movement() -> void:
 	match _state:
 		ENEMY_STATE.IDLE:
@@ -127,17 +142,24 @@ func _update_facing() -> void:
 		flip_facing(true)
 		object_holder_component.current_weapon.flip_weapon(true)
 	
-func set_aim_dir(dir: Vector2):
+## Oriente l'arme tenue vers le point monde `dir` et met à jour `facing_position`. Nécessite
+## une arme équipée (`current_weapon`).
+func set_aim_dir(dir: Vector2) -> void:
 	object_holder_component.current_weapon.aim_at(dir)
 	facing_position = global_position - dir
 
-func flip_facing(must_reverse_flip: bool):
+## Retourne le sprite horizontalement et met `facing_direction` à gauche (si
+## `must_reverse_flip`) ou à droite.
+func flip_facing(must_reverse_flip: bool) -> void:
 	animated_sprite_2d.flip_h = must_reverse_flip
 	if must_reverse_flip:
 		facing_direction = Vector2.LEFT
 		return
 	facing_direction = Vector2.RIGHT
 
+## Tant que la navigation n'est pas finie : vise le prochain point du chemin, oriente le champ
+## de vision et transmet la vitesse souhaitée à l'agent. Le déplacement réel est appliqué dans
+## `_on_navigation_agent_2d_velocity_computed` (évitement).
 func update_navigation() -> void:
 	if nav_agent.is_navigation_finished() == true:
 		return
@@ -145,19 +167,23 @@ func update_navigation() -> void:
 	var next_path_position: Vector2 = nav_agent.get_next_path_position()
 	aim_target = next_path_position
 	fov_detection_component.look_at(next_path_position)
-	var ini_v = global_position.direction_to(next_path_position) * SPEED[_state]
-	nav_agent.set_velocity(ini_v)
+	var desired_velocity: Vector2 = global_position.direction_to(next_path_position) * SPEED[_state]
+	nav_agent.set_velocity(desired_velocity)
 
+## Passe en recherche et navigue vers la position actuelle du joueur.
 func search_player() -> void:
 	set_state(ENEMY_STATE.SEARCHING)
 	set_nav_to_player()
 
+## Passe en recherche et navigue vers `pos`.
 func search_position(pos: Vector2) -> void:
 	set_state(ENEMY_STATE.SEARCHING)
 	set_nav_to_position(pos)
 
 # WAYPOINTS
 
+## Construit la liste des waypoints à partir des enfants du node `patrol_points`. Sans effet
+## pour un PNJ statique (sans patrouille).
 func create_wp() -> void:
 	if is_idle:
 		return
@@ -165,6 +191,7 @@ func create_wp() -> void:
 	for wp in get_node(patrol_points).get_children():
 		_waypoints.append(wp.global_position)
 
+## Cible le waypoint suivant, en repartant du premier après le dernier.
 func navigate_wp() -> void:
 	if _current_wp >= len(_waypoints):
 		_current_wp = 0
@@ -173,14 +200,18 @@ func navigate_wp() -> void:
 
 # MOVEMENT PROCESSING
 
+## État IDLE : ne fait rien (le PNJ reste en place).
 func process_idle() -> void:
 	pass
 
+## État RETURNING : retourne à la position initiale puis passe en IDLE à l'arrivée.
 func process_returning() -> void:
 	nav_agent.target_position = _initial_position
 	if nav_agent.is_navigation_finished() == true:
 		set_state(ENEMY_STATE.IDLE)
 
+## État PATROLLING : joue un bruit de pas au plus une fois par seconde et enchaîne les
+## waypoints à chaque arrivée.
 func process_patrolling() -> void:
 	var now_ms := Time.get_ticks_msec()
 	if now_ms > next_ms:
@@ -189,26 +220,29 @@ func process_patrolling() -> void:
 	if nav_agent.is_navigation_finished() == true:
 		navigate_wp()
 
+## État CHASING : navigue vers la position du joueur détecté. Suppose `detected_body` non nul.
 func process_chasing() -> void:
 	set_nav_to_position(fov_detection_component.detected_body.global_position)
 
+## État SEARCHING : à l'arrivée à destination, reprend la patrouille (ou retourne à son poste
+## si le PNJ est statique).
 func process_searching() -> void:
 	if nav_agent.is_navigation_finished() == false:
 		return
 	
-	var _new_state = ENEMY_STATE.PATROLLING
+	var next_state: ENEMY_STATE = ENEMY_STATE.PATROLLING
 	if is_idle:
-		_new_state = ENEMY_STATE.RETURNING
-	set_state(_new_state)
+		next_state = ENEMY_STATE.RETURNING
+	set_state(next_state)
 
 func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 	velocity = safe_velocity
 	move_and_slide()
 
-func _on_detect(body: Node2D):
+func _on_detect(body: Node2D) -> void:
 	set_nav_to_position(body.global_position)
 	set_state(ENEMY_STATE.CHASING)
 
-func _on_lost(body: Node2D):
+func _on_lost(body: Node2D) -> void:
 	set_nav_to_position(body.global_position)
 	set_state(ENEMY_STATE.SEARCHING)
