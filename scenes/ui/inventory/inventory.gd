@@ -1,4 +1,6 @@
 extends Control
+## Écran d'inventaire du joueur : orchestre les trois `InventoryView` (sac, armure, armes),
+## chacune étant branchée sur son `InventoryModel` par `open`.
 class_name Inventory
 
 @onready var inventory_container: GridContainer = $MarginContainer/VBoxContainer/GridContainer
