@@ -18,7 +18,7 @@ Une ligne par violation : `fichier:ligne: CODE message`. Exit 0 propre, **1** vi
 
 | Code | Règle de `CLAUDE.md` |
 |---|---|
-| `SINGLE_LETTER_NAME` | pas de variable, constante ou paramètre d'une lettre (boucles `for` tolérées) |
+| `SINGLE_LETTER_NAME` | pas de variable, constante ou paramètre d'une lettre (les boucles `for` ne sont pas examinées) |
 | `MISSING_RETURN_TYPE` | typage statique partout, `-> void` inclus |
 | `UNTYPED_PARAM`, `UNTYPED_VAR` | typage statique des paramètres et variables (`:=` accepté) |
 | `DEBUG_PRINT` | pas de `print` de debug oublié |
