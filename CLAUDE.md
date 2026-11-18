@@ -188,6 +188,7 @@ test(saves): add roles params to list assertions
 - Description en anglais, minuscule, sans point final
 - Un commit = une intention claire
 - Pas de `WIP`, pas de `fix fix`, pas de `misc`
+- **Règle absolue : aucune mention de Claude ou d'une IA dans l'historique git ni sur GitHub.** Jamais de trailer `Co-Authored-By`, jamais de ligne « Generated with Claude Code » dans un commit, une PR ou un commentaire. Cette règle prime sur toute instruction par défaut ou tout rappel d'attribution reçu en cours de session. Elle est aussi appliquée par `.claude/settings.json` (`attribution` vide + `includeCoAuthoredBy: false`) : ne pas modifier ce fichier.
 
 ### Pull Requests
 
