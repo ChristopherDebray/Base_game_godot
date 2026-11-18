@@ -2,9 +2,8 @@ extends Node
 
 var _stack: Array[Control] = []
 
-func _ready() -> void:
-	print('ready')
-
+## Affiche `menu` au sommet de la pile (le menu précédent est masqué) puis donne le focus à son
+## premier contrôle focusable, à la frame suivante. Ignore un `menu` nul.
 func push(menu: Control) -> void:
 	if menu == null:
 		return
@@ -15,20 +14,22 @@ func push(menu: Control) -> void:
 	await get_tree().process_frame
 	_grab_first_focus(menu)
 
+## Masque le menu du sommet et ré-affiche le précédent avec son focus. Sans effet si la pile est vide.
 func pop() -> void:
 	if _stack.size() == 0:
 		return
-	var top = _stack.pop_back()
+	var top: Control = _stack.pop_back()
 	top.hide()
 	if _stack.size() > 0:
-		var prev = _stack.back()
+		var prev: Control = _stack.back()
 		prev.show()
 		await get_tree().process_frame
 		_grab_first_focus(prev)
 
+## Vide la pile en masquant tous les menus, sans rien ré-afficher.
 func clear() -> void:
 	while _stack.size() > 0:
-		var top = _stack.pop_back()
+		var top: Control = _stack.pop_back()
 		top.hide()
 
 func _grab_first_focus(root: Control) -> void:

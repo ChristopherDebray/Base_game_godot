@@ -1,6 +1,8 @@
 # File: SfxManager.gd (autoload)
 extends Node
 
+## Service global de sons : pools de lecteurs (monde 2D et UI), configuration par tag (limite
+## de voix, intervalle minimal, rayon audible, priorité) et vol de voix quand le pool est saturé.
 class_name SfxManager
 
 const FOOTSTEPS_BOOTS = preload("uid://byhmwp2vibqd3")
@@ -14,7 +16,7 @@ class TagConfig:
 	var pitch_variation: float
 	var bus_name: String
 
-	func _init(max_simultaneous: int = 8, min_interval_ms: int = 0, audible_radius: float = 1600.0, priority: int = 0, pitch_variation: float = 1.2, bus_name: String = "SFX"):
+	func _init(max_simultaneous: int = 8, min_interval_ms: int = 0, audible_radius: float = 1600.0, priority: int = 0, pitch_variation: float = 1.2, bus_name: String = "SFX") -> void:
 		self.max_simultaneous = max_simultaneous
 		self.min_interval_ms = min_interval_ms
 		self.audible_radius = audible_radius
@@ -34,18 +36,18 @@ var _tag_active_count: Dictionary = {}        # tag -> active count
 func _ready() -> void:
 	# Prewarm pools
 	for i in initial_world_voices:
-		var p := AudioStreamPlayer2D.new()
-		p.autoplay = false
-		p.bus = "SFX"
-		add_child(p)
-		_world_pool.append(p)
+		var world_player := AudioStreamPlayer2D.new()
+		world_player.autoplay = false
+		world_player.bus = "SFX"
+		add_child(world_player)
+		_world_pool.append(world_player)
 
 	for i in initial_ui_voices:
-		var u := AudioStreamPlayer.new()
-		u.autoplay = false
-		u.bus = "UI"
-		add_child(u)
-		_ui_pool.append(u)
+		var ui_player := AudioStreamPlayer.new()
+		ui_player.autoplay = false
+		ui_player.bus = "UI"
+		add_child(ui_player)
+		_ui_pool.append(ui_player)
 
 	# Default configs (tune these to your game)
 	#_tag_configs["arrow"] = TagConfig.new(12, 0, 1400.0, 5, 0.2, "Sfx")
@@ -54,11 +56,15 @@ func _ready() -> void:
 	#_tag_configs["footstep"] = TagConfig.new(4, 90, 800.0, 1, 0.2, "Sfx") # very conservative
 	#_tag_configs["ui"] = TagConfig.new(6, 0, 1e9, 10, 0.1, "UI")
 
+## Enregistre (ou remplace) la configuration du tag `tag_name`. Les tags sans configuration
+## utilisent les valeurs par défaut de `TagConfig`.
 func set_tag_config(tag_name: String, config: TagConfig) -> void:
 	_tag_configs[tag_name] = config
 
 # -------- Public API --------
 
+## Joue `stream` sur un lecteur UI libre, ou vole le premier si tous sont occupés. Si
+## `pitch_variation_override` > 0, le pitch est tiré entre 0.8 et cette valeur.
 func play_ui(stream: AudioStream, volume_db: float = 0.0, pitch_variation_override: float = -1.0) -> void:
 	var player := _get_free_ui_player()
 	if player == null:
@@ -73,6 +79,9 @@ func play_ui(stream: AudioStream, volume_db: float = 0.0, pitch_variation_overri
 		player.pitch_scale = 1.0
 	player.play()
 
+## Joue `stream` à `world_position` selon la configuration du tag `tag_name` : ignoré s'il est
+## hors du rayon audible ou sous l'intervalle minimal ; vole une voix de priorité inférieure ou
+## égale si la limite de voix simultanées du tag est atteinte.
 func play_tag_at(tag_name: String, stream: AudioStream, world_position: Vector2, volume_db: float = 0.0) -> void:
 	if stream == null:
 		return
@@ -104,16 +113,17 @@ func play_tag_at(tag_name: String, stream: AudioStream, world_position: Vector2,
 		return
 
 	# Normal path: take a free player
-	var p := _get_free_world_player()
-	if p == null:
+	var world_player := _get_free_world_player()
+	if world_player == null:
 		# Burst: steal something if possible
-		p = _try_steal_world_voice(cfg.priority, listener_pos)
-		if p == null:
+		world_player = _try_steal_world_voice(cfg.priority, listener_pos)
+		if world_player == null:
 			return
-	_config_and_play(p, stream, world_position, volume_db, cfg, tag_name)
+	_config_and_play(world_player, stream, world_position, volume_db, cfg, tag_name)
 	_tag_last_time[tag_name] = now_ms
 
-func play_footstep(pos: Vector2):
+## Joue le bruit de pas du tag "footsteps" à la position `pos`.
+func play_footstep(pos: Vector2) -> void:
 	SoundManager.play_tag_at("footsteps", FOOTSTEPS_BOOTS, pos, 10.0)
 
 # -------- Internals --------
@@ -177,7 +187,7 @@ func _try_steal_world_voice(min_priority: int, listener_pos: Vector2) -> AudioSt
 				candidate = p
 			continue
 
-		var tag = p.get_meta("tag_name")
+		var tag: String = p.get_meta("tag_name")
 		var tag_cfg: TagConfig = _tag_configs.get(tag, null)
 		if tag_cfg == null:
 			var dist2 := listener_pos.distance_squared_to(p.global_position)

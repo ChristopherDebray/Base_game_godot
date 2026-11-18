@@ -18,12 +18,13 @@ var used_controls := CONTROLS_TYPE.KEYBOARD
 func _ready() -> void:
 	camera_shake_noise = FastNoiseLite.new()
 	set_used_controls()
-	SignalManager.on_death.connect(_on_death)
 
-func modify_current_health(amount: float):
+## Ajoute `amount` (négatif pour des dégâts) à la santé courante, sans borne ni signal.
+func modify_current_health(amount: float) -> void:
 	current_health = current_health + amount
 
-func set_player_health(amount: float):
+## Initialise la santé courante ET maximale à `amount` (début de partie / réinitialisation).
+func set_player_health(amount: float) -> void:
 	current_health = amount
 	max_health = amount
 
@@ -47,15 +48,12 @@ func load_level(level: String) -> void:
 
 	_change_scene(level_path)
 
-func set_used_controls():
+## Met à jour `used_controls` : XBOX si au moins une manette est connectée, sinon KEYBOARD.
+func set_used_controls() -> void:
 	if Input.get_connected_joypads().is_empty():
 		used_controls = CONTROLS_TYPE.KEYBOARD
 	elif !Input.get_connected_joypads().is_empty():
 		used_controls = CONTROLS_TYPE.XBOX
-
-func _on_death(pos: Vector2):
-	print("death")
-	return
 
 ## Change de scène avec vérification du chargement.
 func _change_scene(scene_path: String) -> void:
