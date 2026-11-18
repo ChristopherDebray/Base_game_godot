@@ -6,6 +6,7 @@ extends GdUnitTestSuite
 
 const ItemType = BaseItemData.ITEM_TYPE
 const BAG_SIZE: int = 3
+const OUT_OF_RANGE_INDEX: int = 99
 
 func _create_item(type: ItemType) -> ItemInstance:
 	var item_data := BaseItemData.new()
@@ -79,6 +80,12 @@ func test_can_place_refuses_type_not_listed_in_rules() -> void:
 	assert_bool(model.can_place(0, _create_item(ItemType.HEAD))).is_false()
 
 
+func test_can_place_out_of_range_index_returns_false() -> void:
+	var model := InventoryModel.with_size(BAG_SIZE)
+
+	assert_bool(model.can_place(OUT_OF_RANGE_INDEX, _create_item(ItemType.OTHER))).is_false()
+
+
 # --- find_slot_for ---
 
 func test_find_slot_for_returns_first_empty_slot() -> void:
@@ -142,6 +149,19 @@ func test_can_move_refuses_swap_when_origin_rejects_the_displaced_item() -> void
 	# La destination (bag) accepte PRIMARY, mais l'échange renverrait HEAD dans le slot 0
 	# de `weapons`, qui n'accepte que PRIMARY : le déplacement entier doit être refusé.
 	assert_bool(bag.can_move(weapons, 0, 0)).is_false()
+
+
+func test_can_move_out_of_range_source_index_returns_false() -> void:
+	var model := InventoryModel.with_size(BAG_SIZE)
+
+	assert_bool(model.can_move(model, OUT_OF_RANGE_INDEX, 0)).is_false()
+
+
+func test_can_move_out_of_range_destination_index_returns_false() -> void:
+	var model := InventoryModel.with_size(BAG_SIZE)
+	model.set_item(0, _create_item(ItemType.OTHER))
+
+	assert_bool(model.can_move(model, 0, OUT_OF_RANGE_INDEX)).is_false()
 
 
 # --- move ---
