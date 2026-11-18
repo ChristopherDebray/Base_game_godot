@@ -96,3 +96,16 @@ func test_body_exited_twice_emits_lost_only_once() -> void:
 	_component._on_body_exited(body)
 
 	assert_array(_lost_bodies).has_size(1)
+
+
+func test_cone_polygon_returns_collision_polygon_points() -> void:
+	var cone_points := PackedVector2Array([Vector2(200.0, -90.0), Vector2(200.0, 90.0), Vector2.ZERO])
+	var cone_shape := CollisionPolygon2D.new()
+	cone_shape.polygon = cone_points
+	_component.add_child(cone_shape)
+
+	assert_array(_component.get_cone_polygon()).is_equal(cone_points)
+
+
+func test_cone_polygon_without_collision_polygon_is_empty() -> void:
+	assert_array(_component.get_cone_polygon()).is_empty()
