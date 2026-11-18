@@ -1,6 +1,7 @@
-extends Resource
-
+## Données statiques d'un objet (type de slot, nom, texture, scène équipée).
+## Resource partagée : l'état runtime d'un objet vit dans `ItemInstance`.
 class_name BaseItemData
+extends Resource
 
 enum ITEM_TYPE {HEAD, CHEST, LEGS, FEET, BACK, PRIMARY, SECONDARY, GADGET, OTHER, ANY}
 

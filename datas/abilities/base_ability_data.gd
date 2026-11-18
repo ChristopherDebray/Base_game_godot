@@ -1,6 +1,7 @@
-extends Resource
-
+## Données d'une capacité d'arme (dégâts, portée, cadence, sons). Resource partagée :
+## ne pas y stocker d'état propre à une instance.
 class_name BaseAbilityData
+extends Resource
 
 @export var damage: float;
 @export var speed: float;

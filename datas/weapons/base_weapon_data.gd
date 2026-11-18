@@ -1,6 +1,6 @@
-extends BaseItemData
-
+## Données d'une arme : capacités primaire/secondaire, munitions et cadence de tir.
 class_name BaseWeaponData
+extends BaseItemData
 
 @export var primary_ability: BaseAbilityData
 @export var secondary_ability: BaseAbilityData = null

@@ -1,3 +1,5 @@
+## Exemplaire runtime d'un objet : associe la Resource partagée `BaseItemData` à la scène
+## instanciée, pour que l'état (munitions...) soit propre à chaque exemplaire.
 class_name ItemInstance
 extends RefCounted
 
@@ -8,6 +10,8 @@ var scene_instance: Node2D
 func _init(item_data: BaseItemData) -> void:
 	data = item_data
 
+## Renvoie la scène équipée de l'objet, instanciée au premier appel puis réutilisée
+## (même nœud ensuite, afin de conserver son état). Injecte `data` dans une `BaseWeapon`.
 func get_scene() -> Node2D:
 	if scene_instance == null:
 		var packed: PackedScene = load(data.equipped_scene_path)
