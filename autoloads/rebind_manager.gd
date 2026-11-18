@@ -42,32 +42,24 @@ func _ready() -> void:
 	var cfg := ConfigFile.new()
 	var err := cfg.load(CONFIG_PATH)
 	if err != OK:
-		print("No config file found, creating defaults...")
 		reset_to_defaults(true)
 	else:
-		print("Loading bindings from config...")
 		load_bindings()
-	
-	# DEBUG: Afficher toutes les actions et leurs bindings
-	print("\n=== Current InputMap actions ===")
-	for action in InputMap.get_actions():
-		var events = InputMap.action_get_events(action)
-		print(action, " -> ", events.size(), " events")
-		for e in events:
-			print("  - ", e.as_text())
-	print("================================\n")
 
 func _ensure_actions_exist() -> void:
 	"""S'assure que toutes les actions de DEFAULTS existent dans InputMap"""
 	for action in DEFAULTS.keys():
 		if not InputMap.has_action(action):
 			InputMap.add_action(action)
-			print("Created missing action: ", action)
 
+## Démarre la capture : le prochain événement d'entrée pressé sera lié à `action`, puis
+## `on_captured` sera appelée avec (action, événement). Attention : `_input` est actuellement
+## désactivé par un `return` initial, donc la capture ne se déclenche pas tant qu'il y est.
 func start_capture(action: StringName, on_captured: Callable) -> void:
 	_capturing_action = action
 	_on_captured = on_captured
 
+## Annule une capture en cours sans modifier les bindings ni appeler le callback.
 func cancel_capture() -> void:
 	_capturing_action = &""
 	_on_captured = Callable()
@@ -92,7 +84,6 @@ func _input(event: InputEvent) -> void:
 	# On capture ! Consommer l'event pour pas qu'il aille ailleurs
 	get_viewport().set_input_as_handled()
 	
-	print("Captured event: ", event, " for action: ", _capturing_action)
 	_apply_binding(_capturing_action, event)
 	var done_action := _capturing_action
 	var captured_event := event
@@ -126,6 +117,7 @@ func _clear_action(action: StringName) -> void:
 
 # === Persistence (VERSION SIMPLE avec var_to_str) ===
 
+## Écrit les événements de toutes les actions de l'`InputMap` dans `CONFIG_PATH`.
 func save_bindings() -> void:
 	var cfg := ConfigFile.new()
 	for action in InputMap.get_actions():
@@ -136,6 +128,8 @@ func save_bindings() -> void:
 		cfg.set_value(SECTION, StringName(action), events_array)
 	cfg.save(CONFIG_PATH)
 
+## Recharge les bindings depuis `CONFIG_PATH` (sans effet si le fichier est absent), ignore les
+## entrées invalides, puis applique les valeurs par défaut aux actions de `DEFAULTS` restées vides.
 func load_bindings() -> void:
 	var cfg := ConfigFile.new()
 	var err := cfg.load(CONFIG_PATH)
@@ -147,14 +141,13 @@ func load_bindings() -> void:
 		var events_data: Array = cfg.get_value(SECTION, StringName(action), [])
 		for serialized_str in events_data:
 			if serialized_str is String:
-				var ev = str_to_var(serialized_str)
-				if ev is InputEvent:
-					InputMap.action_add_event(action, ev)
+				var restored_event: Variant = str_to_var(serialized_str)
+				if restored_event is InputEvent:
+					InputMap.action_add_event(action, restored_event)
 	
 	# Si une action n'a aucun event après le load, utiliser les defaults
 	for action in DEFAULTS.keys():
 		if InputMap.action_get_events(action).is_empty():
-			print("Action '", action, "' has no bindings, applying defaults...")
 			var bindings: Array = DEFAULTS[action]
 			for binding in bindings:
 				var ev := _create_event_from_default(binding)
@@ -163,6 +156,8 @@ func load_bindings() -> void:
 
 # === Defaults ===
 
+## Recrée les actions de `DEFAULTS` (si absentes) et remplace leurs bindings par les valeurs par
+## défaut. Si `save_file` est vrai, persiste le résultat via `save_bindings`.
 func reset_to_defaults(save_file: bool) -> void:
 	for action in DEFAULTS.keys():
 		if not InputMap.has_action(action):
@@ -178,7 +173,7 @@ func reset_to_defaults(save_file: bool) -> void:
 	if save_file:
 		save_bindings()
 
-func _create_event_from_default(binding) -> InputEvent:
+func _create_event_from_default(binding: Variant) -> InputEvent:
 	"""Crée un InputEvent depuis les valeurs dans DEFAULTS"""
 	
 	# Si c'est un dictionnaire -> JoypadMotion
