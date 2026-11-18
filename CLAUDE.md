@@ -116,19 +116,12 @@ Le code existant n'est pas toujours conforme à ces règles (projet d'apprentiss
 
 ## Tests
 
-- Framework : gdUnit4 (addons/gdUnit4). Tests dans `tests/`, en miroir de l'arborescence du projet.
-- Nommage : `<nom_du_script>_test.gd`, fonctions `test_<comportement>_<condition_ou_résultat>` 
-  (ex: `test_take_damage_at_zero_emits_death`).
-- Commande de lancement (headless) : `GODOT_BIN=/chemin/vers/godot addons/gdUnit4/runtest.sh -a res://tests` (voir README.md)
-- Tout node créé dans un test est libéré (`auto_free`). Attendre les frames/physique avant d'asserter 
-  sur un comportement dépendant du temps.
-- Priorité de test : 1) logique pure et composants (Health, InventoryModel, états ennemis), 
-  2) interactions entre nodes via scene runner, 3) pas de tests de rendu/shaders/feeling.
-- Un test = un comportement. Pas de logique (if/boucle) dans un test. Pas de dépendance à l'ordre des tests.
-- Ne jamais écrire un test qui passe en reproduisant l'implémentation ; tester le comportement observable.
+Le détail (nommage, `auto_free`, signaux, espions, lancement) est dans le skill `test-conventions`, chargé à la demande. Ce qui s'applique toujours :
+
+- Framework : gdUnit4 (`addons/gdUnit4`). Tests dans `tests/`, en miroir de l'arborescence du projet.
+- Commande de lancement (headless) : `GODOT_BIN=/chemin/vers/godot addons/gdUnit4/runtest.sh -a res://tests` (voir README.md).
 - Ne pas modifier un test pour le faire passer sans me l'expliquer : un test qui échoue est peut-être un vrai bug.
-- Hors périmètre : ne pas ajouter de tests sur le rendu, les shaders ou les SubViewports.
-Ça évite les tests fragiles inutiles.
+- Hors périmètre : pas de tests sur le rendu, les shaders ou les SubViewports.
 
 ## Définition de "terminé"
 
