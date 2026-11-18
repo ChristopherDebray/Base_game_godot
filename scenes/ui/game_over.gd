@@ -1,5 +1,7 @@
 extends Control
 
+## Écran de fin de partie : affiché à la mort du joueur (`SignalManager.on_player_died`), il met
+## le jeu en pause et propose de rejouer ou de retourner au menu principal.
 class_name GameOver
 
 @onready var retry_button: Button = %RetryButton
