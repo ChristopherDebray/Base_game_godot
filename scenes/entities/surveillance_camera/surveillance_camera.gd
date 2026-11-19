@@ -15,6 +15,9 @@ class_name SurveillanceCamera
 ## transformation globale, ce qui suppose que les deux viewports partagent le même repère
 ## (c'est le cas du `LitViewport`, affiché tel quel à l'origine du niveau).
 @export var view: SurveillanceCameraView
+## État allumé / éteint / cassé, optionnel. Sans appareil, la caméra fonctionne en permanence.
+## Éteinte ou cassée, elle arrête balayage, détection et alerte, et son visuel s'éteint.
+@export var device: ElectronicDeviceComponent
 ## Active le balayage gauche-droite. Décoché, la caméra garde son orientation fixe.
 @export var sweep_enabled: bool = false
 ## Amplitude totale du balayage, répartie de part et d'autre de l'orientation de départ.
@@ -30,12 +33,35 @@ func _ready() -> void:
 	_init_view()
 	fov_detection.detect.connect(_on_fov_detection_detect)
 	fov_detection.lost.connect(_on_fov_detection_lost)
+	if is_instance_valid(device):
+		device.state_changed.connect(_on_device_state_changed)
+		_apply_device_state()
 
 # Rotation en physique : le cône est une `Area2D`, sa détection suit les frames physiques.
 func _physics_process(delta: float) -> void:
+	if not _is_powered():
+		return
+
 	_sweep(delta)
 	_refresh_alert_target()
 	_sync_view_transform()
+
+# Sans appareil rattaché, la caméra est toujours alimentée.
+func _is_powered() -> bool:
+	return not is_instance_valid(device) or device.is_active()
+
+# `monitoring` est coupé en différé (on peut être dans un callback physique). Le rallumer
+# ré-émet `body_entered` pour un joueur déjà dans le cône : la détection reprend seule.
+func _apply_device_state() -> void:
+	var powered := _is_powered()
+	fov_detection.set_deferred("monitoring", powered)
+	if is_instance_valid(view):
+		view.set_powered(powered)
+	if powered:
+		return
+
+	alert_zone.clear_target()
+	_show_detected(false)
 
 func _init_view() -> void:
 	if not is_instance_valid(view):
@@ -84,7 +110,13 @@ func _refresh_alert_target() -> void:
 	alert_zone.set_target(fov_detection.detected_body.global_position)
 	_show_detected(true)
 
+func _on_device_state_changed(_new_state: ElectronicDeviceComponent.DeviceState) -> void:
+	_apply_device_state()
+
 func _on_fov_detection_detect(detected_entity: Node2D) -> void:
+	if not _is_powered():
+		return
+
 	alert_zone.set_target(detected_entity.global_position)
 	alert_zone.alert(detected_entity.global_position)
 	_show_detected(true)

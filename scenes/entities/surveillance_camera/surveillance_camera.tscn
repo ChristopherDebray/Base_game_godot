@@ -3,14 +3,19 @@
 [ext_resource type="Script" path="res://scenes/entities/surveillance_camera/surveillance_camera.gd" id="1_camera"]
 [ext_resource type="PackedScene" uid="uid://dvyj0qmn8wilj" path="res://scenes/components/fov_detection_component.tscn" id="2_fov"]
 [ext_resource type="Script" path="res://scenes/components/alert_zone_component.gd" id="3_zone"]
+[ext_resource type="Script" path="res://scenes/components/electronic_device_component.gd" id="4_device"]
 
-[node name="SurveillanceCamera" type="Node2D" node_paths=PackedStringArray("fov_detection", "alert_zone")]
+[node name="SurveillanceCamera" type="Node2D" node_paths=PackedStringArray("fov_detection", "alert_zone", "device")]
 script = ExtResource("1_camera")
 fov_detection = NodePath("FovDetectionComponent")
 alert_zone = NodePath("AlertZoneComponent")
+device = NodePath("ElectronicDeviceComponent")
 
 [node name="FovDetectionComponent" parent="." instance=ExtResource("2_fov")]
 
 [node name="AlertZoneComponent" type="Area2D" parent="."]
 script = ExtResource("3_zone")
 radius = 300.0
+
+[node name="ElectronicDeviceComponent" type="Node" parent="."]
+script = ExtResource("4_device")

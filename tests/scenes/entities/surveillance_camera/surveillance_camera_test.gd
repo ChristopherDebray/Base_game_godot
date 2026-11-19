@@ -49,6 +49,7 @@ var _fov: FovStub
 var _zone: AlertZoneSpy
 var _view: SurveillanceCameraView
 var _player: Node2D
+var _device: ElectronicDeviceComponent
 
 
 func before_test() -> void:
@@ -66,6 +67,8 @@ func before_test() -> void:
 	_camera.fov_detection = _fov
 	_camera.alert_zone = _zone
 	_camera.view = _view
+	_device = auto_free(ElectronicDeviceComponent.new())
+	_camera.device = _device
 	_camera.position = CAMERA_POSITION
 	_camera.rotation_degrees = BASE_ROTATION_DEGREES
 	_camera.sweep_angle_degrees = SWEEP_ANGLE_DEGREES
@@ -201,6 +204,7 @@ func test_scene_wires_components() -> void:
 
 	assert_object(camera.fov_detection).is_not_null()
 	assert_object(camera.alert_zone).is_not_null()
+	assert_object(camera.device).is_not_null()
 
 
 func test_physics_process_with_sweep_disabled_keeps_rotation() -> void:
@@ -243,3 +247,62 @@ func test_sweep_stops_at_opposite_half_angle() -> void:
 	_camera._physics_process(THREE_SECONDS)
 
 	_assert_rotation_degrees(BASE_ROTATION_DEGREES - SWEEP_ANGLE_DEGREES / 2.0)
+
+
+func test_turn_off_clears_zone_target() -> void:
+
+	_device.turn_off()
+
+	assert_int(_zone.clear_count).is_equal(1)
+
+
+func test_turn_off_turns_view_idle_and_unpowered() -> void:
+	_fov.detect.emit(_player)
+
+	_device.turn_off()
+
+	assert_bool(_view.is_detected()).is_false()
+	assert_bool(_view.is_powered()).is_false()
+
+
+func test_turn_on_powers_view_again() -> void:
+	_device.turn_off()
+
+	_device.turn_on()
+
+	assert_bool(_view.is_powered()).is_true()
+
+
+func test_physics_process_does_not_sweep_when_device_is_off() -> void:
+	_camera.sweep_enabled = true
+	_device.turn_off()
+
+	_camera._physics_process(ONE_SECOND)
+
+	_assert_rotation_degrees(BASE_ROTATION_DEGREES)
+
+
+func test_physics_process_does_not_refresh_target_when_device_is_off() -> void:
+	_fov.detected_body = _player
+	_device.turn_off()
+	var clear_count_before := _zone.clear_count
+
+	_camera._physics_process(ONE_SECOND)
+
+	assert_array(_zone.targets).is_empty()
+	assert_int(_zone.clear_count).is_equal(clear_count_before)
+
+
+func test_detect_while_device_is_off_does_not_alert() -> void:
+	_device.turn_off()
+
+	_fov.detect.emit(_player)
+
+	assert_array(_zone.alerts).is_empty()
+
+
+func test_broken_device_stops_camera() -> void:
+
+	_device.break_device()
+
+	assert_bool(_view.is_powered()).is_false()

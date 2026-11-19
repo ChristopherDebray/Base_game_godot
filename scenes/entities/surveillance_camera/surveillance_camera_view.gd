@@ -16,6 +16,7 @@ const CONE_IMAGE_SIZE := 128
 
 # Privés : les modifier sans passer par les setters sauterait la mise à jour de la lumière.
 var _is_detected: bool = false
+var _is_powered: bool = true
 var _cone_polygon: PackedVector2Array = PackedVector2Array()
 
 func _ready() -> void:
@@ -29,6 +30,14 @@ func set_detected(detected: bool) -> void:
 
 	_is_detected = detected
 	_color_cone_light()
+
+## Allume ou éteint le visuel (la lumière du cône). Éteint, la caméra est donc visuellement morte.
+func set_powered(powered: bool) -> void:
+	_is_powered = powered
+	_refresh_cone_light_enabled()
+
+func is_powered() -> bool:
+	return _is_powered
 
 func is_detected() -> bool:
 	return _is_detected
@@ -56,6 +65,12 @@ func _build_cone_light() -> void:
 	var cone_image := ConeLightImage.build(ConeLightImage.half_angle_of(_cone_polygon), CONE_IMAGE_SIZE)
 	cone_light.texture = ImageTexture.create_from_image(cone_image)
 	cone_light.texture_scale = ConeLightImage.radius_of(_cone_polygon) / (CONE_IMAGE_SIZE / 2.0)
+
+func _refresh_cone_light_enabled() -> void:
+	if not is_instance_valid(cone_light):
+		return
+
+	cone_light.enabled = _is_powered
 
 func _color_cone_light() -> void:
 	if not is_instance_valid(cone_light):
