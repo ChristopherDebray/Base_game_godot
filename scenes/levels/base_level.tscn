@@ -15,7 +15,6 @@
 resource_local_to_scene = true
 shader = ExtResource("2_53c65")
 shader_parameter/mask_texture = SubResource("ViewportTexture_53c65")
-shader_parameter/mask_with_alpha = false
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_u1hno"]
 viewport_path = NodePath("LitViewport")
