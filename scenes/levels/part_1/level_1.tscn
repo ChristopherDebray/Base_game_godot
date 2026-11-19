@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cmeiv6en4dxl3" path="res://scenes/items/world_item.tscn" id="11_worlditem"]
 [ext_resource type="Resource" uid="uid://dqw2hvpvfgwgr" path="res://datas/weapons/machine_gun.tres" id="12_machinegun"]
 [ext_resource type="PackedScene" path="res://scenes/entities/surveillance_camera/surveillance_camera_view.tscn" id="13_cameraview"]
+[ext_resource type="PackedScene" path="res://scenes/entities/device_switch/device_switch.tscn" id="14_deviceswitch"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_1scuh"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -1152,7 +1153,11 @@ position = Vector2(100, 100)
 view = NodePath("../../../SurveillanceCameraView")
 sweep_enabled = true
 
-[node name="Player" parent="LitViewport/Entities" parent_id_path=PackedInt32Array(523767429) index="1" unique_id=362983861]
+[node name="DeviceSwitch" parent="LitViewport/Entities" index="1" node_paths=PackedStringArray("devices") instance=ExtResource("14_deviceswitch")]
+position = Vector2(160, 208)
+devices = [NodePath("../SurveillanceCamera/ElectronicDeviceComponent")]
+
+[node name="Player" parent="LitViewport/Entities" parent_id_path=PackedInt32Array(523767429) index="2" unique_id=362983861]
 position = Vector2(220, 208)
 
 [node name="Box" parent="LitViewport/Entities/Objects" parent_id_path=PackedInt32Array(755208327) index="0" unique_id=305955430 instance=ExtResource("3_j0f3p")]
