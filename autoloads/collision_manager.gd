@@ -30,3 +30,30 @@ func draw_ray_query_to_target(
 	query.exclude = [node_from]  # évite de se toucher soi-même
 
 	return space_state.intersect_ray(query)
+
+## Renvoie chaque `Damageable` dont un corps touche le cercle de centre `center` et de rayon
+## `radius`, filtré par `collision_mask`. `excluded` liste des RID à ignorer (ex. le lanceur). Un
+## corps à plusieurs formes de collision n'est renvoyé qu'une fois. Limité aux 32 premiers
+## contacts de la requête physique.
+func get_damageables_in_circle(
+	center: Vector2,
+	radius: float,
+	collision_mask: int,
+	space_state: PhysicsDirectSpaceState2D,
+	excluded: Array[RID] = []
+) -> Array[Damageable]:
+	var shape: CircleShape2D = CircleShape2D.new()
+	shape.radius = radius
+
+	var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.transform = Transform2D(0.0, center)
+	query.collision_mask = collision_mask
+	query.exclude = excluded
+
+	var damageables: Array[Damageable] = []
+	for hit: Dictionary in space_state.intersect_shape(query):
+		var damageable: Damageable = hit.collider as Damageable
+		if damageable != null and not damageables.has(damageable):
+			damageables.append(damageable)
+	return damageables
