@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="RangedBehavior" format=3]
+
+[ext_resource type="Script" uid="uid://1m1qbkr82eh3" path="res://datas/behaviors/ranged_behavior.gd" id="1_behavior"]
+
+[resource]
+script = ExtResource("1_behavior")
