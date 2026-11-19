@@ -4,14 +4,26 @@ extends GdUnitTestSuite
 ## Tests du FovDetectionComponent (détection du joueur par un champ de vision).
 ##
 ## Ce qui est couvert : état de détection, signaux `detect` / `lost`, rejet des corps qui ne sont
-## pas le joueur, absence de ligne de vue. Ce qui ne l'est pas : le cas « le joueur est vu à
-## travers un espace libre » (il faut un vrai `Player`, dont le script exige sa scène complète,
-## et un monde physique).
+## pas le joueur, absence de ligne de vue, nouvelle tentative tant que le joueur reste dans le cône.
+## Le raycast réel (« le joueur est vu à travers un espace libre ») n'est pas couvert : il faut un
+## vrai `Player`, dont le script exige sa scène complète, et un monde physique. Pour la logique de
+## détection, `FovStub` remplace le type de cible et la ligne de vue par des drapeaux.
 ## Les handlers `_on_body_*` sont câblés dans la scène `.tscn`, pas dans le script : sur un
 ## composant instancié seul, on les appelle directement.
 
 const LOST_SIGNAL := "lost"
 const BODY_POSITION := Vector2(500.0, 0.0)
+
+## Champ de vision dont la cible et la ligne de vue sont pilotées par le test.
+class FovStub extends FovDetectionComponent:
+	var line_of_sight: bool = false
+
+	func is_detectable(_body: Node2D) -> bool:
+		return true
+
+	func has_line_of_sight_to(_body: Node2D) -> bool:
+		return line_of_sight
+
 
 var _component: FovDetectionComponent
 # `is_not_emitted` de gdUnit n'écoute qu'À PARTIR du `await` : une émission déjà passée n'est pas vue.
@@ -109,3 +121,63 @@ func test_cone_polygon_returns_collision_polygon_points() -> void:
 
 func test_cone_polygon_without_collision_polygon_is_empty() -> void:
 	assert_array(_component.get_cone_polygon()).is_empty()
+
+
+func _create_stub() -> FovStub:
+	var stub: FovStub = auto_free(FovStub.new())
+	add_child(stub)
+	stub.detect.connect(func(body: Node2D) -> void: _detected_bodies.append(body))
+	return stub
+
+
+func test_body_entered_in_line_of_sight_detects_it() -> void:
+	var stub := _create_stub()
+	stub.line_of_sight = true
+	var body := _create_body()
+
+	stub._on_body_entered(body)
+
+	assert_array(_detected_bodies).contains_exactly([body])
+
+
+func test_body_entered_without_line_of_sight_is_not_detected() -> void:
+	var stub := _create_stub()
+
+	stub._on_body_entered(_create_body())
+
+	assert_array(_detected_bodies).is_empty()
+
+
+func test_body_inside_is_detected_once_line_of_sight_is_gained() -> void:
+	# Entré sans ligne de vue (ex. collé à la caméra) puis avancé dans le cône sans en sortir.
+	var stub := _create_stub()
+	var body := _create_body()
+	stub._on_body_entered(body)
+	stub.line_of_sight = true
+
+	stub._physics_process(0.0)
+
+	assert_array(_detected_bodies).contains_exactly([body])
+	assert_object(stub.detected_body).is_same(body)
+
+
+func test_body_that_left_unseen_is_not_detected_later() -> void:
+	var stub := _create_stub()
+	var body := _create_body()
+	stub._on_body_entered(body)
+	stub._on_body_exited(body)
+	stub.line_of_sight = true
+
+	stub._physics_process(0.0)
+
+	assert_array(_detected_bodies).is_empty()
+
+
+func test_detected_body_is_not_detected_again_each_frame() -> void:
+	var stub := _create_stub()
+	stub.line_of_sight = true
+	stub._on_body_entered(_create_body())
+
+	stub._physics_process(0.0)
+
+	assert_array(_detected_bodies).has_size(1)
