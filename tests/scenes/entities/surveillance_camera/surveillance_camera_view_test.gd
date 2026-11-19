@@ -91,3 +91,22 @@ func test_scene_starts_idle_with_shadowed_light_above_lit_view() -> void:
 	assert_int(view.z_index).is_greater(0)
 	assert_object(view.cone_light).is_not_null()
 	assert_bool(view.cone_light.shadow_enabled).is_true()
+
+
+func test_view_is_powered_by_default() -> void:
+	assert_bool(_view.is_powered()).is_true()
+
+
+func test_set_powered_false_turns_cone_light_off() -> void:
+	_view.set_powered(false)
+
+	assert_bool(_view.is_powered()).is_false()
+	assert_bool(_view.cone_light.enabled).is_false()
+
+
+func test_set_powered_true_turns_cone_light_back_on() -> void:
+	_view.set_powered(false)
+
+	_view.set_powered(true)
+
+	assert_bool(_view.cone_light.enabled).is_true()
