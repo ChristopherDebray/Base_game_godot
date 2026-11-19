@@ -1,9 +1,10 @@
 class_name SurveillanceCameraTest
 extends GdUnitTestSuite
 
-## Tests de la SurveillanceCamera : elle relie le champ de vision à la zone d'alerte.
+## Tests de la SurveillanceCamera : elle relie le champ de vision à la zone d'alerte et pilote
+## son visuel (cône vert/rouge, position).
 ##
-## Les trois composants sont injectés par `@export` (pas de scène) ; la zone est un espion qui
+## Les dépendances sont injectées par `@export` (pas de scène) ; la zone est un espion qui
 ## enregistre les appels reçus. On déclenche la détection en émettant les signaux du champ de vision.
 
 const PLAYER_POSITION := Vector2(150.0, 40.0)
@@ -17,6 +18,7 @@ const ONE_SECOND := 1.0
 const TWO_SECONDS := 2.0
 const THREE_SECONDS := 3.0
 const ROTATION_TOLERANCE := 0.0001
+const CAMERA_POSITION := Vector2(100.0, 60.0)
 
 ## Zone d'alerte qui note ses appels au lieu d'agir sur des `Npc`.
 class AlertZoneSpy extends AlertZoneComponent:
@@ -45,7 +47,7 @@ class FovStub extends FovDetectionComponent:
 var _camera: SurveillanceCamera
 var _fov: FovStub
 var _zone: AlertZoneSpy
-var _cone_visual: Polygon2D
+var _view: SurveillanceCameraView
 var _player: Node2D
 
 
@@ -55,14 +57,16 @@ func before_test() -> void:
 	cone_shape.polygon = CONE_POINTS
 	_fov.add_child(cone_shape)
 	_zone = auto_free(AlertZoneSpy.new())
-	_cone_visual = auto_free(Polygon2D.new())
+	_view = auto_free(SurveillanceCameraView.new())
+	add_child(_view)
 	_player = auto_free(Node2D.new())
 	_player.global_position = PLAYER_POSITION
 	add_child(_player)
 	_camera = auto_free(SurveillanceCamera.new())
 	_camera.fov_detection = _fov
 	_camera.alert_zone = _zone
-	_camera.cone_visual = _cone_visual
+	_camera.view = _view
+	_camera.position = CAMERA_POSITION
 	_camera.rotation_degrees = BASE_ROTATION_DEGREES
 	_camera.sweep_angle_degrees = SWEEP_ANGLE_DEGREES
 	_camera.sweep_speed_degrees = SWEEP_SPEED_DEGREES
@@ -73,8 +77,66 @@ func _assert_rotation_degrees(expected_degrees: float) -> void:
 	assert_float(_camera.rotation_degrees).is_equal_approx(expected_degrees, ROTATION_TOLERANCE)
 
 
-func test_ready_draws_cone_from_fov_polygon() -> void:
-	assert_array(_cone_visual.polygon).is_equal(CONE_POINTS)
+func test_ready_gives_fov_polygon_to_view() -> void:
+	assert_array(_view.get_cone_polygon()).is_equal(CONE_POINTS)
+
+
+func test_ready_places_view_on_camera() -> void:
+	assert_vector(_view.global_position).is_equal(CAMERA_POSITION)
+
+
+func test_view_is_idle_before_any_detection() -> void:
+	assert_bool(_view.is_detected()).is_false()
+
+
+func test_detect_turns_view_to_detected() -> void:
+	_fov.detect.emit(_player)
+
+	assert_bool(_view.is_detected()).is_true()
+
+
+func test_lost_turns_view_back_to_idle() -> void:
+	_fov.detect.emit(_player)
+
+	_fov.lost.emit(_player)
+
+	assert_bool(_view.is_detected()).is_false()
+
+
+func test_physics_process_turns_view_to_idle_when_line_of_sight_is_lost() -> void:
+	_fov.detect.emit(_player)
+	_fov.detected_body = _player
+	_fov.has_line_of_sight = false
+
+	_camera._physics_process(0.0)
+
+	assert_bool(_view.is_detected()).is_false()
+
+
+func test_physics_process_turns_view_to_detected_when_line_of_sight_is_back() -> void:
+	_fov.detected_body = _player
+
+	_camera._physics_process(0.0)
+
+	assert_bool(_view.is_detected()).is_true()
+
+
+func test_physics_process_makes_view_follow_sweep_rotation() -> void:
+	_camera.sweep_enabled = true
+
+	_camera._physics_process(ONE_SECOND)
+
+	assert_float(_view.rotation_degrees).is_equal_approx(
+		BASE_ROTATION_DEGREES + SWEEP_SPEED_DEGREES, ROTATION_TOLERANCE
+	)
+
+
+func test_detect_without_view_still_alerts_zone() -> void:
+	_camera.view = null
+
+	_fov.detect.emit(_player)
+
+	assert_array(_zone.alerts).contains_exactly([PLAYER_POSITION])
 
 
 func test_detect_alerts_zone_toward_player_position() -> void:
@@ -132,14 +194,13 @@ func test_physics_process_without_detected_body_leaves_target_untouched() -> voi
 	assert_array(_zone.targets).is_empty()
 
 
-func test_scene_wires_components_and_draws_cone() -> void:
+func test_scene_wires_components() -> void:
 	var scene: PackedScene = load("res://scenes/entities/surveillance_camera/surveillance_camera.tscn")
 	var camera: SurveillanceCamera = auto_free(scene.instantiate())
 	add_child(camera)
 
 	assert_object(camera.fov_detection).is_not_null()
 	assert_object(camera.alert_zone).is_not_null()
-	assert_array(camera.cone_visual.polygon).is_not_empty()
 
 
 func test_physics_process_with_sweep_disabled_keeps_rotation() -> void:

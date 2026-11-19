@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/entities/surveillance_camera/surveillance_camera_view.gd" id="1_view"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="2_icon"]
+
+[node name="SurveillanceCameraView" type="Node2D" node_paths=PackedStringArray("cone_light")]
+z_index = 1
+script = ExtResource("1_view")
+cone_light = NodePath("ConeLight")
+
+[node name="ConeLight" type="PointLight2D" parent="."]
+energy = 0.35
+shadow_enabled = true
+shadow_filter = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+show_behind_parent = true
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_icon")
