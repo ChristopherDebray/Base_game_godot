@@ -9,6 +9,14 @@ extends GdUnitTestSuite
 const PLAYER_POSITION := Vector2(150.0, 40.0)
 const MOVED_PLAYER_POSITION := Vector2(220.0, -10.0)
 const CONE_POINTS: PackedVector2Array = [Vector2(200.0, -90.0), Vector2(200.0, 90.0), Vector2.ZERO]
+# Orientation de départ non nulle : le balayage doit osciller autour d'elle, pas autour de zéro.
+const BASE_ROTATION_DEGREES := 20.0
+const SWEEP_ANGLE_DEGREES := 90.0
+const SWEEP_SPEED_DEGREES := 30.0
+const ONE_SECOND := 1.0
+const TWO_SECONDS := 2.0
+const THREE_SECONDS := 3.0
+const ROTATION_TOLERANCE := 0.0001
 
 ## Zone d'alerte qui note ses appels au lieu d'agir sur des `Npc`.
 class AlertZoneSpy extends AlertZoneComponent:
@@ -55,7 +63,14 @@ func before_test() -> void:
 	_camera.fov_detection = _fov
 	_camera.alert_zone = _zone
 	_camera.cone_visual = _cone_visual
+	_camera.rotation_degrees = BASE_ROTATION_DEGREES
+	_camera.sweep_angle_degrees = SWEEP_ANGLE_DEGREES
+	_camera.sweep_speed_degrees = SWEEP_SPEED_DEGREES
 	add_child(_camera)
+
+
+func _assert_rotation_degrees(expected_degrees: float) -> void:
+	assert_float(_camera.rotation_degrees).is_equal_approx(expected_degrees, ROTATION_TOLERANCE)
 
 
 func test_ready_draws_cone_from_fov_polygon() -> void:
@@ -125,3 +140,45 @@ func test_scene_wires_components_and_draws_cone() -> void:
 	assert_object(camera.fov_detection).is_not_null()
 	assert_object(camera.alert_zone).is_not_null()
 	assert_array(camera.cone_visual.polygon).is_not_empty()
+
+
+func test_physics_process_with_sweep_disabled_keeps_rotation() -> void:
+	_camera.sweep_enabled = false
+
+	_camera._physics_process(ONE_SECOND)
+
+	_assert_rotation_degrees(BASE_ROTATION_DEGREES)
+
+
+func test_physics_process_with_sweep_enabled_rotates_at_sweep_speed() -> void:
+	_camera.sweep_enabled = true
+
+	_camera._physics_process(ONE_SECOND)
+
+	_assert_rotation_degrees(BASE_ROTATION_DEGREES + SWEEP_SPEED_DEGREES)
+
+
+func test_sweep_stops_at_half_angle() -> void:
+	_camera.sweep_enabled = true
+
+	_camera._physics_process(TWO_SECONDS)
+
+	_assert_rotation_degrees(BASE_ROTATION_DEGREES + SWEEP_ANGLE_DEGREES / 2.0)
+
+
+func test_sweep_reverses_after_reaching_limit() -> void:
+	_camera.sweep_enabled = true
+	_camera._physics_process(TWO_SECONDS)
+
+	_camera._physics_process(ONE_SECOND)
+
+	_assert_rotation_degrees(BASE_ROTATION_DEGREES + SWEEP_ANGLE_DEGREES / 2.0 - SWEEP_SPEED_DEGREES)
+
+
+func test_sweep_stops_at_opposite_half_angle() -> void:
+	_camera.sweep_enabled = true
+	_camera._physics_process(TWO_SECONDS)
+
+	_camera._physics_process(THREE_SECONDS)
+
+	_assert_rotation_degrees(BASE_ROTATION_DEGREES - SWEEP_ANGLE_DEGREES / 2.0)
