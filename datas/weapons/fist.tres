@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BaseWeaponData" format=3]
+
+[ext_resource type="Script" uid="uid://dktoas357kykt" path="res://datas/weapons/base_weapon_data.gd" id="1_weapon_data"]
+[ext_resource type="Resource" path="res://datas/abilities/fist_punch.tres" id="2_ability"]
+
+[resource]
+script = ExtResource("1_weapon_data")
+primary_ability = ExtResource("2_ability")
+max_ammunitions = 1
+type = 5
+item_name = "Fist"
+equipped_scene_path = "res://scenes/weapons/melee/fist.tscn"

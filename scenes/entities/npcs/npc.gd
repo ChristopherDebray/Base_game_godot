@@ -1,8 +1,9 @@
 extends Damageable
 
-## Ennemi contrôlé par une machine à états (IDLE, RETURNING, PATROLLING, CHASING, SEARCHING) :
-## patrouille entre waypoints, détecte le joueur via `FovDetectionComponent` et le poursuit par
-## navigation. Les sous-classes (ex. `Soldier`) ajoutent leur comportement offensif.
+## Ennemi contrôlé par une machine à états (IDLE, RETURNING, PATROLLING, CHASING, ATTACKING,
+## SEARCHING) : patrouille entre waypoints, détecte le joueur via `FovDetectionComponent`, le
+## poursuit par navigation puis l'attaque selon son `CombatBehavior` (distance, corps à corps,
+## kamikaze...) une fois à portée d'engagement.
 class_name Npc
 
 var FOV: Dictionary = {
@@ -10,20 +11,24 @@ var FOV: Dictionary = {
 	ENEMY_STATE.RETURNING: 60.0,
 	ENEMY_STATE.PATROLLING: 60.0,
 	ENEMY_STATE.CHASING: 120.0,
-	ENEMY_STATE.SEARCHING: 100.0
+	ENEMY_STATE.SEARCHING: 100.0,
+	ENEMY_STATE.ATTACKING: 120.0
 }
 var SPEED: Dictionary = {
 	ENEMY_STATE.IDLE: 60.0,
 	ENEMY_STATE.RETURNING: 80.0,
 	ENEMY_STATE.PATROLLING: 70.0,
 	ENEMY_STATE.CHASING: 80.0,
-	ENEMY_STATE.SEARCHING: 80.0
+	ENEMY_STATE.SEARCHING: 80.0,
+	ENEMY_STATE.ATTACKING: 0.0
 }
 
-enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING }
+enum ENEMY_STATE { IDLE, RETURNING, PATROLLING, CHASING, SEARCHING, ATTACKING }
 
 @export var patrol_points: NodePath
 @export var initial_weapon: PackedScene
+## Façon de combattre une fois le joueur en vue. Sans behavior, l'ennemi poursuit sans attaquer.
+@export var combat_behavior: CombatBehavior
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -50,9 +55,13 @@ func _ready() -> void:
 
 ## Prépare le PNJ : coupe le traitement physique (réactivé par `late_setup`), passe en IDLE s'il
 ## n'a pas de points de patrouille, construit les waypoints, retrouve le joueur (groupe
-## "player") et branche le signal `detect` du champ de vision.
+## "player") et branche le signal `detect` du champ de vision. Duplique le `combat_behavior` :
+## la Resource est partagée entre toutes les instances de la scène, or le behavior porte de
+## l'état propre à chaque ennemi (cooldown, mèche armée).
 func setup() -> void:
 	set_physics_process(false)
+	if combat_behavior != null:
+		combat_behavior = combat_behavior.duplicate() as CombatBehavior
 	is_idle = patrol_points.is_empty()
 	if is_idle:
 		_state = ENEMY_STATE.IDLE
@@ -64,11 +73,15 @@ func setup() -> void:
 	fov_detection_component.detect.connect(_on_detect)
 
 ## Appelée en différé après `setup` : attend une frame physique et 0,3 s (le temps que la
-## navigation soit prête), réactive le traitement physique puis équipe l'arme initiale.
+## navigation soit prête), réactive le traitement physique puis équipe l'arme initiale (si le PNJ
+## en a une : un kamikaze ou un corps à corps n'en a pas).
 func late_setup() -> void:
 	await get_tree().physics_frame
 	await get_tree().create_timer(0.3).timeout
 	call_deferred("set_physics_process", true)
+	if initial_weapon == null:
+		return
+
 	object_holder_component.switch_weapon(
 		initial_weapon.instantiate(),
 		muzzle.position
@@ -107,18 +120,30 @@ func set_nav_to_player() -> void:
 func set_nav_to_position(nav_position: Vector2) -> void:
 	nav_agent.target_position = nav_position
 
-## Choisit l'état selon la vue : poursuite si le joueur détecté est visible, recherche s'il
-## vient de disparaître pendant une poursuite.
+## Choisit l'état selon la vue (voir `apply_sight`).
 func update_state() -> void:
-	var new_state: ENEMY_STATE = _state
-	var can_see: bool = fov_detection_component.can_see_detected_body()
-	
-	if can_see == true:
-		new_state = ENEMY_STATE.CHASING
-	elif can_see == false and new_state == ENEMY_STATE.CHASING:
-		new_state = ENEMY_STATE.SEARCHING
-	
-	set_state(new_state)
+	apply_sight(fov_detection_component.can_see_detected_body())
+
+## Applique le résultat de la vue : si le joueur détecté est visible, attaque s'il est à portée
+## d'engagement du `combat_behavior` (poursuite sans behavior ou hors portée) ; s'il disparaît
+## pendant une poursuite ou une attaque, passe en recherche.
+func apply_sight(can_see: bool) -> void:
+	if not can_see:
+		if _state == ENEMY_STATE.CHASING or _state == ENEMY_STATE.ATTACKING:
+			set_state(ENEMY_STATE.SEARCHING)
+		return
+
+	set_state(_state_for_visible_target())
+
+func _state_for_visible_target() -> ENEMY_STATE:
+	var target: Node2D = fov_detection_component.detected_body
+	if combat_behavior == null or not is_instance_valid(target):
+		return ENEMY_STATE.CHASING
+
+	var distance: float = global_position.distance_to(target.global_position)
+	if combat_behavior.decide(distance, true) == CombatBehavior.Action.ATTACK:
+		return ENEMY_STATE.ATTACKING
+	return ENEMY_STATE.CHASING
 
 ## Exécute le comportement de déplacement de l'état courant.
 func update_movement() -> void:
@@ -133,19 +158,26 @@ func update_movement() -> void:
 			process_searching()
 		ENEMY_STATE.CHASING:
 			process_chasing()
+		ENEMY_STATE.ATTACKING:
+			process_attacking()
 
 func _update_facing() -> void:
+	var weapon: BaseWeapon = object_holder_component.current_weapon
 	if facing_position.x < -0.05:
 		flip_facing(false)
-		object_holder_component.current_weapon.flip_weapon(false)
+		if weapon != null:
+			weapon.flip_weapon(false)
 	elif facing_position.x > 0.05:
 		flip_facing(true)
-		object_holder_component.current_weapon.flip_weapon(true)
-	
-## Oriente l'arme tenue vers le point monde `dir` et met à jour `facing_position`. Nécessite
-## une arme équipée (`current_weapon`).
+		if weapon != null:
+			weapon.flip_weapon(true)
+
+## Met à jour `facing_position` pour regarder le point monde `dir` et, si une arme est équipée,
+## l'oriente vers ce point.
 func set_aim_dir(dir: Vector2) -> void:
-	object_holder_component.current_weapon.aim_at(dir)
+	var weapon: BaseWeapon = object_holder_component.current_weapon
+	if weapon != null:
+		weapon.aim_at(dir)
 	facing_position = global_position - dir
 
 ## Retourne le sprite horizontalement et met `facing_direction` à gauche (si
@@ -157,10 +189,15 @@ func flip_facing(must_reverse_flip: bool) -> void:
 		return
 	facing_direction = Vector2.RIGHT
 
-## Tant que la navigation n'est pas finie : vise le prochain point du chemin, oriente le champ
-## de vision et transmet la vitesse souhaitée à l'agent. Le déplacement réel est appliqué dans
-## `_on_navigation_agent_2d_velocity_computed` (évitement).
+## En ATTACKING, immobilise le PNJ. Sinon, tant que la navigation n'est pas finie : vise le
+## prochain point du chemin, oriente le champ de vision et transmet la vitesse souhaitée à
+## l'agent. Le déplacement réel est appliqué dans `_on_navigation_agent_2d_velocity_computed`
+## (évitement).
 func update_navigation() -> void:
+	if _state == ENEMY_STATE.ATTACKING:
+		nav_agent.set_velocity(Vector2.ZERO)
+		return
+
 	if nav_agent.is_navigation_finished() == true:
 		return
 	
@@ -176,9 +213,10 @@ func search_player() -> void:
 	set_nav_to_player()
 
 ## Alerte externe (ex. caméra de surveillance) : le PNJ part chercher en `target_position`.
-## Sans effet pendant une poursuite, pour ne pas dégrader une détection directe plus précise.
+## Sans effet pendant une poursuite ou une attaque, pour ne pas dégrader une détection directe
+## plus précise.
 func alert_to(target_position: Vector2) -> void:
-	if _state == ENEMY_STATE.CHASING:
+	if _state == ENEMY_STATE.CHASING or _state == ENEMY_STATE.ATTACKING:
 		return
 
 	search_position(target_position)
@@ -231,6 +269,17 @@ func process_patrolling() -> void:
 ## État CHASING : navigue vers la position du joueur détecté. Suppose `detected_body` non nul.
 func process_chasing() -> void:
 	set_nav_to_position(fov_detection_component.detected_body.global_position)
+
+## État ATTACKING : se tourne vers le joueur détecté et délègue l'attaque au `combat_behavior`.
+## Sans cible valide ou sans behavior, ne fait rien.
+func process_attacking() -> void:
+	var target: Node2D = fov_detection_component.detected_body
+	if combat_behavior == null or not is_instance_valid(target):
+		return
+
+	aim_target = target.global_position
+	fov_detection_component.look_at(target.global_position)
+	combat_behavior.perform_attack(self, target)
 
 ## État SEARCHING : à l'arrivée à destination, reprend la patrouille (ou retourne à son poste
 ## si le PNJ est statique).
